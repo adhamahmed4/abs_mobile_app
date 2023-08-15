@@ -1,11 +1,12 @@
+import 'package:abs_mobile_app/Home/home.dart';
 import 'package:flutter/material.dart';
 
-class MyLoginPage extends StatefulWidget {
+class LoginPage extends StatefulWidget {
   @override
-  _MyLoginPageState createState() => _MyLoginPageState();
+  _LoginPageState createState() => _LoginPageState();
 }
 
-class _MyLoginPageState extends State<MyLoginPage> {
+class _LoginPageState extends State<LoginPage> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   bool _passwordVisible = false;
@@ -110,7 +111,10 @@ class _MyLoginPageState extends State<MyLoginPage> {
                               ),
                             ),
                             onPressed: () {
-                              // Implement Login functionality
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => Home()),
+                              );
                             },
                             child: Text(
                               'Login',
