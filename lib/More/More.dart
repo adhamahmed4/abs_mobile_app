@@ -182,7 +182,7 @@ class _MorePageState extends State<MorePage> {
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(12), // Add border radius
+              borderRadius: BorderRadius.circular(12),
               child: Container(
                 color: Color.fromARGB(255, 255, 233, 233),
                 child: ListTileTheme(
@@ -195,14 +195,45 @@ class _MorePageState extends State<MorePage> {
                         title: Text(
                           'Logout',
                           style: TextStyle(
-                            color: Colors.red, // Set the font color to red
+                            color: Colors.red,
                           ),
                         ),
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LoginPage()),
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: Center(child: Text('Confirm Logout')),
+                                content:
+                                    Text('Are you sure you want to logout?'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                    },
+                                    child: Text('Cancel'),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .pop(); // Close the dialog
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => LoginPage()),
+                                      );
+                                    },
+                                    child: Text(
+                                      'Logout',
+                                      style: TextStyle(
+                                        color: Colors.red,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
                           );
                         },
                       ),
