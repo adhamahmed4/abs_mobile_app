@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -20,6 +22,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
   String _emailErrorText = '';
   String _passwordErrorText = '';
   String _confirmPasswordErrorText = '';
+  String _phoneNumberErrorText = '';
+
+  PhoneNumber _phoneNumber = PhoneNumber();
 
   @override
   void initState() {
@@ -36,9 +41,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
       _validateEmail(_emailController.text);
     });
 
-    _passwordController.addListener(() {
-      _validatePassword(_passwordController.text);
-    });
+    // _passwordController.addListener(() {
+    //   _validatePassword(_passwordController.text);
+    // });
 
     _confirmPasswordController.addListener(() {
       _validateConfirmPassword(_confirmPasswordController.text);
@@ -88,30 +93,30 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
   }
 
-  void _validatePassword(String password) {
-    bool hasUppercase = password.contains(RegExp(r'[A-Z]'));
-    bool hasLowercase = password.contains(RegExp(r'[a-z]'));
-    bool hasDigit = password.contains(RegExp(r'[0-9]'));
+  // void _validatePassword(String password) {
+  //   bool hasUppercase = password.contains(RegExp(r'[A-Z]'));
+  //   bool hasLowercase = password.contains(RegExp(r'[a-z]'));
+  //   bool hasDigit = password.contains(RegExp(r'[0-9]'));
 
-    String errorText = '';
+  //   String errorText = '';
 
-    if (password.length < 8) {
-      errorText += 'At least 8 characters\n';
-    }
-    if (!hasUppercase) {
-      errorText += 'At least one uppercase letter\n';
-    }
-    if (!hasLowercase) {
-      errorText += 'At least one lowercase letter\n';
-    }
-    if (!hasDigit) {
-      errorText += 'At least one number\n';
-    }
+  //   if (password.length < 8) {
+  //     errorText += 'At least 8 characters\n';
+  //   }
+  //   if (!hasUppercase) {
+  //     errorText += 'At least one uppercase letter\n';
+  //   }
+  //   if (!hasLowercase) {
+  //     errorText += 'At least one lowercase letter\n';
+  //   }
+  //   if (!hasDigit) {
+  //     errorText += 'At least one number\n';
+  //   }
 
-    setState(() {
-      _passwordErrorText = errorText;
-    });
-  }
+  //   setState(() {
+  //     _passwordErrorText = errorText;
+  //   });
+  // }
 
   void _validateConfirmPassword(String confirmPassword) {
     String password = _passwordController.text;
@@ -126,6 +131,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
       });
     }
   }
+
+  void _validatePhoneNumber(String phoneNumber) {
+    if (phoneNumber.isEmpty) {
+      setState(() {
+        _phoneNumberErrorText = 'Phone number is required';
+      });
+    } else {
+      setState(() {
+        _phoneNumberErrorText = '';
+      });
+    }
+  }
+
+  final GlobalKey<FlutterPwValidatorState> validatorKey =
+      GlobalKey<FlutterPwValidatorState>();
 
   @override
   Widget build(BuildContext context) {
@@ -188,29 +208,95 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     ),
                   ),
                   SizedBox(height: 12),
-                  TextField(
-                    controller: _passwordController,
-                    obscureText: !_passwordVisible,
-                    decoration: InputDecoration(
-                      fillColor: const Color.fromARGB(255, 250, 250, 250),
-                      filled: true,
-                      labelText: 'Password',
-                      border: OutlineInputBorder(),
-                      suffixIcon: GestureDetector(
-                        onTap: () {
+                  Container(
+                    height: 65,
+                    decoration: BoxDecoration(
+                      color: Color.fromARGB(255, 250, 250, 250),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(
+                        color: Color.fromARGB(255, 138, 138, 138),
+                        width: 1.4,
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: InternationalPhoneNumberInput(
+                        onInputChanged: (PhoneNumber number) {
+                          if (number.phoneNumber != null) {
+                            _validatePhoneNumber(number.phoneNumber!);
+                          }
                           setState(() {
-                            _passwordVisible = !_passwordVisible;
+                            _phoneNumber = number;
                           });
                         },
-                        child: Icon(
-                          _passwordVisible
-                              ? Icons.visibility
-                              : Icons.visibility_off,
+                        selectorConfig: SelectorConfig(
+                          selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
                         ),
+                        selectorTextStyle: TextStyle(color: Colors.black),
+                        initialValue: _phoneNumber,
                       ),
                     ),
                   ),
+                  if (_phoneNumberErrorText.isNotEmpty)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 4),
+                      child: Text(
+                        _phoneNumberErrorText,
+                        style: TextStyle(color: Colors.red),
+                      ),
+                    ),
+                  if (_phoneNumberErrorText.isNotEmpty)
+                    Text(
+                      _phoneNumberErrorText,
+                      style: TextStyle(color: Colors.red),
+                    ),
                   SizedBox(height: 12),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 2.0),
+                    child: TextField(
+                        controller: _passwordController,
+                        obscureText: !_passwordVisible,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: "Password",
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _passwordVisible = !_passwordVisible;
+                              });
+                            },
+                            child: Icon(
+                              _passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
+                            ),
+                          ),
+                          border: OutlineInputBorder(borderSide: BorderSide()),
+                        )),
+                  ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  FlutterPwValidator(
+                    key: validatorKey,
+                    controller: _passwordController,
+                    minLength: 8,
+                    uppercaseCharCount: 1,
+                    lowercaseCharCount: 1,
+                    numericCharCount: 1,
+                    width: 400,
+                    height: 130,
+                    onSuccess: () {
+                      print("MATCHED");
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("Password is matched")));
+                    },
+                    onFail: () {
+                      print("NOT MATCHED");
+                    },
+                  ),
+                  const SizedBox(height: 12),
                   TextField(
                     controller: _confirmPasswordController,
                     obscureText: !_confirmPasswordVisible,
@@ -236,113 +322,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           : _confirmPasswordErrorText,
                     ),
                   ),
-                  SizedBox(height: 6),
-
-                  // Password validation points with bullet points
-                  if (_passwordErrorText.isNotEmpty)
-                    Row(
-                      children: [
-                        SizedBox(width: 6),
-                        Icon(
-                          _passwordErrorText.contains('8 characters')
-                              ? Icons.close
-                              : Icons.check,
-                          color: _passwordErrorText.contains('8 characters')
-                              ? Colors.red
-                              : Colors.green,
-                        ),
-                        SizedBox(width: 6),
-                        Flexible(
-                          child: Text(
-                            'At least 8 characters',
-                            style: TextStyle(
-                              color: _passwordErrorText.contains('8 characters')
-                                  ? Colors.red
-                                  : Colors.green,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  if (_passwordErrorText.isNotEmpty)
-                    Row(
-                      children: [
-                        SizedBox(width: 6),
-                        Icon(
-                          _passwordErrorText.contains('uppercase letter')
-                              ? Icons.close
-                              : Icons.check,
-                          color: _passwordErrorText.contains('uppercase letter')
-                              ? Colors.red
-                              : Colors.green,
-                        ),
-                        SizedBox(width: 6),
-                        Flexible(
-                          child: Text(
-                            'At least one uppercase letter',
-                            style: TextStyle(
-                              color: _passwordErrorText
-                                      .contains('uppercase letter')
-                                  ? Colors.red
-                                  : Colors.green,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  if (_passwordErrorText.isNotEmpty)
-                    Row(
-                      children: [
-                        SizedBox(width: 6),
-                        Icon(
-                          _passwordErrorText.contains('lowercase letter')
-                              ? Icons.close
-                              : Icons.check,
-                          color: _passwordErrorText.contains('lowercase letter')
-                              ? Colors.red
-                              : Colors.green,
-                        ),
-                        SizedBox(width: 6),
-                        Flexible(
-                          child: Text(
-                            'At least one lowercase letter',
-                            style: TextStyle(
-                              color: _passwordErrorText
-                                      .contains('lowercase letter')
-                                  ? Colors.red
-                                  : Colors.green,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  if (_passwordErrorText.isNotEmpty)
-                    Row(
-                      children: [
-                        SizedBox(width: 6),
-                        Icon(
-                          _passwordErrorText.contains('number')
-                              ? Icons.close
-                              : Icons.check,
-                          color: _passwordErrorText.contains('number')
-                              ? Colors.red
-                              : Colors.green,
-                        ),
-                        SizedBox(width: 6),
-                        Flexible(
-                          child: Text(
-                            'At least one number',
-                            style: TextStyle(
-                              color: _passwordErrorText.contains('number')
-                                  ? Colors.red
-                                  : Colors.green,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-
-                  SizedBox(height: 24),
+                  SizedBox(height: 12),
                   Align(
                     alignment: Alignment.centerRight,
                     child: ElevatedButton(
