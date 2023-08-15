@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:http/http.dart' as http;
 
 import 'Login/login.dart';
 
@@ -31,6 +28,9 @@ class MyApp extends StatelessWidget {
         900: Color(0xFF2B2E83),
       },
     );
+
+    // Define Font
+    GoogleFonts.lexend();
     return MaterialApp(
       title: 'ABS Courier & Freight Systems',
       theme: ThemeData(
@@ -38,57 +38,7 @@ class MyApp extends StatelessWidget {
           fontFamily: GoogleFonts.lexend().fontFamily),
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
-      routes: {
-        '/': (context) => MyLoginPage(),
-        '/home': (context) =>
-            const MyHomePage(title: 'ABS Courier & Freight Systems'),
-      },
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ),
+      routes: {'/': (context) => LoginPage()},
     );
   }
 }
