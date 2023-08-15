@@ -1,4 +1,5 @@
 import 'package:abs_mobile_app/Home/home.dart';
+import 'package:abs_mobile_app/Register/register.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -150,7 +151,12 @@ class _LoginPageState extends State<LoginPage> {
                               SizedBox(width: 4),
                               GestureDetector(
                                 onTap: () {
-                                  // Implement registration redirection
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            RegistrationPage()),
+                                  );
                                 },
                                 child: Text(
                                   'Create',
