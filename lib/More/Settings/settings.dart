@@ -1,4 +1,5 @@
 import 'package:abs_mobile_app/More/Settings/BusinessInfo/businessInfo.dart';
+import 'package:abs_mobile_app/More/Settings/PaymentMethods/paymentMethods.dart';
 import 'package:abs_mobile_app/More/Settings/PersonalInfo/personalInfo.dart';
 import 'package:flutter/material.dart';
 
@@ -104,7 +105,27 @@ class _SettingsPageState extends State<SettingsPage> {
                         title: Text('Payment Methods'),
                         trailing: Icon(Icons.arrow_forward),
                         onTap: () {
-                          // Handle email tap
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              transitionDuration: Duration(
+                                  milliseconds:
+                                      300), // Adjust the animation duration
+                              pageBuilder: (_, __, ___) => PaymentMethodsPage(),
+                              transitionsBuilder: (_,
+                                  Animation<double> animation,
+                                  __,
+                                  Widget child) {
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: Offset(1.0, 0.0),
+                                    end: Offset.zero,
+                                  ).animate(animation),
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
                         },
                       ),
                       Divider(),
