@@ -1,5 +1,6 @@
 import 'package:abs_mobile_app/Home/home.dart';
 import 'package:abs_mobile_app/Register/register.dart';
+import 'package:abs_mobile_app/Register/nextPage.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -154,8 +155,7 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            RegistrationPage()),
+                                        builder: (context) => NextPage()),
                                   );
                                 },
                                 child: Text(
