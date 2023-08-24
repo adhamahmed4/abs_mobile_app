@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
-import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'NextPage.dart';
 import 'dart:developer';
@@ -18,11 +17,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
+  final TextEditingController _phoneNumberController =
+      TextEditingController(text: "+20");
 
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
   bool _isCheckboxChecked = false;
-  bool _hasScrolledToEnd = false;
   String _fullNameErrorText = '';
   String _userNameErrorText = '';
   String _emailErrorText = '';
@@ -30,8 +30,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
   String _phoneNumberErrorText = '';
   bool _passwordIsValid = false;
   bool _isButtonEnabled = false;
-
-  PhoneNumber _phoneNumber = PhoneNumber();
 
   @override
   void initState() {
@@ -57,6 +55,28 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
     _confirmPasswordController.addListener(() {
       _validateConfirmPassword(_confirmPasswordController.text);
+      _updateButtonEnabledStatus();
+    });
+
+    _phoneNumberController.addListener(() {
+      // Ensure the text starts with "+20"
+      if (!_phoneNumberController.text.startsWith("+20")) {
+        _phoneNumberController.text = "+20";
+      }
+
+      // Ensure the total length is 13 characters (including the prefix)
+      if (_phoneNumberController.text.length > 13) {
+        _phoneNumberController.text =
+            _phoneNumberController.text.substring(0, 13);
+      }
+
+      // Move the cursor to the end
+      _phoneNumberController.selection = TextSelection.fromPosition(
+        TextPosition(offset: _phoneNumberController.text.length),
+      );
+
+      // Call the phone number validation method
+      _validatePhoneNumber(_phoneNumberController.text);
       _updateButtonEnabledStatus();
     });
   }
@@ -122,6 +142,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
         _confirmPasswordErrorText = '';
       });
     }
+    _updateButtonEnabledStatus();
   }
 
   void _validatePhoneNumber(String phoneNumber) {
@@ -129,11 +150,20 @@ class _RegistrationPageState extends State<RegistrationPage> {
       setState(() {
         _phoneNumberErrorText = 'Phone number is required';
       });
+    } else if (phoneNumber.length != 13) {
+      setState(() {
+        _phoneNumberErrorText = 'Phone number must be 10 digits';
+      });
+    } else if (!phoneNumber.startsWith('+20')) {
+      setState(() {
+        _phoneNumberErrorText = 'Phone number must start with +20';
+      });
     } else {
       setState(() {
         _phoneNumberErrorText = '';
       });
     }
+    _updateButtonEnabledStatus();
   }
 
   void _updateCheckboxStatus(bool? newValue) {
@@ -145,29 +175,99 @@ class _RegistrationPageState extends State<RegistrationPage> {
     }
   }
 
-  void _showTermsAndConditionsDialog() {
+  void _showTermsAndConditionsDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Terms and Conditions"),
-          content: SingleChildScrollView(
-            child: ListView(
-              shrinkWrap: true,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Here are the terms and conditions..."),
-                // Add more text as needed
+                Container(
+                  width: 340,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF2B2E83),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10.0),
+                      topRight: Radius.circular(10.0),
+                    ),
+                  ),
+                  child: const Text(
+                    "Terms and Conditions",
+                    style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Welcome to ABS! By using our app, you agree to comply with and be bound by the following terms and conditions. Please read them carefully before using the app.\n\n"
+                        "Service Description\n\n"
+                        "ABS provides users with the ability to request package delivery and track shipments. Our app is designed to make shipping and receiving packages convenient and efficient.\n\n"
+                        "User Responsibilities\n\n"
+                        "- You must provide accurate and up-to-date information when using the app.\n"
+                        "- You must not use the app for any illegal or unauthorized purpose.\n"
+                        "- You must not interfere with the app's functionality or security features.\n\n"
+                        "Payment\n\n"
+                        "- Payment for our services can be made through the methods provided in the app.\n"
+                        "- Any charges associated with our services will be clearly displayed before you confirm your request.\n"
+                        "Delivery and Shipping\n\n"
+                        "- We strive to provide accurate delivery estimates, but actual delivery times may vary.\n"
+                        "- Tracking features are available for most shipments.\n"
+                        "- Packages must meet our size and weight restrictions and should not contain prohibited items.\n"
+                        "Privacy and Data Handling\n\n"
+                        "- We collect and use user data in accordance with our Privacy Policy.\n"
+                        "- We use cookies and tracking technologies to enhance user experience and gather usage information.\n"
+                        "Intellectual Property\n\n"
+                        "- The content, trademarks, and copyrights in the app are owned by ABS.\n"
+                        "- You may not use our intellectual property without our prior written consent.\n"
+                        "Liability and Disclaimers\n\n"
+                        "- We are not liable for any damages or losses arising from your use of the app.\n"
+                        "- We do not guarantee the accuracy or availability of the information and services provided.\n"
+                        "Termination\n\n"
+                        "- We reserve the right to terminate or suspend user accounts for any reason.\n"
+                        "- You may terminate your account at any time by following the app's instructions.\n"
+                        "Governing Law\n\n"
+                        "- These terms and conditions are governed by the laws of [Your Jurisdiction].\n"
+                        "- Any disputes arising from these terms will be resolved in [Your Jurisdiction].\n"
+                        "Changes to Terms\n\n"
+                        "- We may update or modify these terms and conditions from time to time.\n"
+                        "- Any changes will be communicated to users through the app.\n"
+                        "Contact Information\n\n"
+                        "If you have any questions or concerns about these terms and conditions, please contact us at [contact@email.com].",
+                        style: TextStyle(fontSize: 16),
+                      ),
+                      // Add more sections here...
+                    ],
+                  ),
+                ),
+                Container(
+                  alignment:
+                      Alignment.bottomLeft, // Align button to the bottom left
+                  padding: const EdgeInsets.fromLTRB(16, 8, 0, 16),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Close the dialog
+                    },
+                    style: TextButton.styleFrom(
+                      textStyle: TextStyle(fontSize: 16),
+                    ),
+                    child: const Text(
+                      "Close",
+                      style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text("Close"),
-            ),
-          ],
         );
       },
     );
@@ -263,49 +363,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       },
                     ),
                     const SizedBox(height: 12),
-                    Container(
-                      height: 75,
-                      decoration: BoxDecoration(
-                        color: const Color.fromARGB(255, 250, 250, 250),
-                        borderRadius: BorderRadius.circular(4),
-                        border: Border.all(
-                          color: const Color.fromARGB(255, 138, 138, 138),
-                          width: 1.4,
-                        ),
+                    TextField(
+                      controller: _phoneNumberController,
+                      keyboardType: TextInputType.phone,
+                      maxLength: 13, // +20 + 10 digits
+                      decoration: InputDecoration(
+                        fillColor: const Color.fromARGB(255, 250, 250, 250),
+                        filled: true,
+                        border: const OutlineInputBorder(),
+                        labelText: 'Phone Number',
+                        errorText: _phoneNumberErrorText.isNotEmpty
+                            ? _phoneNumberErrorText
+                            : null,
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        child: InternationalPhoneNumberInput(
-                          onInputChanged: (PhoneNumber number) {
-                            if (number.phoneNumber != null) {
-                              _validatePhoneNumber(number.phoneNumber!);
-                            }
-                            setState(() {
-                              _phoneNumber = number;
-                            });
-                          },
-                          selectorConfig: const SelectorConfig(
-                            selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
-                          ),
-                          selectorTextStyle:
-                              const TextStyle(color: Colors.black),
-                          initialValue: _phoneNumber,
-                        ),
-                      ),
+                      onChanged: (phoneNumber) {
+                        _validatePhoneNumber(phoneNumber);
+                        _updateButtonEnabledStatus();
+                      },
                     ),
-                    if (_phoneNumberErrorText.isNotEmpty)
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4),
-                        child: Text(
-                          _phoneNumberErrorText,
-                          style: const TextStyle(color: Colors.red),
-                        ),
-                      ),
-                    if (_phoneNumberErrorText.isNotEmpty)
-                      Text(
-                        _phoneNumberErrorText,
-                        style: const TextStyle(color: Colors.red),
-                      ),
                     const SizedBox(height: 12),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 2.0),
@@ -389,7 +464,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       children: [
                         TextButton(
                           onPressed: () {
-                            _showTermsAndConditionsDialog(); // Implement this method to show the terms and conditions dialog
+                            _showTermsAndConditionsDialog(
+                                context); // Call the function to show the dialog
                           },
                           child: Text(
                             "Read Terms and Conditions",
@@ -401,16 +477,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         ),
                         CheckboxListTile(
                           title: Text("I agree to the terms and conditions"),
-                          value: _hasScrolledToEnd,
-                          onChanged: (newValue) {
-                            setState(() {
-                              if (_hasScrolledToEnd) {
-                                _hasScrolledToEnd = false;
-                              } else {
-                                _hasScrolledToEnd = true;
+                          value: _isCheckboxChecked,
+                          onChanged: (bool? newValue) {
+                            if (newValue != null) {
+                              setState(() {
+                                _isCheckboxChecked = newValue;
                                 _updateButtonEnabledStatus(); // Update the button status based on the new checkbox state
-                              }
-                            });
+                              });
+                            }
                           },
                         ),
                       ],
@@ -475,6 +549,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         ],
                       ),
                     ),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
