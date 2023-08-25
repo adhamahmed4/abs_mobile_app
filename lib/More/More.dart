@@ -1,6 +1,11 @@
 import 'package:abs_mobile_app/Login/login.dart';
 import 'package:abs_mobile_app/More/Settings/settings.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../Configurations/app_config.dart';
+import 'package:http/http.dart' as http; // Import the http package
+import 'dart:convert';
 
 class MorePage extends StatefulWidget {
   @override
@@ -8,7 +13,12 @@ class MorePage extends StatefulWidget {
 }
 
 class _MorePageState extends State<MorePage> {
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _mobileController = TextEditingController();
+  TextEditingController _avatarController = TextEditingController();
+
   String generateAvatarLetter(String name) {
+    if (name.isEmpty) return '';
     final names = name.split(" ");
     if (names.length >= 2) {
       return names[0][0] + names[1][0];
@@ -18,10 +28,52 @@ class _MorePageState extends State<MorePage> {
     return '';
   }
 
+  Future<void> fetchUserInfo() async {
+    final url = Uri.parse('${AppConfig.baseUrl}/users-with-info-client');
+    final response = await http.get(url, headers: AppConfig.headers);
+
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      setState(() {
+        _nameController.text = responseBody[0]['firstName'] +
+            ' ' +
+            responseBody[0]['lastName']; // Update the name controller
+        _mobileController.text =
+            responseBody[0]['contactNumber']; // Update the mobile controller
+        _avatarController.text =
+            responseBody[0]['avatar']; // Update the avatar controller
+      });
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Failed to fetch user info'),
+            content: Text('Failed to fetch user info.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserInfo(); // Call the method to fetch user info on page load
+  }
+
   @override
   Widget build(BuildContext context) {
-    final String fullName = 'Adham Ahmed';
-    final String Mobile = '+201001307530';
+    // final String fullName = 'Adham Ahmed';
+    // final String Mobile = '+201001307530';
 
     return Scaffold(
       appBar: AppBar(
@@ -40,37 +92,55 @@ class _MorePageState extends State<MorePage> {
                 children: [
                   ClipOval(
                     child: Container(
-                      color: Color(0xFFEEF1F5),
-                      child: Image.asset(
-                        'assets/images/profile_picture.jpg',
-                        width: 80,
-                        height: 80,
-                        errorBuilder: (BuildContext context, Object exception,
-                            StackTrace? stackTrace) {
-                          return CircleAvatar(
-                            backgroundColor: Color(0xFFEEF1F5),
-                            radius: 40,
-                            child: Text(
-                              generateAvatarLetter(fullName),
-                              style: TextStyle(fontSize: 24),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                        color: Color(0xFFEEF1F5),
+                        child: _avatarController.text.isNotEmpty
+                            ? FadeInImage.assetNetwork(
+                                placeholder:
+                                    'assets/images/profile_picture.jpg', // Placeholder image asset
+                                image:
+                                    'http://192.168.1.138:3000/images/getImage?name=${_avatarController.text}}',
+                                width: 80,
+                                height: 80,
+                                fit: BoxFit.cover,
+                              )
+                            : CircleAvatar(
+                                backgroundColor: Color(0xFFEEF1F5),
+                                radius: 40,
+                                child: Text(
+                                  generateAvatarLetter(_nameController.text),
+                                  style: TextStyle(fontSize: 24),
+                                ),
+                              )
+                        // Image.asset(
+                        //   'assets/images/profile_picture.jpg',
+                        //   width: 80,
+                        //   height: 80,
+                        //   errorBuilder: (BuildContext context, Object exception,
+                        //       StackTrace? stackTrace) {
+                        //     return CircleAvatar(
+                        //       backgroundColor: Color(0xFFEEF1F5),
+                        //       radius: 40,
+                        //       child: Text(
+                        //         generateAvatarLetter(_nameController.text),
+                        //         style: TextStyle(fontSize: 24),
+                        //       ),
+                        //     );
+                        //   },
+                        // ),
+                        ),
                   ),
                   SizedBox(width: 16),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        fullName,
+                        _nameController.text,
                         style: TextStyle(
                             fontSize: 18, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 8),
                       Text(
-                        Mobile,
+                        _mobileController.text,
                         style: TextStyle(fontSize: 16, color: Colors.grey),
                       ),
                     ],
@@ -215,7 +285,10 @@ class _MorePageState extends State<MorePage> {
                                     child: Text('Cancel'),
                                   ),
                                   TextButton(
-                                    onPressed: () {
+                                    onPressed: () async {
+                                      final prefs =
+                                          await SharedPreferences.getInstance();
+                                      await prefs.clear();
                                       Navigator.of(context)
                                           .pop(); // Close the dialog
                                       Navigator.push(

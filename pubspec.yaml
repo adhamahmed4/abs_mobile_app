@@ -48,6 +48,8 @@ dependencies:
   coupon_uikit: ^0.2.0
   intl_phone_field: ^3.2.0
   pricing_cards: ^0.0.8
+  shared_preferences: ^2.2.0
+  flutter_secure_storage: ^8.0.0
 
 dev_dependencies:
   flutter_test:
