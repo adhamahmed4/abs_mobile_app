@@ -23,6 +23,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
   bool _isCheckboxChecked = false;
+  bool _showPasswordValidation = false;
   String _fullNameErrorText = '';
   String _userNameErrorText = '';
   String _emailErrorText = '';
@@ -298,6 +299,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFEEF1F5),
+      appBar: AppBar(
+        title: Text('Create an Account'),
+        automaticallyImplyLeading: false,
+      ),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -305,16 +310,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(24, 60, 24, 0),
+                padding: EdgeInsets.fromLTRB(24, 20, 24, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Create an Account',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 8),
                     const Text(
                       'Sign up to access your account',
                       style: TextStyle(color: Colors.grey),
@@ -366,7 +365,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     TextField(
                       controller: _phoneNumberController,
                       keyboardType: TextInputType.phone,
-                      maxLength: 13, // +20 + 10 digits
+                      //maxLength: 13, // +20 + 10 digits
                       decoration: InputDecoration(
                         fillColor: const Color.fromARGB(255, 250, 250, 250),
                         filled: true,
@@ -385,53 +384,60 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 2.0),
                       child: TextField(
-                          controller: _passwordController,
-                          obscureText: !_passwordVisible,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            hintText: "Password",
-                            suffixIcon: GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  _passwordVisible = !_passwordVisible;
-                                });
-                              },
-                              child: Icon(
-                                _passwordVisible
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                              ),
+                        controller: _passwordController,
+                        obscureText: !_passwordVisible,
+                        onTap: () {
+                          setState(() {
+                            _showPasswordValidation =
+                                true; // Show password validation on tap
+                          });
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.white,
+                          hintText: "Password",
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _passwordVisible = !_passwordVisible;
+                              });
+                            },
+                            child: Icon(
+                              _passwordVisible
+                                  ? Icons.visibility
+                                  : Icons.visibility_off,
                             ),
-                            border: const OutlineInputBorder(
-                                borderSide: BorderSide()),
-                          )),
+                          ),
+                          border: const OutlineInputBorder(
+                            borderSide: BorderSide(),
+                          ),
+                        ),
+                      ),
                     ),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    FlutterPwValidator(
-                      key: validatorKey,
-                      controller: _passwordController,
-                      minLength: 8,
-                      uppercaseCharCount: 1,
-                      lowercaseCharCount: 1,
-                      numericCharCount: 1,
-                      width: 400,
-                      height: 130,
-                      onSuccess: () {
-                        setState(() {
-                          _passwordIsValid = true;
-                        });
-                        _updateButtonEnabledStatus();
-                      },
-                      onFail: () {
-                        setState(() {
-                          _passwordIsValid = false;
-                        });
-                        _updateButtonEnabledStatus();
-                      },
-                    ),
+                    const SizedBox(height: 5),
+                    if (_showPasswordValidation) // Show validation only if _showPasswordValidation is true
+                      FlutterPwValidator(
+                        key: validatorKey,
+                        controller: _passwordController,
+                        minLength: 8,
+                        uppercaseCharCount: 1,
+                        lowercaseCharCount: 1,
+                        numericCharCount: 1,
+                        width: 400,
+                        height: 130,
+                        onSuccess: () {
+                          setState(() {
+                            _passwordIsValid = true;
+                          });
+                          _updateButtonEnabledStatus();
+                        },
+                        onFail: () {
+                          setState(() {
+                            _passwordIsValid = false;
+                          });
+                          _updateButtonEnabledStatus();
+                        },
+                      ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _confirmPasswordController,
