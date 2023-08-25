@@ -155,13 +155,14 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) => NextPage()),
+                                        builder: (context) =>
+                                            RegistrationPage()),
                                   );
                                 },
                                 child: Text(
                                   'Create',
                                   style: TextStyle(
-                                    color: Colors.orange,
+                                    color: Color(0xFFFF9800),
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),

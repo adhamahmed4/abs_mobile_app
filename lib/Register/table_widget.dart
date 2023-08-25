@@ -7,6 +7,8 @@ class TableWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final columnsCount = 8; // Number of columns
+
     return Container(
       margin: EdgeInsets.symmetric(vertical: 16),
       child: Column(
@@ -31,7 +33,7 @@ class TableWidget extends StatelessWidget {
               child: DataTable(
                 columnSpacing: 8,
                 columns: List.generate(
-                  8,
+                  columnsCount,
                   (index) => DataColumn(
                     label: Text(
                       'Header ${index + 1}',
@@ -40,17 +42,25 @@ class TableWidget extends StatelessWidget {
                   ),
                 ),
                 rows: List.generate(
-                  8,
+                  (tableData.length / columnsCount).ceil(),
                   (rowIndex) => DataRow(
                     cells: List.generate(
-                      8,
-                      (cellIndex) => DataCell(
-                        Container(
-                          width: 80, // Adjust the width as needed
-                          alignment: Alignment.center,
-                          child: Text(tableData[rowIndex * 8 + cellIndex]),
-                        ),
-                      ),
+                      columnsCount,
+                      (cellIndex) {
+                        final dataIndex = rowIndex * columnsCount + cellIndex;
+                        if (dataIndex < tableData.length) {
+                          return DataCell(
+                            Container(
+                              width: 80,
+                              alignment: Alignment.center,
+                              child: Text(tableData[dataIndex]),
+                            ),
+                          );
+                        } else {
+                          return DataCell(
+                              Container()); // Empty cell if data not available
+                        }
+                      },
                     ),
                   ),
                 ),
