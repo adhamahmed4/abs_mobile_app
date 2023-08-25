@@ -1,7 +1,11 @@
+import 'package:abs_mobile_app/Configurations/app_config.dart';
 import 'package:abs_mobile_app/Home/home.dart';
-import 'package:abs_mobile_app/Register/register.dart';
 import 'package:abs_mobile_app/Register/nextPage.dart';
 import 'package:flutter/material.dart';
+
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http; // Import the http package
 
 class LoginPage extends StatefulWidget {
   @override
@@ -9,9 +13,61 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _emailController = TextEditingController();
+  TextEditingController _usernameController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
   bool _passwordVisible = false;
+
+  Future<void> _login() async {
+    final url = Uri.parse('http://192.168.1.138:3000/signin-client');
+    final requestBody = {
+      "userCred": _usernameController.text,
+      "password": _passwordController.text
+    };
+
+// Convert the map to a JSON string
+    final jsonBody = json.encode(requestBody);
+
+// Set the headers for the request
+    final headers = {
+      'Content-Type': 'application/json',
+    };
+    final response = await http.post(
+      url,
+      headers: headers,
+      body: jsonBody,
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      final accessToken = responseBody["accessToken"];
+      await AppConfig.storeToken(accessToken);
+      await AppConfig.initialize();
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => Home()),
+      );
+    } else {
+      // Failed login
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Login Failed'),
+            content: Text('Invalid username or password.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +116,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       SizedBox(height: 20),
                       TextField(
-                        controller: _emailController,
+                        controller: _usernameController,
                         decoration: InputDecoration(
                           fillColor: Color.fromARGB(255, 250, 250, 250),
                           filled: true,
@@ -113,10 +169,7 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => Home()),
-                              );
+                              _login();
                             },
                             child: Text(
                               'Login',

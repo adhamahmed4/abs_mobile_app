@@ -50,7 +50,6 @@ class _HomeState extends State<Home> {
                 setState(() {
                   _selectedIndex = index;
                 });
-                print(index);
               },
               tabs: [
                 GButton(
