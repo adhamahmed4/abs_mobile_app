@@ -98,7 +98,7 @@ class _MorePageState extends State<MorePage> {
                                 placeholder:
                                     'assets/images/profile_picture.jpg', // Placeholder image asset
                                 image:
-                                    'http://192.168.1.138:3000/images/getImage?name=${_avatarController.text}}',
+                                    'http://192.168.1.5:3000/images/getImage?name=${_avatarController.text}}',
                                 width: 80,
                                 height: 80,
                                 fit: BoxFit.cover,
