@@ -1,7 +1,9 @@
 import 'package:abs_mobile_app/Configurations/app_config.dart';
-import 'package:abs_mobile_app/Home/home.dart';
+import 'package:abs_mobile_app/Home/navBar.dart';
 import 'package:abs_mobile_app/Register/nextPage.dart';
 import 'package:flutter/material.dart';
+import 'package:abs_mobile_app/Register/register.dart';
+import 'package:abs_mobile_app/Home/Home.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
@@ -18,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _passwordVisible = false;
 
   Future<void> _login() async {
-    final url = Uri.parse('http://192.168.1.138:3000/signin-client');
+    final url = Uri.parse('http://192.168.1.5:3000/signin-client');
     final requestBody = {
       "userCred": _usernameController.text,
       "password": _passwordController.text
@@ -45,7 +47,7 @@ class _LoginPageState extends State<LoginPage> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Home()),
+        MaterialPageRoute(builder: (context) => NavBar()),
       );
     } else {
       // Failed login

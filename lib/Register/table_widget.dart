@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 class TableWidget extends StatelessWidget {
-  final List<String> tableData;
+  final List<Map<String, dynamic>> tableData;
 
   TableWidget(this.tableData);
 
   @override
   Widget build(BuildContext context) {
-    final columnsCount = 8; // Number of columns
+    final columnsCount =
+        tableData.length + 1; // Number of columns (zones + header)
 
     return Container(
       margin: EdgeInsets.symmetric(vertical: 16),
@@ -34,35 +35,35 @@ class TableWidget extends StatelessWidget {
                 columnSpacing: 8,
                 columns: List.generate(
                   columnsCount,
-                  (index) => DataColumn(
-                    label: Text(
-                      'Header ${index + 1}',
-                      style: TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
+                  (index) {
+                    if (index == 0) {
+                      return DataColumn(label: Text('Zone'));
+                    } else {
+                      return DataColumn(label: Text('Zone$index'));
+                    }
+                  },
                 ),
                 rows: List.generate(
-                  (tableData.length / columnsCount).ceil(),
-                  (rowIndex) => DataRow(
-                    cells: List.generate(
-                      columnsCount,
-                      (cellIndex) {
-                        final dataIndex = rowIndex * columnsCount + cellIndex;
-                        if (dataIndex < tableData.length) {
-                          return DataCell(
-                            Container(
-                              width: 80,
-                              alignment: Alignment.center,
-                              child: Text(tableData[dataIndex]),
-                            ),
-                          );
-                        } else {
-                          return DataCell(
-                              Container()); // Empty cell if data not available
-                        }
-                      },
-                    ),
-                  ),
+                  tableData.length,
+                  (rowIndex) {
+                    final rowData = tableData[rowIndex];
+                    return DataRow(
+                      cells: List.generate(
+                        columnsCount,
+                        (cellIndex) {
+                          if (cellIndex == 0) {
+                            // First column: Zone name
+                            return DataCell(Text(rowData['#'] ??
+                                '')); // Use default value if '#'' is null
+                          } else {
+                            // Data columns: Zone values
+                            final zoneValue = rowData['Zone$cellIndex'];
+                            return DataCell(Text(zoneValue.toString()));
+                          }
+                        },
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

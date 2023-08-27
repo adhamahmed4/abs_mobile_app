@@ -3,6 +3,8 @@ import 'package:email_validator/email_validator.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'NextPage.dart';
 import 'dart:developer';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -17,8 +19,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController =
       TextEditingController();
-  final TextEditingController _phoneNumberController =
-      TextEditingController(text: "+20");
+  final TextEditingController _phoneNumberController = TextEditingController();
 
   bool _passwordVisible = false;
   bool _confirmPasswordVisible = false;
@@ -60,15 +61,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
     });
 
     _phoneNumberController.addListener(() {
-      // Ensure the text starts with "+20"
-      if (!_phoneNumberController.text.startsWith("+20")) {
-        _phoneNumberController.text = "+20";
-      }
-
       // Ensure the total length is 13 characters (including the prefix)
-      if (_phoneNumberController.text.length > 13) {
+      if (_phoneNumberController.text.length > 11) {
         _phoneNumberController.text =
-            _phoneNumberController.text.substring(0, 13);
+            _phoneNumberController.text.substring(0, 11);
       }
 
       // Move the cursor to the end
@@ -103,10 +99,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
       setState(() {
         _userNameErrorText = 'Enter a user name';
       });
-    } else if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(userName)) {
+    } else if (userName.length <= 7) {
+      setState(() {
+        _userNameErrorText = 'User name should be at least 8 characters long';
+      });
+    } else if (!RegExp(r'^[a-zA-Z0-9\s]+$').hasMatch(userName)) {
       setState(() {
         _userNameErrorText =
-            'User name should contain only letters and numbers';
+            'User name should contain only letters, numbers, and spaces';
       });
     } else {
       setState(() {
@@ -131,6 +131,69 @@ class _RegistrationPageState extends State<RegistrationPage> {
     _updateButtonEnabledStatus(); // Call this here to update the button status
   }
 
+  Future<bool> _validateEmailExistence(String email) async {
+    final requestBody = {"email": email};
+    log(email);
+    // Convert the map to a JSON string
+    final jsonBody = json.encode(requestBody);
+    final response = await http.post(
+      Uri.parse("http://192.168.1.5:3000/validate/email"),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonBody,
+    );
+
+    final data = json.decode(response.body);
+
+    print(data);
+
+    if (data["message"] == "Email already exists") {
+      return false;
+    }
+    return true;
+  }
+
+  Future<bool> _validateUsernameExistence(String username) async {
+    final requestBody = {"username": username};
+    log(username);
+    // Convert the map to a JSON string
+    final jsonBody = json.encode(requestBody);
+    final response = await http.post(
+      Uri.parse("http://192.168.1.5:3000/validate/username"),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonBody,
+    );
+
+    final data = json.decode(response.body);
+
+    print(data);
+
+    if (data["message"] == "Username already exists") {
+      return false;
+    }
+    return true;
+  }
+
+  Future<bool> _validateMobileExistence(String mobile) async {
+    final requestBody = {"mobile": mobile};
+    log(mobile);
+    // Convert the map to a JSON string
+    final jsonBody = json.encode(requestBody);
+    final response = await http.post(
+      Uri.parse("http://192.168.1.5:3000/validate/mobile"),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonBody,
+    );
+
+    final data = json.decode(response.body);
+
+    print(data);
+
+    if (data["message"] == "Phone number already exists") {
+      return false;
+    }
+    return true;
+  }
+
   void _validateConfirmPassword(String confirmPassword) {
     String password = _passwordController.text;
 
@@ -151,13 +214,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
       setState(() {
         _phoneNumberErrorText = 'Phone number is required';
       });
-    } else if (phoneNumber.length != 13) {
+    } else if (phoneNumber.length != 11) {
       setState(() {
-        _phoneNumberErrorText = 'Phone number must be 10 digits';
-      });
-    } else if (!phoneNumber.startsWith('+20')) {
-      setState(() {
-        _phoneNumberErrorText = 'Phone number must start with +20';
+        _phoneNumberErrorText = 'Phone number must be 11 digits';
       });
     } else {
       setState(() {
@@ -274,13 +333,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
     );
   }
 
-  void _updateButtonEnabledStatus() {
+  void _updateButtonEnabledStatus() async {
     log("Updating button status...");
     log("_fullNameErrorText: $_fullNameErrorText");
     log("_userNameErrorText: $_userNameErrorText");
     log("_emailErrorText: $_emailErrorText");
     log("_confirmPasswordErrorText: $_confirmPasswordErrorText");
     log("_phoneNumberErrorText: $_phoneNumberErrorText");
+
     setState(() {
       _isButtonEnabled = _fullNameErrorText.isEmpty &&
           _userNameErrorText.isEmpty &&
@@ -315,8 +375,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Sign up to access your account',
-                      style: TextStyle(color: Colors.grey),
+                      'Start shipping with ABS',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 23,
+                      ),
                     ),
                     const SizedBox(height: 12),
                     TextField(
@@ -338,7 +401,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         fillColor: const Color.fromARGB(255, 250, 250, 250),
                         filled: true,
                         border: const OutlineInputBorder(),
-                        labelText: 'User Name',
+                        labelText: 'User Name / Account Name',
                         errorText: _userNameErrorText.isEmpty
                             ? null
                             : _userNameErrorText,
@@ -534,16 +597,49 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               ),
                             ),
                             onPressed: _isButtonEnabled && _isCheckboxChecked
-                                ? () {
+                                ? () async {
                                     if (_formKey.currentState!.validate()) {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => NextPage()),
-                                      );
+                                      bool isEmailValid =
+                                          await _validateEmailExistence(
+                                              _emailController.text);
+                                      bool isUsernameValid =
+                                          await _validateUsernameExistence(
+                                              _userNameController.text);
+                                      bool isMobileValid =
+                                          await _validateMobileExistence(
+                                              _phoneNumberController.text);
+
+                                      if (isEmailValid &&
+                                          isUsernameValid &&
+                                          isMobileValid) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) => NextPage()),
+                                        );
+                                      } else {
+                                        String errorMessage = '';
+                                        if (!isEmailValid)
+                                          errorMessage =
+                                              'Email is already taken.';
+                                        if (!isUsernameValid)
+                                          errorMessage =
+                                              'Username is already taken.';
+                                        if (!isMobileValid)
+                                          errorMessage =
+                                              'Mobile number is already taken.';
+
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(
+                                          SnackBar(
+                                            content: Text(errorMessage),
+                                            duration: Duration(seconds: 3),
+                                          ),
+                                        );
+                                      }
                                     }
                                   }
-                                : null, // Disable the button if fields are not valid
+                                : null,
                             child: const Text(
                               'Next',
                               style: TextStyle(
