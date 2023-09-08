@@ -304,9 +304,6 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
     final response =
         await http.post(url, headers: AppConfig.headers, body: jsonBody);
     if (response.statusCode == 200) {
-      final urlUpdate =
-          Uri.parse('${AppConfig.baseUrl}/subAccounts-verification/verify/2');
-      await http.put(urlUpdate, headers: AppConfig.headers);
       final jsonData = json.decode(response.body);
       if (jsonData == "Prefix Already Exists") {
         // Show a dialog with the message
@@ -328,7 +325,9 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
           },
         );
       } else {
-        // Prefix does not exist, you can navigate here
+        final urlUpdate =
+            Uri.parse('${AppConfig.baseUrl}/subAccounts-verification/verify/2');
+        await http.put(urlUpdate, headers: AppConfig.headers);
         Navigator.pop(context); // Go back once
         Navigator.pop(context); // Go back again
       }
