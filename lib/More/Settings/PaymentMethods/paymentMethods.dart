@@ -3,6 +3,9 @@ import 'package:abs_mobile_app/More/Settings/PaymentMethods/MobileCash/mobileCas
 import 'package:abs_mobile_app/More/Settings/PaymentMethods/NearestBranch/nearestBranch.dart';
 import 'package:abs_mobile_app/More/Settings/PaymentMethods/Wallet/wallet.dart';
 import 'package:flutter/material.dart';
+import '../../../../Configurations/app_config.dart';
+import 'dart:convert'; // for JSON decoding and encoding
+import 'package:http/http.dart' as http;
 
 class PaymentMethodsPage extends StatefulWidget {
   @override
@@ -17,115 +20,117 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
         title: Text('Payment Methods'),
         centerTitle: true,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(height: 32),
-          Text(
-            'Choose a Payment Method',
-            style: TextStyle(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(height: 32),
+            Text(
+              'Choose a Payment Method',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          SizedBox(height: 32),
-          PaymentMethodCard(
-            icon: Icons.account_balance,
-            title: 'Bank Transfer',
-            onTap: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: Duration(
-                      milliseconds: 300), // Adjust the animation duration
-                  pageBuilder: (_, __, ___) => BankTransferPage(),
-                  transitionsBuilder:
-                      (_, Animation<double> animation, __, Widget child) {
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset(1.0, 0.0),
-                        end: Offset.zero,
-                      ).animate(animation),
-                      child: child,
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-          PaymentMethodCard(
-            icon: Icons.phone_android,
-            title: 'Mobile Cash',
-            onTap: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: Duration(
-                      milliseconds: 300), // Adjust the animation duration
-                  pageBuilder: (_, __, ___) => MobileCashPage(),
-                  transitionsBuilder:
-                      (_, Animation<double> animation, __, Widget child) {
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset(1.0, 0.0),
-                        end: Offset.zero,
-                      ).animate(animation),
-                      child: child,
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-          PaymentMethodCard(
-            icon: Icons.account_balance_wallet,
-            title: 'Wallet',
-            onTap: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: Duration(
-                      milliseconds: 300), // Adjust the animation duration
-                  pageBuilder: (_, __, ___) => WalletPage(),
-                  transitionsBuilder:
-                      (_, Animation<double> animation, __, Widget child) {
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset(1.0, 0.0),
-                        end: Offset.zero,
-                      ).animate(animation),
-                      child: child,
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-          PaymentMethodCard(
-            icon: Icons.location_on,
-            title: 'Nearest Branch',
-            onTap: () {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: Duration(
-                      milliseconds: 300), // Adjust the animation duration
-                  pageBuilder: (_, __, ___) => NearestBranchPage(),
-                  transitionsBuilder:
-                      (_, Animation<double> animation, __, Widget child) {
-                    return SlideTransition(
-                      position: Tween<Offset>(
-                        begin: Offset(1.0, 0.0),
-                        end: Offset.zero,
-                      ).animate(animation),
-                      child: child,
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-        ],
+            SizedBox(height: 32),
+            PaymentMethodCard(
+              icon: Icons.account_balance,
+              title: 'Bank Transfer',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionDuration: Duration(
+                        milliseconds: 300), // Adjust the animation duration
+                    pageBuilder: (_, __, ___) => BankTransferPage(),
+                    transitionsBuilder:
+                        (_, Animation<double> animation, __, Widget child) {
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: Offset(1.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+            PaymentMethodCard(
+              icon: Icons.phone_android,
+              title: 'Mobile Cash',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionDuration: Duration(
+                        milliseconds: 300), // Adjust the animation duration
+                    pageBuilder: (_, __, ___) => MobileCashPage(),
+                    transitionsBuilder:
+                        (_, Animation<double> animation, __, Widget child) {
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: Offset(1.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+            PaymentMethodCard(
+              icon: Icons.account_balance_wallet,
+              title: 'Wallet',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionDuration: Duration(
+                        milliseconds: 300), // Adjust the animation duration
+                    pageBuilder: (_, __, ___) => WalletPage(),
+                    transitionsBuilder:
+                        (_, Animation<double> animation, __, Widget child) {
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: Offset(1.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+            PaymentMethodCard(
+              icon: Icons.location_on,
+              title: 'Nearest Branch',
+              onTap: () {
+                Navigator.push(
+                  context,
+                  PageRouteBuilder(
+                    transitionDuration: Duration(
+                        milliseconds: 300), // Adjust the animation duration
+                    pageBuilder: (_, __, ___) => NearestBranchPage(),
+                    transitionsBuilder:
+                        (_, Animation<double> animation, __, Widget child) {
+                      return SlideTransition(
+                        position: Tween<Offset>(
+                          begin: Offset(1.0, 0.0),
+                          end: Offset.zero,
+                        ).animate(animation),
+                        child: child,
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

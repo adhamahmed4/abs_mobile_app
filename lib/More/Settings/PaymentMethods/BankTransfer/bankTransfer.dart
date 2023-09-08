@@ -1,5 +1,7 @@
-import 'package:abs_mobile_app/More/Settings/settings.dart';
 import 'package:flutter/material.dart';
+import '../../../../Configurations/app_config.dart';
+import 'dart:convert'; // for JSON decoding and encoding
+import 'package:http/http.dart' as http;
 
 class BankTransferPage extends StatefulWidget {
   @override
@@ -13,17 +15,19 @@ class _BankTransferPageState extends State<BankTransferPage> {
   TextEditingController _ibanController = TextEditingController();
   TextEditingController _swiftCodeController = TextEditingController();
 
-  List<String> _bankNames = ['CIB', 'QNB', 'HSBC', 'ADIB', 'NBE'];
-  late String _selectedBankName = _bankNames[0];
-
+  List<Map<String, dynamic>> _banks = [];
+  String? _selectedBank;
   String _accountOwnerNameErrorText = '';
   String _accountNumberErrorText = '';
   String _ibanErrorText = '';
   String _swiftCodeErrorText = '';
   bool _isButtonEnabled = false;
+  bool _dataExists = false;
 
   void initState() {
     super.initState();
+    getBanks();
+    getBankDetails();
     _accountOwnerNameController.addListener(() {
       _validateAccountOwnerName(_accountOwnerNameController.text);
       _updateButtonEnabledStatus();
@@ -112,11 +116,77 @@ class _BankTransferPageState extends State<BankTransferPage> {
     });
   }
 
+  Future<void> getBankDetails() async {
+    final url =
+        Uri.parse('${AppConfig.baseUrl}/bank-details-by-sub-account-ID');
+    final response = await http.get(url, headers: AppConfig.headers);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
+      if (jsonData.isNotEmpty) {
+        setState(() {
+          _selectedBank = jsonData[0]['Bank ID'].toString();
+          _accountOwnerNameController.text = jsonData[0]['Account Holder Name'];
+          _accountNumberController.text = jsonData[0]['Account Number'];
+          _ibanController.text = jsonData[0]['IBAN'];
+          _swiftCodeController.text = jsonData[0]['Swift Code'];
+          _dataExists = true;
+        });
+      }
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<void> getBanks() async {
+    final url = Uri.parse('${AppConfig.baseUrl}/banks/1');
+    final response = await http.get(url, headers: AppConfig.headers);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
+
+      setState(() {
+        _banks = jsonData.map<Map<String, dynamic>>((dynamic item) {
+          return {
+            'ID': item['ID'],
+            'enBankName': item['enBankName'],
+          };
+        }).toList();
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<void> addBankDetails() async {
+    final url = Uri.parse('${AppConfig.baseUrl}/add-payment-method/4');
+
+    final requestBody = {
+      'accountHolderName': _accountOwnerNameController.text,
+      'accountNumber': _accountNumberController.text,
+      'bankNameID': int.parse(_selectedBank!),
+      'IBAN': _ibanController.text,
+      'swiftCode': _swiftCodeController.text,
+    };
+
+    final jsonBody = json.encode(requestBody);
+    final response =
+        await http.post(url, headers: AppConfig.headers, body: jsonBody);
+    if (response.statusCode == 200) {
+      final urlUpdate =
+          Uri.parse('${AppConfig.baseUrl}/subAccounts-verification/verify/4');
+      await http.put(urlUpdate, headers: AppConfig.headers);
+      // Prefix does not exist, you can navigate here
+      Navigator.pop(context); // Go back once
+      Navigator.pop(context); // Go back again
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Bank Transfer'),
+        title: const Text('Bank Transfer'),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -133,7 +203,7 @@ class _BankTransferPageState extends State<BankTransferPage> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                         child: InputDecorator(
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             fillColor: Color.fromARGB(255, 250, 250, 250),
                             filled: true,
                             border: OutlineInputBorder(
@@ -141,23 +211,26 @@ class _BankTransferPageState extends State<BankTransferPage> {
                             ),
                             labelText: 'Bank',
                           ),
-                          child: Container(
+                          child: SizedBox(
                             height: 20,
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
-                                value: _selectedBankName,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    _selectedBankName = newValue!;
-                                  });
-                                },
-                                items: _bankNames.map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
+                                value: _selectedBank,
+                                onChanged: !_dataExists
+                                    ? (newValue) {
+                                        setState(() {
+                                          _selectedBank = newValue!;
+                                        });
+                                      }
+                                    : null,
+                                items: _banks.map<DropdownMenuItem<String>>(
+                                  (Map<String, dynamic> value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value['ID'].toString(),
+                                      child: Text(value['enBankName']),
+                                    );
+                                  },
+                                ).toList(),
                               ),
                             ),
                           ),
@@ -167,10 +240,11 @@ class _BankTransferPageState extends State<BankTransferPage> {
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                         child: TextField(
                           controller: _accountOwnerNameController,
+                          readOnly: _dataExists,
                           decoration: InputDecoration(
                             fillColor: Color.fromARGB(255, 250, 250, 250),
                             filled: true,
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Color(0xFFFFAB4A))),
                             labelText: "Account Owner Name",
@@ -188,10 +262,11 @@ class _BankTransferPageState extends State<BankTransferPage> {
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                         child: TextField(
                           controller: _accountNumberController,
+                          readOnly: _dataExists,
                           decoration: InputDecoration(
                             fillColor: Color.fromARGB(255, 250, 250, 250),
                             filled: true,
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Color(0xFFFFAB4A))),
                             labelText: 'Account Number',
@@ -209,10 +284,11 @@ class _BankTransferPageState extends State<BankTransferPage> {
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                         child: TextField(
                           controller: _ibanController,
+                          readOnly: _dataExists,
                           decoration: InputDecoration(
                             fillColor: Color.fromARGB(255, 250, 250, 250),
                             filled: true,
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Color(0xFFFFAB4A))),
                             labelText:
@@ -231,10 +307,11 @@ class _BankTransferPageState extends State<BankTransferPage> {
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                         child: TextField(
                           controller: _swiftCodeController,
+                          readOnly: _dataExists,
                           decoration: InputDecoration(
                             fillColor: Color.fromARGB(255, 250, 250, 250),
                             filled: true,
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Color(0xFFFFAB4A))),
                             labelText: 'Swift Code',
@@ -256,33 +333,34 @@ class _BankTransferPageState extends State<BankTransferPage> {
                 padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
                 child: Align(
                   alignment: Alignment.bottomRight,
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: _isButtonEnabled
-                          ? Theme.of(context).primaryColor
-                          : Color.fromARGB(249, 95, 95, 95),
-                      fixedSize: const Size(120, 50),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(7),
-                        side: const BorderSide(
-                          color: Color.fromARGB(255, 138, 138, 138),
-                          width: 1.4,
-                        ),
-                      ),
-                    ),
-                    onPressed: _isButtonEnabled
-                        ? () {
-                            if (_formKey.currentState!.validate()) {
-                              Navigator.pop(context); // Go back once
-                              Navigator.pop(context); // Go back again
-                            }
-                          }
-                        : null, // Disable the button if fields are not valid
-                    child: Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Text('Submit'),
-                    ),
-                  ),
+                  child: !_dataExists
+                      ? ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: _isButtonEnabled
+                                ? Theme.of(context).primaryColor
+                                : const Color.fromARGB(249, 95, 95, 95),
+                            fixedSize: const Size(120, 50),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(7),
+                              side: const BorderSide(
+                                color: Color.fromARGB(255, 138, 138, 138),
+                                width: 1.4,
+                              ),
+                            ),
+                          ),
+                          onPressed: _isButtonEnabled
+                              ? () {
+                                  if (_formKey.currentState!.validate()) {
+                                    addBankDetails();
+                                  }
+                                }
+                              : null, // Disable the button if fields are not valid
+                          child: const Padding(
+                            padding: EdgeInsets.all(12.0),
+                            child: Text('Submit'),
+                          ),
+                        )
+                      : null,
                 ),
               ),
             ],
