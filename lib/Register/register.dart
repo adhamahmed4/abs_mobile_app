@@ -137,14 +137,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
     // Convert the map to a JSON string
     final jsonBody = json.encode(requestBody);
     final response = await http.post(
-      Uri.parse("http://192.168.1.5:3000/validate/email"),
+      Uri.parse("http://192.168.1.138:3000/validate/email"),
       headers: {'Content-Type': 'application/json'},
       body: jsonBody,
     );
 
     final data = json.decode(response.body);
-
-    print(data);
 
     if (data["message"] == "Email already exists") {
       return false;
@@ -158,14 +156,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
     // Convert the map to a JSON string
     final jsonBody = json.encode(requestBody);
     final response = await http.post(
-      Uri.parse("http://192.168.1.5:3000/validate/username"),
+      Uri.parse("http://192.168.1.138:3000/validate/username"),
       headers: {'Content-Type': 'application/json'},
       body: jsonBody,
     );
 
     final data = json.decode(response.body);
-
-    print(data);
 
     if (data["message"] == "Username already exists") {
       return false;
@@ -179,14 +175,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
     // Convert the map to a JSON string
     final jsonBody = json.encode(requestBody);
     final response = await http.post(
-      Uri.parse("http://192.168.1.5:3000/validate/mobile"),
+      Uri.parse("http://192.168.1.138:3000/validate/mobile"),
       headers: {'Content-Type': 'application/json'},
       body: jsonBody,
     );
 
     final data = json.decode(response.body);
-
-    print(data);
 
     if (data["message"] == "Phone number already exists") {
       return false;

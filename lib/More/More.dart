@@ -40,8 +40,9 @@ class _MorePageState extends State<MorePage> {
             responseBody[0]['lastName']; // Update the name controller
         _mobileController.text =
             responseBody[0]['contactNumber']; // Update the mobile controller
-        _avatarController.text =
-            responseBody[0]['avatar']; // Update the avatar controller
+        _avatarController.text = responseBody[0]['avatar'] != null
+            ? responseBody[0]['avatar']
+            : ''; // Update the avatar controller
       });
     } else {
       showDialog(
@@ -93,12 +94,12 @@ class _MorePageState extends State<MorePage> {
                   ClipOval(
                     child: Container(
                         color: Color(0xFFEEF1F5),
-                        child: _avatarController.text.isNotEmpty
+                        child: _avatarController.text != ''
                             ? FadeInImage.assetNetwork(
                                 placeholder:
                                     'assets/images/profile_picture.jpg', // Placeholder image asset
                                 image:
-                                    'http://192.168.1.5:3000/images/getImage?name=${_avatarController.text}}',
+                                    'http://192.168.1.138:3000/images/getImage?name=${_avatarController.text}',
                                 width: 80,
                                 height: 80,
                                 fit: BoxFit.cover,
