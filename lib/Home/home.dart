@@ -11,6 +11,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isEmailVerified = true; // Replace with your actual logic
+  bool isCompanyInfoComplete = false; // Replace with your actual logic
+  bool isCompanyAddressComplete = true; // Replace with your actual l
+  int totalConditionsCount = 0;
+  int validatedConditionsCount = 0;
+  String YourBalance = '140978';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchCountNew();
+    fetchUserName();
+    fetchValidation();
+  }
+
   Future<String> fetchUserName() async {
     final url = Uri.parse('${AppConfig.baseUrl}/users-with-info-client');
     final response = await http.get(url, headers: AppConfig.headers);
@@ -21,6 +36,25 @@ class _HomePageState extends State<HomePage> {
       return fullName;
     } else {
       throw Exception('Failed to fetch user info');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchValidation() async {
+    final url = Uri.parse(
+        '${AppConfig.baseUrl}/subAccounts-verification-by-subAccountId');
+    final response = await http.get(url, headers: AppConfig.headers);
+
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body) as List<dynamic>;
+      final List<Map<String, dynamic>> validationData = [];
+
+      for (final data in responseBody) {
+        validationData.add(data);
+      }
+
+      return validationData;
+    } else {
+      throw Exception('Failed to fetch user validations');
     }
   }
 
@@ -66,26 +100,6 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  bool isEmailVerified = true; // Replace with your actual logic
-  bool isCompanyInfoComplete = false; // Replace with your actual logic
-  bool isCompanyAddressComplete = true; // Replace with your actual l
-  String NewOrders = '1890';
-  String ProcessingwOrders = '17987';
-  String InTransit = '28946';
-  String OutForDelivery = '86949';
-  String ReturningToOrigin = '89742';
-  String AwaitingYourAction = '95930';
-  String OnHold = '49590';
-  String YourBalance = '140978';
-
-  int getValidatedConditionsCount() {
-    int count = 0;
-    if (isEmailVerified) count++;
-    if (isCompanyInfoComplete) count++;
-    if (isCompanyAddressComplete) count++;
-    return count;
-  }
-
   Widget _buildStatusText(String statusText, String additionalInfo) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -98,7 +112,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
         Text(
-          additionalInfo, // Use the provided additional info for each status text
+          additionalInfo, // Use InTransit Count here
           style: TextStyle(
             fontSize: 16,
             color: Colors.grey,
@@ -108,7 +122,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildStatusCircle(int count) {
+  Widget _buildStatusCircle(int validatedCount, int totalCount) {
+    double progress = totalCount > 0 ? validatedCount / totalCount : 0.0;
+    String progressText = '$validatedCount';
+    String progressText2 = 'of $totalCount';
+
     return Container(
       width: 100,
       height: 100,
@@ -119,7 +137,7 @@ class _HomePageState extends State<HomePage> {
             width: 74, // Adjust the width to increase the radius
             height: 74, // Adjust the height to increase the radius
             child: CircularProgressIndicator(
-              value: count / 3,
+              value: progress,
               strokeWidth: 10,
               valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF2B2E83)),
               backgroundColor: Color.fromARGB(255, 214, 214, 214),
@@ -129,15 +147,20 @@ class _HomePageState extends State<HomePage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                count.toString(),
-                style: TextStyle(
+                progressText,
+                style: const TextStyle(
                   color: Color(0xFF2B2E83),
                   fontWeight: FontWeight.bold,
                   fontSize: 25,
                 ),
               ),
               Text(
-                'of 3',
+                progressText2,
+                style: const TextStyle(
+                  color: Color.fromARGB(255, 77, 77, 77),
+                  fontWeight: FontWeight.w500,
+                  fontSize: 15,
+                ),
               ),
             ],
           ),
@@ -146,9 +169,384 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  int getValidatedConditionsCount(List<Map<String, dynamic>> validationData) {
+    int count = 0;
+
+    for (final data in validationData) {
+      final isVerified = data['isVerified'] as bool;
+      if (isVerified) {
+        count++;
+      }
+    }
+
+    return count;
+  }
+
+  Future<String> fetchCountNew() async {
+    try {
+      final url =
+          Uri.parse('${AppConfig.baseUrl}/status-count-by-subAccountID');
+      final response = await http.post(url, headers: AppConfig.headers);
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body) as List<dynamic>;
+        final countNewData = responseBody.firstWhere(
+          (statusData) => statusData['Status'] == 'New',
+          orElse: () => null,
+        );
+
+        if (countNewData != null) {
+          return countNewData['Count'].toString();
+        } else {
+          // Return a default value or an error message if 'New' status data not found
+          return '0';
+        }
+      } else {
+        // Handle non-200 response status here
+        print('HTTP Error: ${response.statusCode}');
+        throw Exception('HTTP Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle other errors that occur during the request
+      print('Error: $error');
+      throw Exception('Error: $error');
+    }
+  }
+
+  Future<int> countStatusValues() async {
+    try {
+      final url =
+          Uri.parse('${AppConfig.baseUrl}/status-count-by-subAccountID');
+      final response = await http.post(url, headers: AppConfig.headers);
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body) as List<dynamic>;
+        int totalCount = 0;
+
+        for (final statusData in responseBody) {
+          final String status = statusData['Status'];
+          final int count = statusData['Count'];
+
+          // Check if the status is not in the excluded list
+          if (status != 'Delivered' &&
+              status != 'New' &&
+              status != 'Returned To Shipper' &&
+              status != 'Undelivered') {
+            totalCount += count;
+          }
+        }
+
+        return totalCount;
+      } else {
+        // Handle non-200 response status here
+        print('HTTP Error: ${response.statusCode}');
+        throw Exception('HTTP Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle other errors that occur during the request
+      print('Error: $error');
+      throw Exception('Error: $error');
+    }
+  }
+
+  Future<int> inTransitCount() async {
+    try {
+      final url =
+          Uri.parse('${AppConfig.baseUrl}/status-count-by-subAccountID');
+      final response = await http.post(url, headers: AppConfig.headers);
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body) as List<dynamic>;
+        int totalCount = 0;
+
+        for (final statusData in responseBody) {
+          final String status = statusData['Status'];
+          final int count = statusData['Count'];
+
+          // Check if the status is not in the excluded list
+          if (status == 'In Transit') {
+            totalCount = count;
+          }
+        }
+
+        return totalCount;
+      } else {
+        // Handle non-200 response status here
+        print('HTTP Error: ${response.statusCode}');
+        throw Exception('HTTP Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle other errors that occur during the request
+      print('Error: $error');
+      throw Exception('Error: $error');
+    }
+  }
+
+  Future<int> outForDeliveryCount() async {
+    try {
+      final url =
+          Uri.parse('${AppConfig.baseUrl}/status-count-by-subAccountID');
+      final response = await http.post(url, headers: AppConfig.headers);
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body) as List<dynamic>;
+        int totalCount = 0;
+
+        for (final statusData in responseBody) {
+          final String status = statusData['Status'];
+          final int count = statusData['Count'];
+
+          // Check if the status is not in the excluded list
+          if (status == 'Out For Delivery') {
+            totalCount = count;
+          }
+        }
+
+        return totalCount;
+      } else {
+        // Handle non-200 response status here
+        print('HTTP Error: ${response.statusCode}');
+        throw Exception('HTTP Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle other errors that occur during the request
+      print('Error: $error');
+      throw Exception('Error: $error');
+    }
+  }
+
+  Future<int> outForReturnCount() async {
+    try {
+      final url =
+          Uri.parse('${AppConfig.baseUrl}/status-count-by-subAccountID');
+      final response = await http.post(url, headers: AppConfig.headers);
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body) as List<dynamic>;
+        int totalCount = 0;
+
+        for (final statusData in responseBody) {
+          final String status = statusData['Status'];
+          final int count = statusData['Count'];
+
+          // Check if the status is not in the excluded list
+          if (status == 'Out for return') {
+            totalCount = count;
+          }
+        }
+
+        return totalCount;
+      } else {
+        // Handle non-200 response status here
+        print('HTTP Error: ${response.statusCode}');
+        throw Exception('HTTP Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle other errors that occur during the request
+      print('Error: $error');
+      throw Exception('Error: $error');
+    }
+  }
+
+  Future<int> onHoldCount() async {
+    try {
+      final url =
+          Uri.parse('${AppConfig.baseUrl}/status-count-by-subAccountID');
+      final response = await http.post(url, headers: AppConfig.headers);
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body) as List<dynamic>;
+        int totalCount = 0;
+
+        for (final statusData in responseBody) {
+          final String status = statusData['Status'];
+          final int count = statusData['Count'];
+
+          // Check if the status is not in the excluded list
+          if (status == 'On hold') {
+            totalCount = count;
+          }
+        }
+
+        return totalCount;
+      } else {
+        // Handle non-200 response status here
+        print('HTTP Error: ${response.statusCode}');
+        throw Exception('HTTP Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle other errors that occur during the request
+      print('Error: $error');
+      throw Exception('Error: $error');
+    }
+  }
+
+  Future<int> deliveredCount() async {
+    try {
+      final url =
+          Uri.parse('${AppConfig.baseUrl}/status-count-by-subAccountID');
+      final response = await http.post(url, headers: AppConfig.headers);
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body) as List<dynamic>;
+        int totalCount = 0;
+
+        for (final statusData in responseBody) {
+          final String status = statusData['Status'];
+          final int count = statusData['Count'];
+
+          // Check if the status is not in the excluded list
+          if (status == 'Delivered') {
+            totalCount = count;
+          }
+        }
+
+        return totalCount;
+      } else {
+        // Handle non-200 response status here
+        print('HTTP Error: ${response.statusCode}');
+        throw Exception('HTTP Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle other errors that occur during the request
+      print('Error: $error');
+      throw Exception('Error: $error');
+    }
+  }
+
+  Future<int> undeliveredCount() async {
+    try {
+      final url =
+          Uri.parse('${AppConfig.baseUrl}/status-count-by-subAccountID');
+      final response = await http.post(url, headers: AppConfig.headers);
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body) as List<dynamic>;
+        int totalCount = 0;
+
+        for (final statusData in responseBody) {
+          final String status = statusData['Status'];
+          final int count = statusData['Count'];
+
+          // Check if the status is not in the excluded list
+          if (status == 'Undelivered') {
+            totalCount = count;
+          }
+        }
+
+        return totalCount;
+      } else {
+        // Handle non-200 response status here
+        print('HTTP Error: ${response.statusCode}');
+        throw Exception('HTTP Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle other errors that occur during the request
+      print('Error: $error');
+      throw Exception('Error: $error');
+    }
+  }
+
+  Future<int> returnedToShipperCount() async {
+    try {
+      final url =
+          Uri.parse('${AppConfig.baseUrl}/status-count-by-subAccountID');
+      final response = await http.post(url, headers: AppConfig.headers);
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body) as List<dynamic>;
+        int totalCount = 0;
+
+        for (final statusData in responseBody) {
+          final String status = statusData['Status'];
+          final int count = statusData['Count'];
+
+          // Check if the status is not in the excluded list
+          if (status == 'Returned To Shipper') {
+            totalCount = count;
+          }
+        }
+
+        return totalCount;
+      } else {
+        // Handle non-200 response status here
+        print('HTTP Error: ${response.statusCode}');
+        throw Exception('HTTP Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle other errors that occur during the request
+      print('Error: $error');
+      throw Exception('Error: $error');
+    }
+  }
+
+  // Function to fetch "Total Cash" data
+  Future<String> fetchTotalCash() async {
+    try {
+      final url = Uri.parse('${AppConfig.baseUrl}/wallet-paid-cash');
+      final response = await http.post(url, headers: AppConfig.headers);
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body) as List<dynamic>;
+        final totalCashData =
+            responseBody.isNotEmpty ? responseBody.first : null;
+
+        if (totalCashData != null) {
+          final totalCash = totalCashData['Total Cash'].toString();
+          return totalCash;
+        } else {
+          // Return a default value or an error message if data not found
+          return '0';
+        }
+      } else {
+        // Handle non-200 response status here
+        print('HTTP Error: ${response.statusCode}');
+        throw Exception('HTTP Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle other errors that occur during the request
+      print('Error: $error');
+      throw Exception('Error: $error');
+    }
+  }
+
+// Function to fetch "ABS Fees" data
+  Future<String> fetchAbsFees() async {
+    try {
+      final url = Uri.parse('${AppConfig.baseUrl}/wallet-ABS-Fees');
+      final response = await http.post(url, headers: AppConfig.headers);
+
+      if (response.statusCode == 200) {
+        final responseBody = json.decode(response.body) as List<dynamic>;
+        final absFeesData = responseBody.isNotEmpty ? responseBody.first : null;
+
+        if (absFeesData != null) {
+          final absFees = absFeesData['ABS Fees'].toString();
+          return absFees;
+        } else {
+          // Return a default value or an error message if data not found
+          return '0';
+        }
+      } else {
+        // Handle non-200 response status here
+        print('HTTP Error: ${response.statusCode}');
+        throw Exception('HTTP Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle other errors that occur during the request
+      print('Error: $error');
+      throw Exception('Error: $error');
+    }
+  }
+
+// Function to calculate the difference between "Total Cash" and "ABS Fees"
+  int calculateDifference(int totalCash, int absFees) {
+    return totalCash - absFees;
+  }
+
   @override
   Widget build(BuildContext context) {
-    int validatedConditionsCount = getValidatedConditionsCount();
+    int validatedConditionsCount = 0;
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 244, 246, 248),
       body: SingleChildScrollView(
@@ -192,68 +590,102 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
             ),
-            Row(
-              children: [
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      width: 380,
-                      padding: EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 10,
-                            offset: Offset(0, 3),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              SizedBox(width: 8),
-                              Text(
-                                'Complete your' +
-                                    '\n' 'account for' '\n' 'a full experience',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(249, 0, 0, 0),
-                                ),
+            FutureBuilder<List<Map<String, dynamic>>>(
+              future: fetchValidation(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  final validationData = snapshot.data ?? [];
+
+                  // Calculate counts
+                  int totalConditionsCount = validationData.length;
+                  int validatedConditionsCount =
+                      getValidatedConditionsCount(validationData);
+
+                  // Check if the Row should be visible
+                  bool isRowVisible =
+                      validatedConditionsCount != totalConditionsCount;
+
+                  return Visibility(
+                    visible: isRowVisible,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Container(
+                              width: 380,
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    spreadRadius: 1,
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
                               ),
-                              SizedBox(width: 70),
-                              _buildStatusCircle(validatedConditionsCount),
-                            ],
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      const SizedBox(width: 8),
+                                      const Text(
+                                        'Complete your' +
+                                            '\n'
+                                                'account for'
+                                                '\n'
+                                                'a full experience',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color.fromARGB(249, 0, 0, 0),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 70),
+                                      // Build and display the status circle here using validatedConditionsCount and totalConditionsCount
+                                      _buildStatusCircle(
+                                          validatedConditionsCount,
+                                          totalConditionsCount),
+                                    ],
+                                  ),
+                                  // Your additional Column containing status rows
+                                  Column(
+                                    children: validationData.map((data) {
+                                      final verificationType =
+                                          data['Verification Type'] as String;
+                                      final isVerified =
+                                          data['isVerified'] as bool;
+                                      return _buildStatusRow(
+                                          verificationType, isVerified);
+                                    }).toList(),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          SizedBox(height: 40),
-                          _buildStatusRow(
-                              'Email Verification', isEmailVerified),
-                          _buildDivider(),
-                          _buildStatusRow(
-                              'Company Info', isCompanyInfoComplete),
-                          _buildDivider(),
-                          _buildStatusRow(
-                              'Company Address', isCompanyAddressComplete),
-                          SizedBox(height: 16),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-              ],
+                  );
+                }
+              },
             ),
-            SizedBox(height: 20), // Add spacing between the two containers
+
+            const SizedBox(
+                height: 20), // Add spacing between the two containers
             Center(
               child: Container(
                 width: 380,
-                padding: EdgeInsets.all(16),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -262,15 +694,15 @@ class _HomePageState extends State<HomePage> {
                       color: Colors.black.withOpacity(0.1),
                       spreadRadius: 1,
                       blurRadius: 10,
-                      offset: Offset(0, 3),
+                      offset: const Offset(0, 3),
                     ),
                   ],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Orders Overview', // Add the title here
+                    const Text(
+                      'Shipments Overview', // Add the title here
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -292,11 +724,11 @@ class _HomePageState extends State<HomePage> {
                                   height: 50,
                                   color: Color(0xFF2B2E83),
                                 ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'New Orders',
+                                const SizedBox(height: 8),
+                                const Text(
+                                  'New Shipments',
                                   style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 15,
                                     color: Color.fromARGB(248, 125, 125, 125),
                                   ),
                                 ),
@@ -305,12 +737,27 @@ class _HomePageState extends State<HomePage> {
                             Positioned(
                               top: 0,
                               left: 8,
-                              child: Text(
-                                NewOrders, // Replace with the appropriate number
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  color: Color.fromARGB(248, 79, 79, 79),
-                                ),
+                              child: FutureBuilder<String>(
+                                future: fetchCountNew(),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return Text(
+                                        "Error: ${snapshot.error}"); // Show error message
+                                  } else {
+                                    final countNew = snapshot.data;
+                                    return Text(
+                                      countNew ??
+                                          "0", // Use the fetched count or a default value
+                                      style: TextStyle(
+                                        fontSize: 30,
+                                        color: Color.fromARGB(248, 79, 79, 79),
+                                      ),
+                                    );
+                                  }
+                                },
                               ),
                             ),
                           ],
@@ -326,11 +773,11 @@ class _HomePageState extends State<HomePage> {
                                   height: 50,
                                   color: Colors.orange,
                                 ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'Processing Orders',
+                                const SizedBox(height: 8),
+                                const Text(
+                                  'Processing Shipments',
                                   style: TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 15,
                                     color: Color.fromARGB(248, 125, 125, 125),
                                   ),
                                 ),
@@ -339,12 +786,28 @@ class _HomePageState extends State<HomePage> {
                             Positioned(
                               top: 0,
                               left: 8,
-                              child: Text(
-                                ProcessingwOrders, // Replace with the appropriate number
-                                style: TextStyle(
-                                  fontSize: 30,
-                                  color: Color.fromARGB(248, 79, 79, 79),
-                                ),
+                              child: FutureBuilder<int>(
+                                future:
+                                    countStatusValues(), // Use the new function here
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return CircularProgressIndicator();
+                                  } else if (snapshot.hasError) {
+                                    return Text(
+                                        "Error: ${snapshot.error}"); // Show error message
+                                  } else {
+                                    final countProcessing =
+                                        snapshot.data.toString();
+                                    return Text(
+                                      countProcessing,
+                                      style: const TextStyle(
+                                        fontSize: 30,
+                                        color: Color.fromARGB(248, 79, 79, 79),
+                                      ),
+                                    );
+                                  }
+                                },
                               ),
                             ),
                           ],
@@ -355,7 +818,8 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
-            SizedBox(height: 20), // Add spacing between the two containers
+            const SizedBox(
+                height: 20), // Add spacing between the two containers
             Center(
               child: Container(
                 width: 380,
@@ -375,35 +839,180 @@ class _HomePageState extends State<HomePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Processing Orders', // Add the title here
+                    const Text(
+                      'Processing Shipments', // Add the title here
                       style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
                         color: Color.fromARGB(249, 0, 0, 0),
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 5,
                     ), // Add spacing before the additional text
-                    Text(
-                      'Status for all orders under processing', // Add your text here
+                    const Text(
+                      'Status for all Shipments under processing', // Add your text here
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey,
                       ),
                     ),
                     SizedBox(height: 20),
-                    _buildStatusText('In transit', InTransit),
+                    FutureBuilder<int>(
+                      future: inTransitCount(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}");
+                        } else {
+                          final inTransitCount = snapshot.data;
+                          return _buildStatusText(
+                              'In transit', inTransitCount.toString());
+                        }
+                      },
+                    ),
                     SizedBox(height: 20),
-                    _buildStatusText('Out for delivery', OutForDelivery),
+                    FutureBuilder<int>(
+                      future: outForDeliveryCount(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}");
+                        } else {
+                          final outForDeliveryCount = snapshot.data;
+                          return _buildStatusText('Out for delivery',
+                              outForDeliveryCount.toString());
+                        }
+                      },
+                    ),
                     SizedBox(height: 20),
-                    _buildStatusText('Returning to origin', ReturningToOrigin),
+                    FutureBuilder<int>(
+                      future: outForReturnCount(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}");
+                        } else {
+                          final outForReturnCount = snapshot.data;
+                          return _buildStatusText(
+                              'Out for return', outForReturnCount.toString());
+                        }
+                      },
+                    ),
                     SizedBox(height: 20),
-                    _buildStatusText(
-                        'Awaiting your action', AwaitingYourAction),
+                    FutureBuilder<int>(
+                      future: onHoldCount(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}");
+                        } else {
+                          final onHoldCount = snapshot.data;
+                          return _buildStatusText(
+                              'On hold', onHoldCount.toString());
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
+            const SizedBox(
+                height: 20), // Add spacing between the two containers
+            Center(
+              child: Container(
+                width: 380,
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 10,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Processed Shipments', // Add the title here
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Color.fromARGB(249, 0, 0, 0),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ), // Add spacing before the additional text
+                    const Text(
+                      'Status for all processed Shipments', // Add your text here
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.grey,
+                      ),
+                    ),
                     SizedBox(height: 20),
-                    _buildStatusText('On hold', OnHold),
+                    FutureBuilder<int>(
+                      future: deliveredCount(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}");
+                        } else {
+                          final deliveredCount = snapshot.data;
+                          return _buildStatusText(
+                              'Delivered', deliveredCount.toString());
+                        }
+                      },
+                    ),
+                    SizedBox(height: 20),
+                    FutureBuilder<int>(
+                      future: undeliveredCount(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}");
+                        } else {
+                          final undeliveredCount = snapshot.data;
+                          return _buildStatusText(
+                              'Undelivered', undeliveredCount.toString());
+                        }
+                      },
+                    ),
+                    SizedBox(height: 20),
+                    FutureBuilder<int>(
+                      future: returnedToShipperCount(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (snapshot.hasError) {
+                          return Text("Error: ${snapshot.error}");
+                        } else {
+                          final returnedToShipperCount = snapshot.data;
+                          return _buildStatusText('Returned to shipper',
+                              returnedToShipperCount.toString());
+                        }
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -457,18 +1066,63 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                     SizedBox(
-                      height: 5,
-                    ), // Add spacing before the additional text
-                    Text(
-                      YourBalance, // Add your text here
-                      style: TextStyle(
-                        fontSize: 45,
-                        color: Color(0xFF2B2E83),
-                      ),
-                    ),
+                        height: 10), // Add spacing before the additional text
+                    FutureBuilder<String>(
+                      future: fetchTotalCash(),
+                      builder: (context, totalCashSnapshot) {
+                        if (totalCashSnapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return CircularProgressIndicator();
+                        } else if (totalCashSnapshot.hasError) {
+                          return Text("Error: ${totalCashSnapshot.error}");
+                        } else {
+                          final totalCash =
+                              int.tryParse(totalCashSnapshot.data ?? "0") ?? 0;
 
-                    SizedBox(
-                        height: 5), // Add spacing before the additional text
+                          // Now, fetch ABS Fees
+                          return FutureBuilder<String>(
+                            future: fetchAbsFees(),
+                            builder: (context, absFeesSnapshot) {
+                              if (absFeesSnapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return CircularProgressIndicator();
+                              } else if (absFeesSnapshot.hasError) {
+                                return Text("Error: ${absFeesSnapshot.error}");
+                              } else {
+                                final absFees =
+                                    int.tryParse(absFeesSnapshot.data ?? "0") ??
+                                        0;
+
+                                // Calculate the difference
+                                final int difference =
+                                    calculateDifference(totalCash, absFees);
+
+                                return Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      difference.toString(),
+                                      style: TextStyle(
+                                        fontSize: 45,
+                                        color: Color(0xFF2B2E83),
+                                      ),
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      'EGP',
+                                      style: TextStyle(
+                                        fontSize: 25,
+                                        color: Color(0xFF2B2E83),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }
+                            },
+                          );
+                        }
+                      },
+                    )
                   ],
                 ),
               ),
