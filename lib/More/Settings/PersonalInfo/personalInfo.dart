@@ -1,4 +1,12 @@
+import 'dart:io';
+import 'package:abs_mobile_app/More/Settings/PersonalInfo/ChangePassword/changePassword.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../../Configurations/app_config.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:convert'; // for JSON decoding and encoding
+import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 class PersonalInfoPage extends StatefulWidget {
   @override
@@ -6,16 +14,115 @@ class PersonalInfoPage extends StatefulWidget {
 }
 
 class _PersonalInfoPageState extends State<PersonalInfoPage> {
-  TextEditingController _nameController =
-      TextEditingController(text: "Adham Ahmed");
-  TextEditingController _phoneController =
-      TextEditingController(text: "+201001307530");
-  TextEditingController _emailController =
-      TextEditingController(text: "adhamahmeds2312@gmail.com");
+  final Dio _dio = Dio();
+  String? imageName;
+  String? imagePath;
 
-  bool _phoneEditable = false; // Track the edit state for the phone field
-  bool _emailEditable = false; // Track the edit state for the email field
-  bool _nameEditable = false; // Track if the name field has been modified
+  TextEditingController _nameController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    getCurrentPersonalInfo();
+  }
+
+  Future<void> getCurrentPersonalInfo() async {
+    final url = Uri.parse('${AppConfig.baseUrl}/users-with-info-client');
+    final response = await http.get(url, headers: AppConfig.headers);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
+      setState(() {
+        _nameController.text = jsonData[0]['firstName'] +
+            ' ' +
+            jsonData[0]['lastName']; // Concatenate first and last name
+        _phoneController.text = jsonData[0]['contactNumber'];
+        _emailController.text = jsonData[0]['email'];
+      });
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<void> _pickProfilePicture() async {
+    final imagePicker = ImagePicker();
+    final pickedImage =
+        await imagePicker.pickImage(source: ImageSource.gallery);
+    if (pickedImage == null) return;
+    imageName = pickedImage.path.split('/').last;
+    imagePath = pickedImage.path;
+    final prefs = await SharedPreferences.getInstance();
+    FormData formData = FormData.fromMap({
+      "file": await MultipartFile.fromFile(
+        imagePath!,
+        filename: imageName, // Replace with the desired file name
+      ),
+    });
+    Response response = await _dio.post(
+      "${AppConfig.baseUrl}/images/single",
+      data: formData,
+      options: Options(
+        headers: {
+          "authorization": "Bearer ${prefs.getString("accessToken")}",
+        },
+      ),
+    );
+
+    if (response.statusCode == 200) {
+      final url = Uri.parse('${AppConfig.baseUrl}/user-avatar');
+      final requestBody = {'avatar': response.data['url']};
+      final jsonBody = json.encode(requestBody);
+      final res =
+          await http.put(url, headers: AppConfig.headers, body: jsonBody);
+      if (res.statusCode == 200) {
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: Text("Success"),
+                  content: Text("Image uploaded successfully"),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("OK"),
+                    ),
+                  ],
+                ));
+      } else {
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: Text("Error"),
+                  content: Text("Failed to upload image"),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text("OK"),
+                    ),
+                  ],
+                ));
+      }
+    } else {
+      showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+                title: Text("Error"),
+                content: Text("Failed to upload image"),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: Text("OK"),
+                  ),
+                ],
+              ));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,118 +131,110 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         title: Text('Personal Info'),
         centerTitle: true,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 32, 16, 32),
-            child: Container(
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                    child: TextField(
-                      controller: _nameController,
-                      readOnly: !_nameEditable,
-                      decoration: InputDecoration(
-                        fillColor: Color.fromARGB(255, 250, 250, 250),
-                        filled: true,
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFFFAB4A))),
-                        labelText: 'Name',
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              if (_nameEditable) {
-                                setState(() {
-                                  _nameEditable = !_nameEditable;
-                                });
-                              } else {
-                                setState(() {
-                                  _nameEditable = !_nameEditable;
-                                });
-                              }
-                            });
-                          },
-                          icon: Icon(_nameEditable
-                              ? Icons.save
-                              : Icons
-                                  .edit), // Change the icon based on edit mode
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 32, 16, 32),
+              child: Container(
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                      child: TextField(
+                        controller: _nameController,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          fillColor: Color.fromARGB(255, 250, 250, 250),
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFFFFAB4A))),
+                          labelText: 'Name',
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                    child: TextField(
-                      controller: _phoneController,
-                      readOnly: !_phoneEditable,
-                      decoration: InputDecoration(
-                        fillColor: Color.fromARGB(255, 250, 250, 250),
-                        filled: true,
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFFFAB4A))),
-                        labelText: 'Phone',
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              if (_phoneEditable) {
-                                setState(() {
-                                  _phoneEditable = !_phoneEditable;
-                                });
-                              } else {
-                                setState(() {
-                                  _phoneEditable = !_phoneEditable;
-                                });
-                              }
-                            });
-                          },
-                          icon: Icon(_phoneEditable
-                              ? Icons.save
-                              : Icons
-                                  .edit), // Change the icon based on edit mode
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                      child: TextField(
+                        controller: _phoneController,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          fillColor: Color.fromARGB(255, 250, 250, 250),
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFFFFAB4A))),
+                          labelText: 'Phone',
                         ),
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                    child: TextField(
-                      controller: _emailController,
-                      readOnly: !_emailEditable,
-                      decoration: InputDecoration(
-                        fillColor: Color.fromARGB(255, 250, 250, 250),
-                        filled: true,
-                        border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Color(0xFFFFAB4A))),
-                        labelText: 'Email Address',
-                        suffixIcon: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              if (_emailEditable) {
-                                setState(() {
-                                  _emailEditable = !_emailEditable;
-                                });
-                              } else {
-                                setState(() {
-                                  _emailEditable = !_emailEditable;
-                                });
-                              }
-                            });
-                          },
-                          icon: Icon(_emailEditable
-                              ? Icons.save
-                              : Icons
-                                  .edit), // Change the icon based on edit mode
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                      child: TextField(
+                        controller: _emailController,
+                        readOnly: true,
+                        decoration: InputDecoration(
+                          fillColor: Color.fromARGB(255, 250, 250, 250),
+                          filled: true,
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFFFFAB4A))),
+                          labelText: 'Email Address',
                         ),
                       ),
                     ),
-                  ),
-                ],
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                      child: Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              _pickProfilePicture();
+                            },
+                            child: Text("Upload Profile Picture"),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                      child: Column(
+                        children: [
+                          ElevatedButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  transitionDuration: Duration(
+                                      milliseconds:
+                                          300), // Adjust the animation duration
+                                  pageBuilder: (_, __, ___) =>
+                                      ChangePasswordPage(),
+                                  transitionsBuilder: (_,
+                                      Animation<double> animation,
+                                      __,
+                                      Widget child) {
+                                    return SlideTransition(
+                                      position: Tween<Offset>(
+                                        begin: Offset(1.0, 0.0),
+                                        end: Offset.zero,
+                                      ).animate(animation),
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );
+                            },
+                            child: Text("Change Password"),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

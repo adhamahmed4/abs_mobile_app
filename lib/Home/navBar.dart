@@ -18,7 +18,7 @@ class _NavBarState extends State<NavBar> {
     HomePage(), // Home page
     HomePage(),
     HomePage(),
-    HomePage(),
+    MorePage(),
   ];
 
   @override
