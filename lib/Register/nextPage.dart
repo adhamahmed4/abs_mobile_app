@@ -3,6 +3,7 @@ import 'table_widget.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../Configurations/app_config.dart';
 
 class Plan {
   final String title;
@@ -104,8 +105,8 @@ class _NextPageState extends State<NextPage> {
 
   Future<void> fetchPlansFromApi() async {
     try {
-      final response = await http
-          .get(Uri.parse('http://192.168.1.138:3000/price-plan-names/1'));
+      final response =
+          await http.get(Uri.parse('${AppConfig.baseUrl}/price-plan-names/1'));
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body) as List<dynamic>;

@@ -5,6 +5,7 @@ import 'NextPage.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:abs_mobile_app/Configurations/app_config.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -137,7 +138,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     // Convert the map to a JSON string
     final jsonBody = json.encode(requestBody);
     final response = await http.post(
-      Uri.parse("http://192.168.1.138:3000/validate/email"),
+      Uri.parse("${AppConfig.baseUrl}/validate/email"),
       headers: {'Content-Type': 'application/json'},
       body: jsonBody,
     );
@@ -156,7 +157,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     // Convert the map to a JSON string
     final jsonBody = json.encode(requestBody);
     final response = await http.post(
-      Uri.parse("http://192.168.1.138:3000/validate/username"),
+      Uri.parse("${AppConfig.baseUrl}/validate/username"),
       headers: {'Content-Type': 'application/json'},
       body: jsonBody,
     );
@@ -175,7 +176,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     // Convert the map to a JSON string
     final jsonBody = json.encode(requestBody);
     final response = await http.post(
-      Uri.parse("http://192.168.1.138:3000/validate/mobile"),
+      Uri.parse("${AppConfig.baseUrl}/validate/mobile"),
       headers: {'Content-Type': 'application/json'},
       body: jsonBody,
     );
