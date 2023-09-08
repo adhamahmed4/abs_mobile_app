@@ -105,7 +105,7 @@ class _NextPageState extends State<NextPage> {
   Future<void> fetchPlansFromApi() async {
     try {
       final response = await http
-          .get(Uri.parse('http://192.168.1.5:3000/price-plan-names/1'));
+          .get(Uri.parse('http://192.168.137.166:3000/price-plan-names/1'));
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body) as List<dynamic>;
