@@ -7,11 +7,13 @@ import '../Configurations/app_config.dart';
 
 class Plan {
   final String title;
+  final int pricePlanId;
   final String price;
   final List<Map<String, dynamic>> tableData;
 
   Plan({
     required this.title,
+    required this.pricePlanId,
     required this.price,
     required this.tableData,
   });
@@ -115,47 +117,32 @@ class _NextPageState extends State<NextPage> {
           guestPlans.clear();
 
           for (var apiPlan in jsonData) {
+            final pricePlanId = apiPlan['Price Plan ID'];
             final title = apiPlan['Price Plan Name'];
             final price =
                 ' ${apiPlan['Number Of Shipments'] ?? 0} Shipments / Month';
 
-            final parsedTableData = [
-              {
-                "#": "Zone1",
-                "Zone": apiPlan['Zone1'],
-              },
-              {
-                "#": "Zone2",
-                "Zone": apiPlan['Zone2'],
-              },
-              {
-                "#": "Zone3",
-                "Zone": apiPlan['Zone3'],
-              },
-              {
-                "#": "Zone4",
-                "Zone": apiPlan['Zone4'],
-              },
-              {
-                "#": "Zone5",
-                "Zone": apiPlan['Zone5'],
-              },
-              {
-                "#": "Zone6",
-                "Zone": apiPlan['Zone6'],
-              },
-              {
-                "#": "Zone7",
-                "Zone": apiPlan['Zone7'],
-              },
-              {
-                "#": "Zone8",
-                "Zone": apiPlan['Zone8'],
-              },
-            ];
+            final response = await http.get(Uri.parse(
+                '${AppConfig.baseUrl}/price-plans-matrix-by-ID/$pricePlanId'));
+
+            final parsedTableData = <Map<String, dynamic>>[];
+
+            if (response.statusCode == 200) {
+              final jsonData = json.decode(response.body) as List<dynamic>;
+              if (jsonData != null) {
+                for (var apiRow in jsonData) {
+                  final row = <String, dynamic>{};
+                  for (var key in apiRow.keys) {
+                    row[key] = apiRow[key];
+                  }
+                  parsedTableData.add(row);
+                }
+              }
+            }
 
             final plan = Plan(
               title: title ?? '',
+              pricePlanId: pricePlanId ?? '',
               price: price,
               tableData: parsedTableData,
             );
