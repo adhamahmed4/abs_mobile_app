@@ -1,7 +1,15 @@
 import 'package:abs_mobile_app/More/Settings/BusinessInfo/businessInfo.dart';
+import 'package:abs_mobile_app/More/Settings/BusinessLocations/businessLocations.dart';
+import 'package:abs_mobile_app/More/Settings/PaymentMethods/BankTransfer/bankTransfer.dart';
+import 'package:abs_mobile_app/More/Settings/PaymentMethods/MobileCash/mobileCash.dart';
+import 'package:abs_mobile_app/More/Settings/PaymentMethods/NearestBranch/nearestBranch.dart';
+import 'package:abs_mobile_app/More/Settings/PaymentMethods/Wallet/wallet.dart';
 import 'package:abs_mobile_app/More/Settings/PaymentMethods/paymentMethods.dart';
 import 'package:abs_mobile_app/More/Settings/PersonalInfo/personalInfo.dart';
 import 'package:flutter/material.dart';
+import '../../../../Configurations/app_config.dart';
+import 'dart:convert'; // for JSON decoding and encoding
+import 'package:http/http.dart' as http;
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -9,6 +17,59 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  Future<void> hasPaymentMethod() async {
+    final url = Uri.parse('${AppConfig.baseUrl}/sub-accounts-payment-method');
+    final response = await http.get(url, headers: AppConfig.headers);
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      final paymentMethod = jsonData['paymentMethodID'];
+      if (jsonData['paymentMethodID'] != null) {
+        if (paymentMethod == 1) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MobileCashPage()),
+          );
+        } else if (paymentMethod == 2) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => WalletPage()),
+          );
+        } else if (paymentMethod == 3) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => NearestBranchPage()),
+          );
+        } else if (paymentMethod == 4) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => BankTransferPage()),
+          );
+        }
+      } else {
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            transitionDuration:
+                Duration(milliseconds: 300), // Adjust the animation duration
+            pageBuilder: (_, __, ___) => PaymentMethodsPage(),
+            transitionsBuilder:
+                (_, Animation<double> animation, __, Widget child) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+          ),
+        );
+      }
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,13 +166,24 @@ class _SettingsPageState extends State<SettingsPage> {
                         title: Text('Payment Methods'),
                         trailing: Icon(Icons.arrow_forward),
                         onTap: () {
+                          hasPaymentMethod();
+                        },
+                      ),
+                      Divider(),
+                      ListTile(
+                        tileColor: Colors.white,
+                        leading: Icon(Icons.my_location_outlined),
+                        title: Text('Business Locations'),
+                        trailing: Icon(Icons.arrow_forward),
+                        onTap: () {
                           Navigator.push(
                             context,
                             PageRouteBuilder(
                               transitionDuration: Duration(
                                   milliseconds:
                                       300), // Adjust the animation duration
-                              pageBuilder: (_, __, ___) => PaymentMethodsPage(),
+                              pageBuilder: (_, __, ___) =>
+                                  BusinessLocationsPage(),
                               transitionsBuilder: (_,
                                   Animation<double> animation,
                                   __,
@@ -126,16 +198,6 @@ class _SettingsPageState extends State<SettingsPage> {
                               },
                             ),
                           );
-                        },
-                      ),
-                      Divider(),
-                      ListTile(
-                        tileColor: Colors.white,
-                        leading: Icon(Icons.my_location_outlined),
-                        title: Text('Pickup Locations'),
-                        trailing: Icon(Icons.arrow_forward),
-                        onTap: () {
-                          // Handle location tap
                         },
                       ),
                       Divider(),

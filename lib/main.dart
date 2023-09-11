@@ -38,6 +38,8 @@ class MyApp extends StatelessWidget {
       title: 'ABS Courier & Freight Systems',
       theme: ThemeData(
           primarySwatch: primarySwatchColor,
+          scaffoldBackgroundColor: Color.fromARGB(
+              255, 244, 246, 248), // Set the background color here
           fontFamily: GoogleFonts.lexend().fontFamily),
       debugShowCheckedModeBanner: false,
       initialRoute: '/',

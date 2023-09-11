@@ -7,10 +7,12 @@ import '../Configurations/app_config.dart';
 
 class Plan {
   final String title;
+  final int pricePlanId;
   final String price;
 
   Plan({
     required this.title,
+    required this.pricePlanId,
     required this.price,
   });
 }
@@ -113,12 +115,30 @@ class _NextPageState extends State<NextPage> {
           guestPlans.clear();
 
           for (var apiPlan in jsonData) {
+            final pricePlanId = apiPlan['Price Plan ID'];
             final title = apiPlan['Price Plan Name'];
             final price =
                 ' ${apiPlan['Number Of Shipments'] ?? 0} Shipments / Month';
+            final response = await http.get(Uri.parse(
+                '${AppConfig.baseUrl}/price-plans-matrix-by-ID/$pricePlanId'));
 
+            final parsedTableData = <Map<String, dynamic>>[];
+
+            if (response.statusCode == 200) {
+              final jsonData = json.decode(response.body) as List<dynamic>;
+              if (jsonData != null) {
+                for (var apiRow in jsonData) {
+                  final row = <String, dynamic>{};
+                  for (var key in apiRow.keys) {
+                    row[key] = apiRow[key];
+                  }
+                  parsedTableData.add(row);
+                }
+              }
+            }
             final plan = Plan(
               title: title ?? '',
+              pricePlanId: pricePlanId ?? '',
               price: price,
             );
 
