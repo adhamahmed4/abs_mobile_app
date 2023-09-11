@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'table_widget.dart';
+// import 'table_widget.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -9,13 +9,11 @@ class Plan {
   final String title;
   final int pricePlanId;
   final String price;
-  final List<Map<String, dynamic>> tableData;
 
   Plan({
     required this.title,
     required this.pricePlanId,
     required this.price,
-    required this.tableData,
   });
 }
 
@@ -121,7 +119,6 @@ class _NextPageState extends State<NextPage> {
             final title = apiPlan['Price Plan Name'];
             final price =
                 ' ${apiPlan['Number Of Shipments'] ?? 0} Shipments / Month';
-
             final response = await http.get(Uri.parse(
                 '${AppConfig.baseUrl}/price-plans-matrix-by-ID/$pricePlanId'));
 
@@ -139,12 +136,10 @@ class _NextPageState extends State<NextPage> {
                 }
               }
             }
-
             final plan = Plan(
               title: title ?? '',
               pricePlanId: pricePlanId ?? '',
               price: price,
-              tableData: parsedTableData,
             );
 
             plans.add(plan);
@@ -216,14 +211,14 @@ class _NextPageState extends State<NextPage> {
                 ],
               ),
               if (selectedCardIndex != -1)
-                Container(
-                  height:
-                      9 * 56.0 + 56.0, // Total height of 9 rows + header row
-                  child: SingleChildScrollView(
-                    child: TableWidget(plans[selectedCardIndex].tableData),
-                  ),
-                ),
-              SizedBox(height: 32), // Add some space between sections
+                // Container(
+                //   height:
+                //       9 * 56.0 + 56.0, // Total height of 9 rows + header row
+                //   child: SingleChildScrollView(
+                //     child: TableWidget(plans[selectedCardIndex].tableData),
+                //   ),
+                // ),
+                SizedBox(height: 32), // Add some space between sections
               Text(
                 'Guest Plan', // Add this text
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -247,14 +242,14 @@ class _NextPageState extends State<NextPage> {
                       ),
                 ],
               ),
-              if (selectedNewCardIndex != -1)
-                Container(
-                  height:
-                      9 * 56.0 + 56.0, // Total height of 9 rows + header row
-                  child: SingleChildScrollView(
-                    child: TableWidget(plans[selectedNewCardIndex].tableData),
-                  ),
-                ),
+              // if (selectedNewCardIndex != -1)
+              //   Container(
+              //     height:
+              //         9 * 56.0 + 56.0, // Total height of 9 rows + header row
+              //     child: SingleChildScrollView(
+              //       child: TableWidget(plans[selectedNewCardIndex].tableData),
+              //     ),
+              //   ),
             ],
           ),
         ),

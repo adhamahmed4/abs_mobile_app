@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Configurations/app_config.dart';
 import 'package:http/http.dart' as http; // Import the http package
 import 'dart:convert';
+import 'package:abs_mobile_app/More/wallet.dart';
 
 class MorePage extends StatefulWidget {
   @override
@@ -196,7 +197,12 @@ class _MorePageState extends State<MorePage> {
                         title: Text('Wallet'),
                         trailing: Icon(Icons.arrow_forward),
                         onTap: () {
-                          // Handle location tap
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //       builder: (context) =>
+                          //           WalletPage()), // Navigate to WalletPage
+                          // );
                         },
                       ),
                       Divider(),

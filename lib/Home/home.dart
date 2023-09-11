@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:abs_mobile_app/Configurations/app_config.dart';
 import 'dart:convert';
+import 'package:abs_mobile_app/More/Settings/BusinessInfo/businessInfo.dart';
+import 'package:abs_mobile_app/More/Settings/PaymentMethods/paymentMethods.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,6 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool isVerificationInProgress = false;
   bool isEmailVerified = true; // Replace with your actual logic
   bool isCompanyInfoComplete = false; // Replace with your actual logic
   bool isCompanyAddressComplete = true; // Replace with your actual l
@@ -36,6 +39,19 @@ class _HomePageState extends State<HomePage> {
       return fullName;
     } else {
       throw Exception('Failed to fetch user info');
+    }
+  }
+
+  Future<String> fetchEmail() async {
+    final url = Uri.parse('${AppConfig.baseUrl}/users-with-info-client');
+    final response = await http.get(url, headers: AppConfig.headers);
+
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body);
+      final email = responseBody[0]['email'];
+      return email;
+    } else {
+      throw Exception('Failed to fetch email info');
     }
   }
 
@@ -66,29 +82,101 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildStatusRow(String title, bool isVerified) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-              fontSize: 14, color: const Color.fromARGB(255, 114, 114, 114)),
-        ),
-        Container(
-          width: 30,
-          height: 40,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: isVerified ? Color(0xFF2B2E83) : Colors.grey,
+  Widget _buildStatusRow(BuildContext context, String title, bool isVerified) {
+    void navigateToPage(String title) async {
+      switch (title) {
+        case 'Add your payment method':
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PaymentMethodsPage()),
+          );
+          break;
+        case 'Add your business info':
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => BusinessInfoPage()),
+          );
+          break;
+        case 'Verify your email address':
+          // Check if title is 'Verify your email address'
+          if (!isVerified) {
+            // Fetch the email
+            final email = await fetchEmail(); // Use fetchEmail() here
+
+            // Check if the email is not null or empty
+            if (email != null && email.isNotEmpty) {
+              // Send the email verification request
+              final verificationUrl =
+                  '${AppConfig.baseUrl}/subAccounts-verification/send-email';
+              final emailData = {'email': email};
+              final response = await http.post(
+                Uri.parse(verificationUrl),
+                body: json.encode(emailData),
+                headers: {'Content-Type': 'application/json'},
+              );
+
+              if (response.statusCode == 200) {
+                SnackBar(
+                  content: Text('email sent successfully'),
+                );
+                // You can handle success here if needed
+              } else {
+                // Handle errors if the request fails
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Failed to send email verification request'),
+                  ),
+                );
+              }
+            } else {
+              // Handle the case where email is null or empty
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Email is empty or null'),
+                ),
+              );
+            }
+          }
+          break;
+        default:
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Unknown title: $title'),
+            ),
+          );
+      }
+    }
+
+    return GestureDetector(
+      onTap: () {
+        navigateToPage(title);
+      },
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            title,
+            style: TextStyle(
+              fontSize: 14,
+              color: const Color.fromARGB(255, 114, 114, 114),
+              decoration: isVerified ? TextDecoration.lineThrough : null,
+            ),
           ),
-          child: Icon(
-            isVerified ? Icons.check : Icons.close,
-            color: Colors.white,
-            size: 20,
+          Container(
+            width: 30,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: isVerified ? Colors.grey : Color(0xFF2B2E83),
+            ),
+            child: Icon(
+              isVerified ? Icons.check : Icons.keyboard_double_arrow_right,
+              color: Colors.white,
+              size: 20,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -664,8 +752,12 @@ class _HomePageState extends State<HomePage> {
                                           data['Verification Type'] as String;
                                       final isVerified =
                                           data['isVerified'] as bool;
-                                      return _buildStatusRow(
-                                          verificationType, isVerified);
+                                      return Builder(
+                                        builder: (context) {
+                                          return _buildStatusRow(context,
+                                              verificationType, isVerified);
+                                        },
+                                      );
                                     }).toList(),
                                   ),
                                 ],
