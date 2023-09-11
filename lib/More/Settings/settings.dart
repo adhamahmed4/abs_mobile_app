@@ -1,4 +1,5 @@
 import 'package:abs_mobile_app/More/Settings/BusinessInfo/businessInfo.dart';
+import 'package:abs_mobile_app/More/Settings/BusinessLocations/businessLocations.dart';
 import 'package:abs_mobile_app/More/Settings/PaymentMethods/BankTransfer/bankTransfer.dart';
 import 'package:abs_mobile_app/More/Settings/PaymentMethods/MobileCash/mobileCash.dart';
 import 'package:abs_mobile_app/More/Settings/PaymentMethods/NearestBranch/nearestBranch.dart';
@@ -172,10 +173,31 @@ class _SettingsPageState extends State<SettingsPage> {
                       ListTile(
                         tileColor: Colors.white,
                         leading: Icon(Icons.my_location_outlined),
-                        title: Text('Pickup Locations'),
+                        title: Text('Business Locations'),
                         trailing: Icon(Icons.arrow_forward),
                         onTap: () {
-                          // Handle location tap
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              transitionDuration: Duration(
+                                  milliseconds:
+                                      300), // Adjust the animation duration
+                              pageBuilder: (_, __, ___) =>
+                                  BusinessLocationsPage(),
+                              transitionsBuilder: (_,
+                                  Animation<double> animation,
+                                  __,
+                                  Widget child) {
+                                return SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: Offset(1.0, 0.0),
+                                    end: Offset.zero,
+                                  ).animate(animation),
+                                  child: child,
+                                );
+                              },
+                            ),
+                          );
                         },
                       ),
                       Divider(),

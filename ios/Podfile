@@ -1,0 +1,9 @@
+platform :ios, '11.0' # Specify the desired iOS version
+
+target 'Runner' do
+  # Your existing pod dependencies
+end
+
+target 'RunnerTests' do
+  # Your existing test-related pod dependencies (if any)
+end
