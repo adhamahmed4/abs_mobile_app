@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppConfig {
-  static const String baseUrl = 'http://192.168.1.17:3000';
+  static const String baseUrl = 'http://192.168.1.15:3000';
   static String? jwtToken;
 
   static Future<void> storeToken(String token) async {
