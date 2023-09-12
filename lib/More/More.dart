@@ -1,4 +1,5 @@
 import 'package:abs_mobile_app/Login/login.dart';
+import 'package:abs_mobile_app/More/Settings/PaymentMethods/Wallet/wallet.dart';
 import 'package:abs_mobile_app/More/Settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -6,7 +7,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../Configurations/app_config.dart';
 import 'package:http/http.dart' as http; // Import the http package
 import 'dart:convert';
-import 'package:abs_mobile_app/More/wallet.dart';
 
 class MorePage extends StatefulWidget {
   @override
@@ -199,33 +199,33 @@ class _MorePageState extends State<MorePage> {
                                 );
                               },
                             ),
-                          );
-                        },
-                      ),
-                      Divider(),
-                      ListTile(
-                        tileColor: Colors.white,
-                        leading: Icon(Icons.wallet),
-                        title: Text('Wallet'),
-                        trailing: Icon(Icons.arrow_forward),
-                        onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) =>
-                          //           WalletPage()), // Navigate to WalletPage
-                          // );
-                        },
-                      ),
-                      Divider(),
-                      ListTile(
-                        tileColor: Colors.white,
-                        leading: Icon(Icons.support),
-                        title: Text('Support Tickets'),
-                        trailing: Icon(Icons.arrow_forward),
-                        onTap: () {
-                          // Handle profile tap
-                        },
+                            Divider(),
+                            ListTile(
+                              tileColor: Colors.white,
+                              leading: Icon(Icons.wallet),
+                              title: Text('Wallet'),
+                              trailing: Icon(Icons.arrow_forward),
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          WalletPage()), // Navigate to WalletPage
+                                );
+                              },
+                            ),
+                            Divider(),
+                            ListTile(
+                              tileColor: Colors.white,
+                              leading: Icon(Icons.support),
+                              title: Text('Support Tickets'),
+                              trailing: Icon(Icons.arrow_forward),
+                              onTap: () {
+                                // Handle profile tap
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
