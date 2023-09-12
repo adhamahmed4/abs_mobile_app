@@ -18,6 +18,8 @@ class BusinessInfoPage extends StatefulWidget {
 class _BusinessInfoPageState extends State<BusinessInfoPage> {
   final Dio _dio = Dio();
 
+  bool isLoading = true;
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _englishNameController = TextEditingController();
   final TextEditingController _arabicNameController = TextEditingController();
@@ -87,6 +89,7 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
             .split(',')
             .map((str) => int.parse(str))
             .toList();
+        isLoading = false;
       });
     } else {
       throw Exception('Failed to load data');
@@ -359,401 +362,415 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
         title: Text('Business Info'),
         centerTitle: true,
       ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 32, 16, 32),
-                child: Container(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: TextField(
-                          controller: _englishNameController,
-                          readOnly: _dataExists,
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: "Business Name (English)",
-                          ),
-                          onChanged: (englishName) {
-                            _updateButtonEnabledStatus();
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: TextField(
-                          controller: _arabicNameController,
-                          readOnly: _dataExists,
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: 'Business Name (Arabic)',
-                          ),
-                          onChanged: (arabicName) {
-                            _updateButtonEnabledStatus();
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: InputDecorator(
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFFFAB4A)),
+      body: Stack(
+        children: [
+          if (!isLoading)
+            Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 32, 16, 32),
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: TextField(
+                                controller: _englishNameController,
+                                readOnly: _dataExists,
+                                decoration: const InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFAB4A))),
+                                  labelText: "Business Name (English)",
+                                ),
+                                onChanged: (englishName) {
+                                  _updateButtonEnabledStatus();
+                                },
+                              ),
                             ),
-                            labelText: 'Sales Channels',
-                          ),
-                          child: Container(
-                            height: 20,
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: _selectedSalesChannel,
-                                onChanged: !_dataExists
-                                    ? (newValue) {
-                                        setState(() {
-                                          _selectedSalesChannel = newValue!;
-                                        });
-                                        _updateButtonEnabledStatus();
-                                      }
-                                    : null,
-                                items: _salesChannels
-                                    .map<DropdownMenuItem<String>>(
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: TextField(
+                                controller: _arabicNameController,
+                                readOnly: _dataExists,
+                                decoration: const InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFAB4A))),
+                                  labelText: 'Business Name (Arabic)',
+                                ),
+                                onChanged: (arabicName) {
+                                  _updateButtonEnabledStatus();
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: InputDecorator(
+                                decoration: const InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFFFAB4A)),
+                                  ),
+                                  labelText: 'Sales Channels',
+                                ),
+                                child: Container(
+                                  height: 20,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      value: _selectedSalesChannel,
+                                      onChanged: !_dataExists
+                                          ? (newValue) {
+                                              setState(() {
+                                                _selectedSalesChannel =
+                                                    newValue!;
+                                              });
+                                              _updateButtonEnabledStatus();
+                                            }
+                                          : null,
+                                      items: _salesChannels
+                                          .map<DropdownMenuItem<String>>(
+                                              (Map<String, dynamic> value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value['Sales Channeel Type ID']
+                                              .toString(),
+                                          child: Text(
+                                              value['Sales Channeel Type']),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: TextField(
+                                controller: _salesChannelNameController,
+                                readOnly: _dataExists,
+                                decoration: const InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFAB4A))),
+                                  labelText: 'Sales Channel Name',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: TextField(
+                                controller: _storeURLController,
+                                readOnly: _dataExists,
+                                decoration: const InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFAB4A))),
+                                  labelText: 'Store URL',
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: InputDecorator(
+                                decoration: const InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFFFAB4A)),
+                                  ),
+                                  labelText: 'Product',
+                                ),
+                                child: Container(
+                                  height: 20,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      value: _selectedProduct,
+                                      onChanged: !_dataExists
+                                          ? (newValue) {
+                                              setState(() {
+                                                _selectedProduct = newValue!;
+                                              });
+                                              _updateButtonEnabledStatus();
+                                            }
+                                          : null,
+                                      items: _products
+                                          .map<DropdownMenuItem<String>>(
+                                              (Map<String, dynamic> value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value['ID'].toString(),
+                                          child: Text(value['enProduct']),
+                                        );
+                                      }).toList(),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: TextField(
+                                controller: _prefixController,
+                                readOnly: _dataExists,
+                                decoration: const InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFAB4A))),
+                                  labelText: "Prefix",
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: InputDecorator(
+                                decoration: const InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFFFAB4A)),
+                                  ),
+                                  labelText: 'City',
+                                ),
+                                child: Container(
+                                  height: 20,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      value: _selectedCity,
+                                      onChanged: !_dataExists
+                                          ? (newValue) {
+                                              setState(() {
+                                                _selectedCity = newValue!;
+                                              });
+                                              _updateButtonEnabledStatus();
+                                            }
+                                          : null,
+                                      items:
+                                          _cities.map<DropdownMenuItem<String>>(
                                         (Map<String, dynamic> value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value['Sales Channeel Type ID']
-                                        .toString(),
-                                    child: Text(value['Sales Channeel Type']),
-                                  );
-                                }).toList(),
+                                          return DropdownMenuItem<String>(
+                                            value: value['City ID'].toString(),
+                                            child: Text(value['City Name']),
+                                          );
+                                        },
+                                      ).toList(),
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: TextField(
-                          controller: _salesChannelNameController,
-                          readOnly: _dataExists,
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: 'Sales Channel Name',
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: TextField(
-                          controller: _storeURLController,
-                          readOnly: _dataExists,
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: 'Store URL',
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: InputDecorator(
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFFFAB4A)),
-                            ),
-                            labelText: 'Product',
-                          ),
-                          child: Container(
-                            height: 20,
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: _selectedProduct,
-                                onChanged: !_dataExists
-                                    ? (newValue) {
-                                        setState(() {
-                                          _selectedProduct = newValue!;
-                                        });
-                                        _updateButtonEnabledStatus();
-                                      }
-                                    : null,
-                                items: _products.map<DropdownMenuItem<String>>(
-                                    (Map<String, dynamic> value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value['ID'].toString(),
-                                    child: Text(value['enProduct']),
-                                  );
-                                }).toList(),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: TextField(
+                                controller: _streetNameController,
+                                readOnly: _dataExists,
+                                decoration: const InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFAB4A))),
+                                  labelText: "Street Name",
+                                ),
+                                onChanged: (streetName) {
+                                  _updateButtonEnabledStatus();
+                                },
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: TextField(
-                          controller: _prefixController,
-                          readOnly: _dataExists,
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: "Prefix",
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: InputDecorator(
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFFFAB4A)),
-                            ),
-                            labelText: 'City',
-                          ),
-                          child: Container(
-                            height: 20,
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: _selectedCity,
-                                onChanged: !_dataExists
-                                    ? (newValue) {
-                                        setState(() {
-                                          _selectedCity = newValue!;
-                                        });
-                                        _updateButtonEnabledStatus();
-                                      }
-                                    : null,
-                                items: _cities.map<DropdownMenuItem<String>>(
-                                  (Map<String, dynamic> value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value['City ID'].toString(),
-                                      child: Text(value['City Name']),
-                                    );
-                                  },
-                                ).toList(),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: TextField(
+                                controller: _buildingNumberController,
+                                readOnly: _dataExists,
+                                decoration: const InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFAB4A))),
+                                  labelText: "Building Number",
+                                ),
+                                onChanged: (buildingNumber) {
+                                  _updateButtonEnabledStatus();
+                                },
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: TextField(
-                          controller: _streetNameController,
-                          readOnly: _dataExists,
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: "Street Name",
-                          ),
-                          onChanged: (streetName) {
-                            _updateButtonEnabledStatus();
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: TextField(
-                          controller: _buildingNumberController,
-                          readOnly: _dataExists,
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: "Building Number",
-                          ),
-                          onChanged: (buildingNumber) {
-                            _updateButtonEnabledStatus();
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: TextField(
-                          controller: _floorNumberController,
-                          readOnly: _dataExists,
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: "Floor Number",
-                          ),
-                          onChanged: (floorNumber) {
-                            _updateButtonEnabledStatus();
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: TextField(
-                          controller: _apartmentNumberController,
-                          readOnly: _dataExists,
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: "Apartment Number",
-                          ),
-                          onChanged: (apartmentNumber) {
-                            _updateButtonEnabledStatus();
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                        child: InputDecorator(
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFFFAB4A)),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: TextField(
+                                controller: _floorNumberController,
+                                readOnly: _dataExists,
+                                decoration: const InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFAB4A))),
+                                  labelText: "Floor Number",
+                                ),
+                                onChanged: (floorNumber) {
+                                  _updateButtonEnabledStatus();
+                                },
+                              ),
                             ),
-                            labelText: 'Services',
-                          ),
-                          child: IgnorePointer(
-                            ignoring: _dataExists,
-                            child: MultiSelectDialogField(
-                              initialValue: _selectedServices,
-                              items: _services
-                                  .map((e) => MultiSelectItem(
-                                      e['Service Type ID'],
-                                      e['Service Type'].toString()))
-                                  .toList(),
-                              listType: MultiSelectListType.CHIP,
-                              onConfirm: (selectedItems) {
-                                setState(() {
-                                  _selectedServices =
-                                      List<int>.from(selectedItems);
-                                });
-                              },
-                              buttonText: !_dataExists
-                                  ? Text('Select Services')
-                                  : Text(''),
-                              chipDisplay: MultiSelectChipDisplay(),
-                              searchHint: 'Search Services',
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: TextField(
+                                controller: _apartmentNumberController,
+                                readOnly: _dataExists,
+                                decoration: const InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFAB4A))),
+                                  labelText: "Apartment Number",
+                                ),
+                                onChanged: (apartmentNumber) {
+                                  _updateButtonEnabledStatus();
+                                },
+                              ),
                             ),
-                          ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                              child: InputDecorator(
+                                decoration: const InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFFFAB4A)),
+                                  ),
+                                  labelText: 'Services',
+                                ),
+                                child: IgnorePointer(
+                                  ignoring: _dataExists,
+                                  child: MultiSelectDialogField(
+                                    initialValue: _selectedServices,
+                                    items: _services
+                                        .map((e) => MultiSelectItem(
+                                            e['Service Type ID'],
+                                            e['Service Type'].toString()))
+                                        .toList(),
+                                    listType: MultiSelectListType.CHIP,
+                                    onConfirm: (selectedItems) {
+                                      setState(() {
+                                        _selectedServices =
+                                            List<int>.from(selectedItems);
+                                      });
+                                    },
+                                    buttonText: !_dataExists
+                                        ? Text('Select Services')
+                                        : Text(''),
+                                    chipDisplay: MultiSelectChipDisplay(),
+                                    searchHint: 'Search Services',
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-                  child: Column(
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: !_dataExists
-                                ? Theme.of(context).primaryColor
-                                : const Color.fromARGB(249, 95, 95, 95)),
-                        onPressed: !_dataExists
-                            ? () {
-                                _pickIDImage();
-                              }
-                            : null,
-                        child: Text("Upload National ID"),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Center(
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                  child: Column(
-                    children: [
-                      ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                            backgroundColor: !_dataExists
-                                ? Theme.of(context).primaryColor
-                                : const Color.fromARGB(249, 95, 95, 95)),
-                        onPressed: !_dataExists
-                            ? () {
-                                _pickCommercialRegisterImage();
-                              }
-                            : null,
-                        child: Text("Upload Commercial Register"),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Visibility(
-                visible: !_dataExists,
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-                  child: Align(
-                    alignment: Alignment.bottomRight,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: _dataExists
-                            ? Theme.of(context).primaryColor
-                            : const Color.fromARGB(249, 95, 95, 95),
-                        fixedSize: const Size(120, 50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(7),
-                          side: const BorderSide(
-                            color: Color.fromARGB(255, 138, 138, 138),
-                            width: 1.4,
-                          ),
-                        ),
-                      ),
-                      onPressed: _isButtonEnabled
-                          ? () {
-                              if (_formKey.currentState!.validate()) {
-                                addBussinessInfo();
-                              }
-                            }
-                          : null, // Disable the button if fields are not valid
-                      child: const Padding(
-                        padding: EdgeInsets.all(12.0),
-                        child: Text('Submit'),
                       ),
                     ),
-                  ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        child: Column(
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: !_dataExists
+                                      ? Theme.of(context).primaryColor
+                                      : const Color.fromARGB(249, 95, 95, 95)),
+                              onPressed: !_dataExists
+                                  ? () {
+                                      _pickIDImage();
+                                    }
+                                  : null,
+                              child: Text("Upload National ID"),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                        child: Column(
+                          children: [
+                            ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: !_dataExists
+                                      ? Theme.of(context).primaryColor
+                                      : const Color.fromARGB(249, 95, 95, 95)),
+                              onPressed: !_dataExists
+                                  ? () {
+                                      _pickCommercialRegisterImage();
+                                    }
+                                  : null,
+                              child: Text("Upload Commercial Register"),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Visibility(
+                      visible: !_dataExists,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                        child: Align(
+                          alignment: Alignment.bottomRight,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: _dataExists
+                                  ? Theme.of(context).primaryColor
+                                  : const Color.fromARGB(249, 95, 95, 95),
+                              fixedSize: const Size(120, 50),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(7),
+                                side: const BorderSide(
+                                  color: Color.fromARGB(255, 138, 138, 138),
+                                  width: 1.4,
+                                ),
+                              ),
+                            ),
+                            onPressed: _isButtonEnabled
+                                ? () {
+                                    if (_formKey.currentState!.validate()) {
+                                      addBussinessInfo();
+                                    }
+                                  }
+                                : null, // Disable the button if fields are not valid
+                            child: const Padding(
+                              padding: EdgeInsets.all(12.0),
+                              child: Text('Submit'),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
-        ),
+            ),
+          if (isLoading) const Center(child: CircularProgressIndicator()),
+        ],
       ),
     );
   }
