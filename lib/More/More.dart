@@ -1,5 +1,5 @@
 import 'package:abs_mobile_app/Login/login.dart';
-import 'package:abs_mobile_app/More/Settings/PaymentMethods/Wallet/wallet.dart';
+import 'package:abs_mobile_app/More/Wallet/wallet.dart';
 import 'package:abs_mobile_app/More/Settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
