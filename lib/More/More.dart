@@ -209,12 +209,12 @@ class _MorePageState extends State<MorePage> {
                         title: Text('Wallet'),
                         trailing: Icon(Icons.arrow_forward),
                         onTap: () {
-                          // Navigator.push(
-                          //   context,
-                          //   MaterialPageRoute(
-                          //       builder: (context) =>
-                          //           WalletPage()), // Navigate to WalletPage
-                          // );
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    WalletPage()), // Navigate to WalletPage
+                          );
                         },
                       ),
                       Divider(),
