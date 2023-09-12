@@ -15,6 +15,7 @@ class PersonalInfoPage extends StatefulWidget {
 
 class _PersonalInfoPageState extends State<PersonalInfoPage> {
   final Dio _dio = Dio();
+  bool isLoading = true;
   String? imageName;
   String? imagePath;
 
@@ -39,6 +40,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
             jsonData[0]['lastName']; // Concatenate first and last name
         _phoneController.text = jsonData[0]['contactNumber'];
         _emailController.text = jsonData[0]['email'];
+        isLoading = false;
       });
     } else {
       throw Exception('Failed to load data');
@@ -131,110 +133,122 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         title: Text('Personal Info'),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 32, 16, 32),
-              child: Container(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                      child: TextField(
-                        controller: _nameController,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          fillColor: Color.fromARGB(255, 250, 250, 250),
-                          filled: true,
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFFFAB4A))),
-                          labelText: 'Name',
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                      child: TextField(
-                        controller: _phoneController,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          fillColor: Color.fromARGB(255, 250, 250, 250),
-                          filled: true,
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFFFAB4A))),
-                          labelText: 'Phone',
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                      child: TextField(
-                        controller: _emailController,
-                        readOnly: true,
-                        decoration: InputDecoration(
-                          fillColor: Color.fromARGB(255, 250, 250, 250),
-                          filled: true,
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFFFAB4A))),
-                          labelText: 'Email Address',
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+      body: Stack(
+        children: [
+          if (!isLoading)
+            SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 32, 16, 32),
+                    child: Container(
                       child: Column(
                         children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              _pickProfilePicture();
-                            },
-                            child: Text("Upload Profile Picture"),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                            child: TextField(
+                              controller: _nameController,
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                fillColor: Color.fromARGB(255, 250, 250, 250),
+                                filled: true,
+                                border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFFFAB4A))),
+                                labelText: 'Name',
+                              ),
+                            ),
                           ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                      child: Column(
-                        children: [
-                          ElevatedButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  transitionDuration: Duration(
-                                      milliseconds:
-                                          300), // Adjust the animation duration
-                                  pageBuilder: (_, __, ___) =>
-                                      ChangePasswordPage(),
-                                  transitionsBuilder: (_,
-                                      Animation<double> animation,
-                                      __,
-                                      Widget child) {
-                                    return SlideTransition(
-                                      position: Tween<Offset>(
-                                        begin: Offset(1.0, 0.0),
-                                        end: Offset.zero,
-                                      ).animate(animation),
-                                      child: child,
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                            child: TextField(
+                              controller: _phoneController,
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                fillColor: Color.fromARGB(255, 250, 250, 250),
+                                filled: true,
+                                border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFFFAB4A))),
+                                labelText: 'Phone',
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                            child: TextField(
+                              controller: _emailController,
+                              readOnly: true,
+                              decoration: InputDecoration(
+                                fillColor: Color.fromARGB(255, 250, 250, 250),
+                                filled: true,
+                                border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFFFAB4A))),
+                                labelText: 'Email Address',
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                            child: Column(
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    _pickProfilePicture();
+                                  },
+                                  child: Text("Upload Profile Picture"),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                            child: Column(
+                              children: [
+                                ElevatedButton(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                        transitionDuration: Duration(
+                                            milliseconds:
+                                                300), // Adjust the animation duration
+                                        pageBuilder: (_, __, ___) =>
+                                            ChangePasswordPage(),
+                                        transitionsBuilder: (_,
+                                            Animation<double> animation,
+                                            __,
+                                            Widget child) {
+                                          return SlideTransition(
+                                            position: Tween<Offset>(
+                                              begin: Offset(1.0, 0.0),
+                                              end: Offset.zero,
+                                            ).animate(animation),
+                                            child: child,
+                                          );
+                                        },
+                                      ),
                                     );
                                   },
+                                  child: Text("Change Password"),
                                 ),
-                              );
-                            },
-                            child: Text("Change Password"),
+                              ],
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
-          ],
-        ),
+          if (isLoading)
+            Center(
+              child: CircularProgressIndicator(),
+            ),
+        ],
       ),
     );
   }

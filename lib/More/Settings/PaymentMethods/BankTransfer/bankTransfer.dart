@@ -10,6 +10,9 @@ class BankTransferPage extends StatefulWidget {
 
 class _BankTransferPageState extends State<BankTransferPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  bool isLoading = true;
+
   TextEditingController _accountOwnerNameController = TextEditingController();
   TextEditingController _accountNumberController = TextEditingController();
   TextEditingController _ibanController = TextEditingController();
@@ -130,6 +133,7 @@ class _BankTransferPageState extends State<BankTransferPage> {
           _ibanController.text = jsonData[0]['IBAN'];
           _swiftCodeController.text = jsonData[0]['Swift Code'];
           _dataExists = true;
+          isLoading = false;
         });
       }
     } else {
@@ -189,183 +193,192 @@ class _BankTransferPageState extends State<BankTransferPage> {
         title: const Text('Bank Transfer'),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 32, 16, 32),
-                child: Container(
-                  child: Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: InputDecorator(
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: OutlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFFFAB4A)),
+      body: Stack(
+        children: [
+          if (!isLoading)
+            SingleChildScrollView(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 32, 16, 32),
+                      child: Container(
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: InputDecorator(
+                                decoration: const InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Color(0xFFFFAB4A)),
+                                  ),
+                                  labelText: 'Bank',
+                                ),
+                                child: SizedBox(
+                                  height: 20,
+                                  child: DropdownButtonHideUnderline(
+                                    child: DropdownButton<String>(
+                                      value: _selectedBank,
+                                      onChanged: !_dataExists
+                                          ? (newValue) {
+                                              setState(() {
+                                                _selectedBank = newValue!;
+                                              });
+                                            }
+                                          : null,
+                                      items:
+                                          _banks.map<DropdownMenuItem<String>>(
+                                        (Map<String, dynamic> value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value['ID'].toString(),
+                                            child: Text(value['enBankName']),
+                                          );
+                                        },
+                                      ).toList(),
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ),
-                            labelText: 'Bank',
-                          ),
-                          child: SizedBox(
-                            height: 20,
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: _selectedBank,
-                                onChanged: !_dataExists
-                                    ? (newValue) {
-                                        setState(() {
-                                          _selectedBank = newValue!;
-                                        });
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: TextField(
+                                controller: _accountOwnerNameController,
+                                readOnly: _dataExists,
+                                decoration: InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFAB4A))),
+                                  labelText: "Account Owner Name",
+                                  errorText:
+                                      _accountOwnerNameErrorText.isNotEmpty
+                                          ? _accountOwnerNameErrorText
+                                          : null,
+                                ),
+                                onChanged: (accountOwnerName) {
+                                  _validateAccountOwnerName(accountOwnerName);
+                                  _updateButtonEnabledStatus();
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: TextField(
+                                controller: _accountNumberController,
+                                readOnly: _dataExists,
+                                decoration: InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFAB4A))),
+                                  labelText: 'Account Number',
+                                  errorText: _accountNumberErrorText.isNotEmpty
+                                      ? _accountNumberErrorText
+                                      : null,
+                                ),
+                                onChanged: (accountNumber) {
+                                  _validateAccountNumber(accountNumber);
+                                  _updateButtonEnabledStatus();
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: TextField(
+                                controller: _ibanController,
+                                readOnly: _dataExists,
+                                decoration: InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFAB4A))),
+                                  labelText:
+                                      'IBAN (International Bank Account Number)',
+                                  errorText: _ibanErrorText.isNotEmpty
+                                      ? _ibanErrorText
+                                      : null,
+                                ),
+                                onChanged: (iban) {
+                                  _validateIBAN(iban);
+                                  _updateButtonEnabledStatus();
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
+                              child: TextField(
+                                controller: _swiftCodeController,
+                                readOnly: _dataExists,
+                                decoration: InputDecoration(
+                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  filled: true,
+                                  border: const OutlineInputBorder(
+                                      borderSide:
+                                          BorderSide(color: Color(0xFFFFAB4A))),
+                                  labelText: 'Swift Code',
+                                  errorText: _swiftCodeErrorText.isNotEmpty
+                                      ? _swiftCodeErrorText
+                                      : null,
+                                ),
+                                onChanged: (swiftCode) {
+                                  _validateSwiftCode(swiftCode);
+                                  _updateButtonEnabledStatus();
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
+                      child: Align(
+                        alignment: Alignment.bottomRight,
+                        child: !_dataExists
+                            ? ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: _isButtonEnabled
+                                      ? Theme.of(context).primaryColor
+                                      : const Color.fromARGB(249, 95, 95, 95),
+                                  fixedSize: const Size(120, 50),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(7),
+                                    side: const BorderSide(
+                                      color: Color.fromARGB(255, 138, 138, 138),
+                                      width: 1.4,
+                                    ),
+                                  ),
+                                ),
+                                onPressed: _isButtonEnabled
+                                    ? () {
+                                        if (_formKey.currentState!.validate()) {
+                                          addBankDetails();
+                                        }
                                       }
-                                    : null,
-                                items: _banks.map<DropdownMenuItem<String>>(
-                                  (Map<String, dynamic> value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value['ID'].toString(),
-                                      child: Text(value['enBankName']),
-                                    );
-                                  },
-                                ).toList(),
-                              ),
-                            ),
-                          ),
-                        ),
+                                    : null, // Disable the button if fields are not valid
+                                child: const Padding(
+                                  padding: EdgeInsets.all(12.0),
+                                  child: Text('Submit'),
+                                ),
+                              )
+                            : null,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: TextField(
-                          controller: _accountOwnerNameController,
-                          readOnly: _dataExists,
-                          decoration: InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: "Account Owner Name",
-                            errorText: _accountOwnerNameErrorText.isNotEmpty
-                                ? _accountOwnerNameErrorText
-                                : null,
-                          ),
-                          onChanged: (accountOwnerName) {
-                            _validateAccountOwnerName(accountOwnerName);
-                            _updateButtonEnabledStatus();
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: TextField(
-                          controller: _accountNumberController,
-                          readOnly: _dataExists,
-                          decoration: InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: 'Account Number',
-                            errorText: _accountNumberErrorText.isNotEmpty
-                                ? _accountNumberErrorText
-                                : null,
-                          ),
-                          onChanged: (accountNumber) {
-                            _validateAccountNumber(accountNumber);
-                            _updateButtonEnabledStatus();
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: TextField(
-                          controller: _ibanController,
-                          readOnly: _dataExists,
-                          decoration: InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText:
-                                'IBAN (International Bank Account Number)',
-                            errorText: _ibanErrorText.isNotEmpty
-                                ? _ibanErrorText
-                                : null,
-                          ),
-                          onChanged: (iban) {
-                            _validateIBAN(iban);
-                            _updateButtonEnabledStatus();
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                        child: TextField(
-                          controller: _swiftCodeController,
-                          readOnly: _dataExists,
-                          decoration: InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
-                            filled: true,
-                            border: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: 'Swift Code',
-                            errorText: _swiftCodeErrorText.isNotEmpty
-                                ? _swiftCodeErrorText
-                                : null,
-                          ),
-                          onChanged: (swiftCode) {
-                            _validateSwiftCode(swiftCode);
-                            _updateButtonEnabledStatus();
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 16, 0),
-                child: Align(
-                  alignment: Alignment.bottomRight,
-                  child: !_dataExists
-                      ? ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: _isButtonEnabled
-                                ? Theme.of(context).primaryColor
-                                : const Color.fromARGB(249, 95, 95, 95),
-                            fixedSize: const Size(120, 50),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(7),
-                              side: const BorderSide(
-                                color: Color.fromARGB(255, 138, 138, 138),
-                                width: 1.4,
-                              ),
-                            ),
-                          ),
-                          onPressed: _isButtonEnabled
-                              ? () {
-                                  if (_formKey.currentState!.validate()) {
-                                    addBankDetails();
-                                  }
-                                }
-                              : null, // Disable the button if fields are not valid
-                          child: const Padding(
-                            padding: EdgeInsets.all(12.0),
-                            child: Text('Submit'),
-                          ),
-                        )
-                      : null,
-                ),
-              ),
-            ],
-          ),
-        ),
+            ),
+          if (isLoading) const Center(child: CircularProgressIndicator()),
+        ],
       ),
     );
   }

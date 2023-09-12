@@ -27,22 +27,78 @@ class _SettingsPageState extends State<SettingsPage> {
         if (paymentMethod == 1) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MobileCashPage()),
+            PageRouteBuilder(
+              transitionDuration:
+                  Duration(milliseconds: 300), // Adjust the animation duration
+              pageBuilder: (_, __, ___) => MobileCashPage(),
+              transitionsBuilder:
+                  (_, Animation<double> animation, __, Widget child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                );
+              },
+            ),
           );
         } else if (paymentMethod == 2) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => WalletPage()),
+            PageRouteBuilder(
+              transitionDuration:
+                  Duration(milliseconds: 300), // Adjust the animation duration
+              pageBuilder: (_, __, ___) => WalletPage(),
+              transitionsBuilder:
+                  (_, Animation<double> animation, __, Widget child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                );
+              },
+            ),
           );
         } else if (paymentMethod == 3) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => NearestBranchPage()),
+            PageRouteBuilder(
+              transitionDuration:
+                  Duration(milliseconds: 300), // Adjust the animation duration
+              pageBuilder: (_, __, ___) => NearestBranchPage(),
+              transitionsBuilder:
+                  (_, Animation<double> animation, __, Widget child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                );
+              },
+            ),
           );
         } else if (paymentMethod == 4) {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => BankTransferPage()),
+            PageRouteBuilder(
+              transitionDuration:
+                  Duration(milliseconds: 300), // Adjust the animation duration
+              pageBuilder: (_, __, ___) => BankTransferPage(),
+              transitionsBuilder:
+                  (_, Animation<double> animation, __, Widget child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                );
+              },
+            ),
           );
         }
       } else {
