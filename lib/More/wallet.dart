@@ -1,71 +1,115 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_date_range_picker/flutter_date_range_picker.dart' as DateRangePicker;
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-// class WalletPage extends StatefulWidget {
-//   @override
-//   _WalletPageState createState() => _WalletPageState();
-// }
+class WalletPage extends StatefulWidget {
+  @override
+  _WalletPageState createState() => _WalletPageState();
+}
 
-// class _WalletPageState extends State<WalletPage> {
-//   TextEditingController _dateController = TextEditingController();
-//   DateTime _selectedStartDate = DateTime.now(); // Initialize with a default value
-//   DateTime _selectedEndDate = DateTime.now(); 
+class _WalletPageState extends State<WalletPage> {
+  TextEditingController _dateController = TextEditingController();
+  DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
+  DateTime _selectedStartDate = DateTime.now();
+  DateTime _selectedEndDate = DateTime.now();
 
-//   Future<void> _selectDateRange(BuildContext context) async {
-//     final picked = await DateRangePicker.showDatePicker(
-//       context: context,
-//       initialFirstDate: DateTime.now(),
-//       initialLastDate: DateTime.now(),
-//       firstDate: DateTime(1950),
-//       lastDate: DateTime(2100),
-//     );
+  Future<void> _selectDateRange(BuildContext context) async {
+    DateTimeRange? selectedRange = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(1950),
+      lastDate: DateTime(2100),
+      initialDateRange: DateTimeRange(
+        start: _selectedStartDate,
+        end: _selectedEndDate,
+      ),
+    );
 
-//     if (picked != null && picked.length == 2) {
-//       setState(() {
-//         _selectedStartDate = picked[0];
-//         _selectedEndDate = picked[1];
-//         final formattedStartDate =
-//             "${_selectedStartDate.year}-${_selectedStartDate.month}-${_selectedStartDate.day}";
-//         final formattedEndDate =
-//             "${_selectedEndDate.year}-${_selectedEndDate.month}-${_selectedEndDate.day}";
-//         _dateController.text = "$formattedStartDate - $formattedEndDate";
-//       });
-//     }
-//   }
+    if (selectedRange != null) {
+      setState(() {
+        _selectedStartDate = selectedRange.start;
+        _selectedEndDate = selectedRange.end;
+        _dateController.text =
+            "${_dateFormat.format(_selectedStartDate)} - ${_dateFormat.format(_selectedEndDate)}";
+      });
+    }
+  }
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Wallet'),
-//         centerTitle: true,
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(16.0),
-//         child: Column(
-//           crossAxisAlignment: CrossAxisAlignment.start,
-//           children: [
-//             SizedBox(height: 16),
-//             Container(
-//               padding: EdgeInsets.all(16),
-//               child: TextField(
-//                 controller: _dateController,
-//                 readOnly: true,
-//                 decoration: InputDecoration(
-//                   icon: Icon(Icons.calendar_today),
-//                   labelText: 'Select Date Range',
-//                   suffixIcon: IconButton(
-//                     icon: Icon(Icons.calendar_view_day),
-//                     onPressed: () {
-//                       _selectDateRange(context);
-//                     },
-//                   ),
-//                 ),
-//               ),
-//             ),
-//           ],
-//         ),
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Wallet'),
+        centerTitle: true,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Card(
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  child: TextField(
+                    controller: _dateController,
+                    readOnly: true,
+                    onTap: () {
+                      _selectDateRange(context);
+                    },
+                    decoration: const InputDecoration(
+                      icon: Icon(Icons.calendar_today),
+                      labelText: 'Creation Date',
+                      suffixIcon: Icon(Icons.calendar_view_day),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 16),
+              buildCard('Expected Cash', '15,000 EGP', Color(0xFF2B2E83)),
+              buildCard('Collected Cash', '1,148 EGP', Color(0xFF2B2E83)),
+              buildCard('ABS Fees + Cash Collection Fees', '48 EGP',
+                  Color(0xFF2B2E83)),
+              buildCard('Net Value', '199,005,900 EGP', Color(0xFF2B2E83)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildCard(String title, String amount, Color backgroundColor) {
+    return Card(
+      elevation: 4,
+      child: Column(
+        children: [
+          Container(
+            color: backgroundColor,
+            width: double.infinity,
+            alignment: Alignment.center,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 20),
+          Text(
+            amount,
+            style: TextStyle(
+              fontSize: 24,
+              color: Color.fromARGB(255, 96, 96, 96),
+            ),
+          ),
+          SizedBox(
+            height: 20,
+          )
+        ],
+      ),
+    );
+  }
+}

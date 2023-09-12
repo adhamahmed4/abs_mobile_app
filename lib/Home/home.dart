@@ -6,13 +6,18 @@ import 'package:abs_mobile_app/More/Settings/BusinessInfo/businessInfo.dart';
 import 'package:abs_mobile_app/More/Settings/PaymentMethods/paymentMethods.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
   @override
   _HomePageState createState() => _HomePageState();
+  HomePage({Key? key}) : super(key: key); // Add this constructor
 }
 
 class _HomePageState extends State<HomePage> {
+  final GlobalKey<_HomePageState> homePageKey = GlobalKey<_HomePageState>();
+
+  bool emailVerificationClicked =
+      false; // Variable to track email verification click
+  DateTime?
+      emailVerificationTime; // Timestamp when email verification was clicked
   bool isVerificationInProgress = false;
   bool isEmailVerified = true; // Replace with your actual logic
   bool isCompanyInfoComplete = false; // Replace with your actual logic
@@ -98,41 +103,43 @@ class _HomePageState extends State<HomePage> {
           );
           break;
         case 'Verify your email address':
-          // Check if title is 'Verify your email address'
-          if (!isVerified) {
+          // Check if title is 'Verify your email address' and it's not already clicked
+          if (!isVerified && !emailVerificationClicked) {
+            // Mark email verification as clicked and record the timestamp
+            setState(() {
+              emailVerificationClicked = true;
+              emailVerificationTime = DateTime.now();
+            });
+
             // Fetch the email
             final email = await fetchEmail(); // Use fetchEmail() here
 
-            // Check if the email is not null or empty
-            if (email != null && email.isNotEmpty) {
-              // Send the email verification request
-              final verificationUrl =
-                  '${AppConfig.baseUrl}/subAccounts-verification/send-email';
-              final emailData = {'email': email};
-              final response = await http.post(
-                Uri.parse(verificationUrl),
-                body: json.encode(emailData),
-                headers: {'Content-Type': 'application/json'},
-              );
-
-              if (response.statusCode == 200) {
-                SnackBar(
-                  content: Text('email sent successfully'),
-                );
-                // You can handle success here if needed
-              } else {
-                // Handle errors if the request fails
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Failed to send email verification request'),
-                  ),
-                );
-              }
+            // ... Rest of your email verification code ...
+          } else if (emailVerificationClicked) {
+            // Check if it's been more than 2 minutes since the click
+            final currentTime = DateTime.now();
+            if (emailVerificationTime != null &&
+                currentTime.difference(emailVerificationTime!) >
+                    Duration(minutes: 2)) {
+              // Reset email verification if more than 2 minutes have passed
+              setState(() {
+                emailVerificationClicked = false;
+                emailVerificationTime = null;
+              });
             } else {
-              // Handle the case where email is null or empty
+              // Calculate the time remaining in seconds
+              final timeRemainingInSeconds = (2 * 60) -
+                  currentTime.difference(emailVerificationTime!).inSeconds;
+
+              // Calculate minutes and seconds
+              final minutes = (timeRemainingInSeconds / 60).floor();
+              final seconds = timeRemainingInSeconds % 60;
+
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Email is empty or null'),
+                  content: Text(
+                    'Email verification disabled for $minutes min $seconds sec.',
+                  ),
                 ),
               );
             }
@@ -634,7 +641,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    int validatedConditionsCount = 0;
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 244, 246, 248),
       body: SingleChildScrollView(
