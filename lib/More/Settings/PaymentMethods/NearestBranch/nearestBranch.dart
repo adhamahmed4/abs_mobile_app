@@ -45,6 +45,11 @@ class _NearestBranchPageState extends State<NearestBranchPage> {
           _dataExists = true;
           isLoading = false;
         });
+      } else {
+        setState(() {
+          isLoading = false;
+          _dataExists = false;
+        });
       }
     } else {
       throw Exception('Failed to load data');

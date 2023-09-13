@@ -76,6 +76,11 @@ class _MobileCashPageState extends State<MobileCashPage> {
           _dataExists = true;
           isLoading = false;
         });
+      } else {
+        setState(() {
+          isLoading = false;
+          _dataExists = false;
+        });
       }
     } else {
       throw Exception('Failed to load data');

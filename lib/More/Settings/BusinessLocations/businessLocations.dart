@@ -21,10 +21,17 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
-      setState(() {
-        locations = jsonData;
-        isLoading = false;
-      });
+      if (jsonData.isNotEmpty) {
+        setState(() {
+          locations = jsonData;
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          locations = [];
+          isLoading = false;
+        });
+      }
     } else {
       throw Exception('Failed to load data');
     }
@@ -125,139 +132,142 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                         ),
                       ),
                     ),
-                    Expanded(
-                      child: Card(
-                        margin: const EdgeInsets.fromLTRB(0, 8.0, 0, 0),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: locations!.map((location) {
-                              return ClipRRect(
-                                borderRadius: BorderRadius.circular(18.0),
-                                child: Card(
-                                  color:
-                                      const Color.fromARGB(255, 226, 226, 226),
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      InkWell(
-                                        onTap: () {
-                                          Navigator.push(
-                                            context,
-                                            PageRouteBuilder(
-                                              transitionDuration:
-                                                  Duration(milliseconds: 300),
-                                              pageBuilder: (_, __, ___) =>
-                                                  AddNewLocationPage(
-                                                locationID: location["ID"],
-                                              ),
-                                              transitionsBuilder: (_,
-                                                  Animation<double> animation,
-                                                  __,
-                                                  Widget child) {
-                                                return SlideTransition(
-                                                  position: Tween<Offset>(
-                                                    begin: Offset(1.0, 0.0),
-                                                    end: Offset.zero,
-                                                  ).animate(animation),
-                                                  child: child,
-                                                );
-                                              },
-                                            ),
-                                          ).then((_) {
-                                            getBusinessLocations();
-                                          });
-                                        },
-                                        child: ListTile(
-                                          title: Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                vertical: 4.0),
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                  location["Location Name"],
-                                                  style: const TextStyle(
-                                                    fontSize: 14.0,
-                                                    color: Colors.grey,
+                    locations!.isEmpty
+                        ? Container()
+                        : Card(
+                            margin: const EdgeInsets.fromLTRB(0, 8.0, 0, 0),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: locations!.map((location) {
+                                  return ClipRRect(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                    child: Card(
+                                      color: const Color.fromARGB(
+                                          255, 226, 226, 226),
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                PageRouteBuilder(
+                                                  transitionDuration: Duration(
+                                                      milliseconds: 300),
+                                                  pageBuilder: (_, __, ___) =>
+                                                      AddNewLocationPage(
+                                                    locationID: location["ID"],
                                                   ),
+                                                  transitionsBuilder: (_,
+                                                      Animation<double>
+                                                          animation,
+                                                      __,
+                                                      Widget child) {
+                                                    return SlideTransition(
+                                                      position: Tween<Offset>(
+                                                        begin: Offset(1.0, 0.0),
+                                                        end: Offset.zero,
+                                                      ).animate(animation),
+                                                      child: child,
+                                                    );
+                                                  },
                                                 ),
-                                                const SizedBox(width: 8.0),
-                                                Container(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 4.0,
-                                                      vertical: 4.0),
-                                                  decoration: BoxDecoration(
-                                                    color:
-                                                        _getColorForLocationType(
+                                              ).then((_) {
+                                                getBusinessLocations();
+                                              });
+                                            },
+                                            child: ListTile(
+                                              title: Padding(
+                                                padding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 4.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text(
+                                                      location["Location Name"],
+                                                      style: const TextStyle(
+                                                        fontSize: 14.0,
+                                                        color: Colors.grey,
+                                                      ),
+                                                    ),
+                                                    const SizedBox(width: 8.0),
+                                                    Container(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 4.0,
+                                                          vertical: 4.0),
+                                                      decoration: BoxDecoration(
+                                                        color: _getColorForLocationType(
                                                             location[
                                                                 "Location Type"]),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
-                                                  ),
-                                                  child: Text(
-                                                    location["Location Type"],
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 10.0,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.0),
+                                                      ),
+                                                      child: Text(
+                                                        location[
+                                                            "Location Type"],
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 10.0,
+                                                        ),
+                                                      ),
                                                     ),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                    width:
-                                                        8.0), // Add some space between badges
-                                                Expanded(
-                                                  child:
-                                                      Container(), // Empty Expanded widget to push content to the right
-                                                ),
-                                                Container(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                      horizontal: 4.0,
-                                                      vertical: 4.0),
-                                                  decoration: BoxDecoration(
-                                                    color: location["isActive"]
-                                                        ? Colors.green
-                                                        : Colors.red,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
-                                                  ),
-                                                  child: Text(
-                                                    location["isActive"]
-                                                        ? 'Active'
-                                                        : 'Inactive',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 10.0,
+                                                    const SizedBox(
+                                                        width:
+                                                            8.0), // Add some space between badges
+                                                    Expanded(
+                                                      child:
+                                                          Container(), // Empty Expanded widget to push content to the right
                                                     ),
-                                                  ),
+                                                    Container(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 4.0,
+                                                          vertical: 4.0),
+                                                      decoration: BoxDecoration(
+                                                        color:
+                                                            location["isActive"]
+                                                                ? Colors.green
+                                                                : Colors.red,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(8.0),
+                                                      ),
+                                                      child: Text(
+                                                        location["isActive"]
+                                                            ? 'Active'
+                                                            : 'Inactive',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 10.0,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ],
+                                              ),
+                                              subtitle: Text(
+                                                location["Address"],
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                ),
+                                              ),
                                             ),
                                           ),
-                                          subtitle: Text(
-                                            location["Address"],
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                        ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }).toList(),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
-                    ),
                   ],
                 ),
               ),

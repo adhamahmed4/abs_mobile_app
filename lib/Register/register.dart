@@ -1,7 +1,8 @@
+import 'package:abs_mobile_app/Register/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
-import 'NextPage.dart';
+import './nextPage.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -579,67 +580,95 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           const SizedBox(
                               width:
                                   30), // Add spacing between the back button and "Next" button
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              fixedSize: const Size(282, 50),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(7),
-                                side: const BorderSide(
-                                  color: Color.fromARGB(255, 138, 138, 138),
-                                  width: 1.4,
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                fixedSize: const Size(282, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  side: const BorderSide(
+                                    color: Color.fromARGB(255, 138, 138, 138),
+                                    width: 1.4,
+                                  ),
                                 ),
                               ),
-                            ),
-                            onPressed: _isButtonEnabled && _isCheckboxChecked
-                                ? () async {
-                                    if (_formKey.currentState!.validate()) {
-                                      bool isEmailValid =
-                                          await _validateEmailExistence(
-                                              _emailController.text);
-                                      bool isUsernameValid =
-                                          await _validateUsernameExistence(
-                                              _userNameController.text);
-                                      bool isMobileValid =
-                                          await _validateMobileExistence(
-                                              _phoneNumberController.text);
+                              onPressed: _isButtonEnabled && _isCheckboxChecked
+                                  ? () async {
+                                      if (_formKey.currentState!.validate()) {
+                                        bool isEmailValid =
+                                            await _validateEmailExistence(
+                                                _emailController.text);
+                                        bool isUsernameValid =
+                                            await _validateUsernameExistence(
+                                                _userNameController.text);
+                                        bool isMobileValid =
+                                            await _validateMobileExistence(
+                                                _phoneNumberController.text);
 
-                                      if (isEmailValid &&
-                                          isUsernameValid &&
-                                          isMobileValid) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => NextPage()),
-                                        );
-                                      } else {
-                                        String errorMessage = '';
-                                        if (!isEmailValid)
-                                          errorMessage =
-                                              'Email is already taken.';
-                                        if (!isUsernameValid)
-                                          errorMessage =
-                                              'Username is already taken.';
-                                        if (!isMobileValid)
-                                          errorMessage =
-                                              'Mobile number is already taken.';
+                                        if (isEmailValid &&
+                                            isUsernameValid &&
+                                            isMobileValid) {
+                                          UserData userData = UserData(
+                                            fullName: _fullNameController.text,
+                                            userName: _userNameController.text,
+                                            email: _emailController.text,
+                                            phoneNumber:
+                                                _phoneNumberController.text,
+                                            password: _passwordController.text,
+                                          );
+                                          Navigator.push(
+                                            context,
+                                            PageRouteBuilder(
+                                              transitionDuration:
+                                                  Duration(milliseconds: 300),
+                                              pageBuilder: (_, __, ___) =>
+                                                  NextPage(
+                                                userData: userData,
+                                              ),
+                                              transitionsBuilder: (_,
+                                                  Animation<double> animation,
+                                                  __,
+                                                  Widget child) {
+                                                return SlideTransition(
+                                                  position: Tween<Offset>(
+                                                    begin: Offset(1.0, 0.0),
+                                                    end: Offset.zero,
+                                                  ).animate(animation),
+                                                  child: child,
+                                                );
+                                              },
+                                            ),
+                                          );
+                                        } else {
+                                          String errorMessage = '';
+                                          if (!isEmailValid)
+                                            errorMessage =
+                                                'Email is already taken.';
+                                          if (!isUsernameValid)
+                                            errorMessage =
+                                                'Username is already taken.';
+                                          if (!isMobileValid)
+                                            errorMessage =
+                                                'Mobile number is already taken.';
 
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(errorMessage),
-                                            duration: Duration(seconds: 3),
-                                          ),
-                                        );
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(errorMessage),
+                                              duration: Duration(seconds: 3),
+                                            ),
+                                          );
+                                        }
                                       }
                                     }
-                                  }
-                                : null,
-                            child: const Text(
-                              'Next',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Color.fromARGB(249, 95, 95, 95),
+                                  : null,
+                              child: const Text(
+                                'Next',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color.fromARGB(249, 95, 95, 95),
+                                ),
                               ),
                             ),
                           ),
