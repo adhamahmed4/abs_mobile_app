@@ -71,6 +71,67 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+  Future<void> resetPassword() async {
+    if (_usernameController.text.isEmpty) {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Reset Password Failed'),
+            content: Text('Please enter your username.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+      return;
+    }
+
+    final url = Uri.parse('${AppConfig.baseUrl}/reset-password');
+    final requestBody = {
+      "userCred": _usernameController.text,
+    };
+    final jsonBody = json.encode(requestBody);
+    final response = await http.post(
+      url,
+      headers: AppConfig.headers,
+      body: jsonBody,
+    );
+    if (response.statusCode == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            'Reset password email sent.',
+          ),
+        ),
+      );
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Reset Password Failed'),
+            content: Text('Invalid username.'),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('OK'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -156,7 +217,7 @@ class _LoginPageState extends State<LoginPage> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              // Implement Forgot Password functionality
+                              resetPassword();
                             },
                             child: Text(
                               'Forgot Password?',

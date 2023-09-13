@@ -69,28 +69,35 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
     final url = Uri.parse('${AppConfig.baseUrl}/business-info');
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
-      _dataExists = true;
       final List<dynamic> jsonData = json.decode(response.body);
 
-      setState(() {
-        _englishNameController.text = jsonData[0]['English Business Name'];
-        _arabicNameController.text = jsonData[0]['Arabic Business Name'];
-        _selectedSalesChannel = jsonData[0]['Sales Channel Type'].toString();
-        _salesChannelNameController.text = jsonData[0]['Sales Channel Name'];
-        _storeURLController.text = jsonData[0]['Sales Channel URL'];
-        _selectedProduct = jsonData[0]['Product Type'].toString();
-        _prefixController.text = jsonData[0]['Prefix'];
-        _selectedCity = jsonData[0]['City ID'].toString();
-        _streetNameController.text = jsonData[0]['Street Name'];
-        _buildingNumberController.text = jsonData[0]['Building Number'];
-        _floorNumberController.text = jsonData[0]['Floor Number'];
-        _apartmentNumberController.text = jsonData[0]['Apartment Number'];
-        _selectedServices = jsonData[0]['Services ID']
-            .split(',')
-            .map((str) => int.parse(str))
-            .toList();
-        isLoading = false;
-      });
+      if (jsonData.isNotEmpty) {
+        setState(() {
+          _englishNameController.text = jsonData[0]['English Business Name'];
+          _arabicNameController.text = jsonData[0]['Arabic Business Name'];
+          _selectedSalesChannel = jsonData[0]['Sales Channel Type'].toString();
+          _salesChannelNameController.text = jsonData[0]['Sales Channel Name'];
+          _storeURLController.text = jsonData[0]['Sales Channel URL'];
+          _selectedProduct = jsonData[0]['Product Type'].toString();
+          _prefixController.text = jsonData[0]['Prefix'] ?? '';
+          _selectedCity = jsonData[0]['City ID'].toString();
+          _streetNameController.text = jsonData[0]['Street Name'];
+          _buildingNumberController.text = jsonData[0]['Building Number'];
+          _floorNumberController.text = jsonData[0]['Floor Number'];
+          _apartmentNumberController.text = jsonData[0]['Apartment Number'];
+          _selectedServices = jsonData[0]['Services ID']
+              .split(',')
+              .map((str) => int.parse(str))
+              .toList();
+          isLoading = false;
+          _dataExists = true;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+          _dataExists = false;
+        });
+      }
     } else {
       throw Exception('Failed to load data');
     }
@@ -296,9 +303,7 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
       'floorNumber': _floorNumberController.text,
       'buildingNumber': _buildingNumberController.text,
       'cityID': int.parse(_selectedCity.toString()),
-      'serviceTypesIDs': selectedServices!.isNotEmpty
-          ? selectedServices.join(',')
-          : _selectedServices,
+      'serviceTypesIDs': selectedServices,
       'nationalID': _nationalID,
       'commercialRegister': _commercialRegister,
     };

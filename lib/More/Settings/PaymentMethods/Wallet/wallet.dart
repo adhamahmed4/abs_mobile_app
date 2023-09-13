@@ -108,6 +108,11 @@ class _WalletPageState extends State<WalletPage> {
           _dataExists = true;
           isLoading = false;
         });
+      } else {
+        setState(() {
+          isLoading = false;
+          _dataExists = false;
+        });
       }
     } else {
       throw Exception('Failed to load data');
