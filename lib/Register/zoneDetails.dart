@@ -15,6 +15,7 @@ class ZoneDetailsPage extends StatefulWidget {
 
 class _ZoneDetailsPageState extends State<ZoneDetailsPage> {
   List<dynamic> zones = [];
+  Map<int, List<dynamic>> zoneCities = {}; // Store cities for each zone
 
   bool isLoading = true;
 
@@ -25,12 +26,21 @@ class _ZoneDetailsPageState extends State<ZoneDetailsPage> {
       final List<dynamic> jsonData = json.decode(response.body);
       setState(() {
         zones = jsonData;
+      });
+
+      for (var zone in zones) {
+        final zoneID = zone['Zone ID'];
+        final cities = await getZoneCities(zoneID);
+        setState(() {
+          zoneCities[zoneID] = cities;
+        });
+      }
+      setState(() {
         isLoading = false;
       });
     } else {
       setState(() {
-        isLoading:
-        false;
+        isLoading = false;
       });
       throw Exception('Failed to load data');
     }
@@ -65,72 +75,53 @@ class _ZoneDetailsPageState extends State<ZoneDetailsPage> {
           if (!isLoading)
             SingleChildScrollView(
               child: Column(
-                children: zones
-                    .map(
-                      (zone) => Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Center(
-                                child: Text(
-                                  zone['Zone'],
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 18,
+                children: zones.map((zone) {
+                  final cities = zoneCities[zone['Zone ID']] ?? [];
+
+                  return Card(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: Text(
+                              zone['Zone'],
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18,
+                              ),
+                            ),
+                          ),
+                          Wrap(
+                            spacing: 8.0,
+                            runSpacing: 8.0,
+                            children: cities.map((city) {
+                              return InkWell(
+                                onTap: () {
+                                  // Handle city tap if needed
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.all(8.0),
+                                  decoration: BoxDecoration(
+                                    color: Colors.orange,
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    city['City Name'],
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              FutureBuilder(
-                                future: getZoneCities(zone[
-                                    'Zone ID']), // Fetch cities for this zone
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return CircularProgressIndicator(); // Show loading indicator while fetching cities
-                                  } else if (snapshot.hasError) {
-                                    return Text('Error: ${snapshot.error}');
-                                  } else {
-                                    final cities =
-                                        snapshot.data as List<dynamic>;
-                                    return Wrap(
-                                      spacing:
-                                          8.0, // Adjust spacing between cities as needed
-                                      runSpacing:
-                                          8.0, // Adjust run spacing as needed
-                                      children: cities.map((city) {
-                                        return InkWell(
-                                          onTap: () {
-                                            // Handle city tap if needed
-                                          },
-                                          child: Container(
-                                            padding: EdgeInsets.all(8.0),
-                                            decoration: BoxDecoration(
-                                              color: Colors.orange,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      20), // Oval background
-                                            ),
-                                            child: Text(
-                                              city['City Name'],
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      }).toList(),
-                                    );
-                                  }
-                                },
-                              ),
-                            ],
+                              );
+                            }).toList(),
                           ),
-                        ),
+                        ],
                       ),
-                    )
-                    .toList(),
+                    ),
+                  );
+                }).toList(),
               ),
             ),
           if (isLoading)

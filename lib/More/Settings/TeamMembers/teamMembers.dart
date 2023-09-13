@@ -74,7 +74,7 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
             child: Stack(
               children: [
                 if (!isLoading && _teamMembers.isEmpty)
-                  Center(
+                  const Center(
                     child: Text(
                       'No Team Members',
                       style: TextStyle(
@@ -84,9 +84,10 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
                       ),
                     ),
                   ),
-                SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                if (isLoading)
+                  const Center(child: CircularProgressIndicator())
+                else
+                  ListView(
                     children: _teamMembers.map((teamMember) {
                       return Card(
                         elevation: 2,
@@ -155,8 +156,6 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
                       );
                     }).toList(),
                   ),
-                ),
-                if (isLoading) const Center(child: CircularProgressIndicator()),
               ],
             ),
           ),
@@ -164,32 +163,28 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
             padding: const EdgeInsets.all(16.0),
             child: Align(
               alignment: Alignment.bottomRight,
-              child: Positioned(
-                bottom: 16.0, // Adjust the distance from the bottom as needed
-                right: 16.0, // Adjust the distance from the right as needed
-                child: FloatingActionButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageRouteBuilder(
-                        transitionDuration: Duration(
-                            milliseconds: 300), // Adjust the animation duration
-                        pageBuilder: (_, __, ___) => AddTeamMemberPage(),
-                        transitionsBuilder:
-                            (_, Animation<double> animation, __, Widget child) {
-                          return SlideTransition(
-                            position: Tween<Offset>(
-                              begin: Offset(1.0, 0.0),
-                              end: Offset.zero,
-                            ).animate(animation),
-                            child: child,
-                          );
-                        },
-                      ),
-                    ).then((value) => getTeamMembers());
-                  },
-                  child: Icon(Icons.add),
-                ),
+              child: FloatingActionButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      transitionDuration: Duration(
+                          milliseconds: 300), // Adjust the animation duration
+                      pageBuilder: (_, __, ___) => AddTeamMemberPage(),
+                      transitionsBuilder:
+                          (_, Animation<double> animation, __, Widget child) {
+                        return SlideTransition(
+                          position: Tween<Offset>(
+                            begin: Offset(1.0, 0.0),
+                            end: Offset.zero,
+                          ).animate(animation),
+                          child: child,
+                        );
+                      },
+                    ),
+                  ).then((value) => getTeamMembers());
+                },
+                child: Icon(Icons.add),
               ),
             ),
           ),
