@@ -9,7 +9,7 @@ import 'package:abs_mobile_app/More/Settings/PaymentMethods/paymentMethods.dart'
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
-  HomePage({Key? key}) : super(key: key); // Add this constructor
+  HomePage({Key? key}) : super(key: key);
 }
 
 class _HomePageState extends State<HomePage> {
@@ -59,7 +59,6 @@ class _HomePageState extends State<HomePage> {
         _isLoading = false;
       });
     } catch (error) {
-      // Handle errors here
       setState(() {
         _isLoading = false;
       });
@@ -130,9 +129,7 @@ class _HomePageState extends State<HomePage> {
           );
           break;
         case 'Verify your email address':
-          // Check if title is 'Verify your email address' and it's not already clicked
           if (!isVerified && !emailVerificationClicked) {
-            // Fetch the email
             final url = Uri.parse(
                 '${AppConfig.baseUrl}/subAccounts-verification/send-email');
 
@@ -163,22 +160,17 @@ class _HomePageState extends State<HomePage> {
               emailVerificationTime = DateTime.now();
             });
           } else if (emailVerificationClicked) {
-            // Check if it's been more than 2 minutes since the click
             final currentTime = DateTime.now();
             if (emailVerificationTime != null &&
                 currentTime.difference(emailVerificationTime!) >
                     const Duration(minutes: 2)) {
-              // Reset email verification if more than 2 minutes have passed
               setState(() {
                 emailVerificationClicked = false;
                 emailVerificationTime = null;
               });
             } else {
-              // Calculate the time remaining in seconds
               final timeRemainingInSeconds = (2 * 60) -
                   currentTime.difference(emailVerificationTime!).inSeconds;
-
-              // Calculate minutes and seconds
               final minutes = (timeRemainingInSeconds / 60).floor();
               final seconds = timeRemainingInSeconds % 60;
 
@@ -381,8 +373,7 @@ class _HomePageState extends State<HomePage> {
             child: Column(
               children: [
                 Align(
-                  alignment:
-                      Alignment.topLeft, // Align the logo to the top left
+                  alignment: Alignment.topLeft,
                   child: Container(
                     padding: const EdgeInsets.all(4),
                     child: Image.asset(
@@ -485,7 +476,6 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
-
                       const SizedBox(height: 20),
                       Center(
                         child: Container(
@@ -507,7 +497,7 @@ class _HomePageState extends State<HomePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                'Shipments Overview', // Add the title here
+                                'Shipments Overview',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -620,7 +610,7 @@ class _HomePageState extends State<HomePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                'Processing Shipments', // Add the title here
+                                'Processing Shipments',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -629,9 +619,9 @@ class _HomePageState extends State<HomePage> {
                               ),
                               const SizedBox(
                                 height: 5,
-                              ), // Add spacing before the additional text
+                              ),
                               const Text(
-                                'Status for all Shipments under processing', // Add your text here
+                                'Status for all Shipments under processing',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey,
@@ -725,9 +715,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       ),
-
-                      const SizedBox(
-                          height: 20), // Add spacing between the two containers
+                      const SizedBox(height: 20),
                       Center(
                         child: Container(
                           width: 380,
@@ -748,7 +736,7 @@ class _HomePageState extends State<HomePage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Text(
-                                'Processed Shipments', // Add the title here
+                                'Processed Shipments',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -757,9 +745,9 @@ class _HomePageState extends State<HomePage> {
                               ),
                               const SizedBox(
                                 height: 5,
-                              ), // Add spacing before the additional text
+                              ),
                               const Text(
-                                'Status for all processed Shipments', // Add your text here
+                                'Status for all processed Shipments',
                                 style: TextStyle(
                                   fontSize: 14,
                                   color: Colors.grey,
