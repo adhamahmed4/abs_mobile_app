@@ -199,9 +199,11 @@ class _LoginPageState extends State<LoginPage> {
                           labelText: 'Password',
                           suffixIcon: GestureDetector(
                             onTap: () {
-                              setState(() {
-                                _passwordVisible = !_passwordVisible;
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  _passwordVisible = !_passwordVisible;
+                                });
+                              }
                             },
                             child: Icon(
                               _passwordVisible

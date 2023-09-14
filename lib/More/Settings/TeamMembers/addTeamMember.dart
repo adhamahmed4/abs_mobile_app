@@ -30,47 +30,27 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
   bool _isButtonEnabled = false;
   bool _dataExists = false;
 
+  @override
   void initState() {
     super.initState();
     getSubAccounts();
     getRoles();
-    // getBankDetails();
     _updateButtonEnabledStatus();
   }
 
   void _updateButtonEnabledStatus() {
-    setState(() {
-      _isButtonEnabled = _fullNameController.text.isNotEmpty &&
-          _usernameController.text.isNotEmpty &&
-          _passwordController.text.isNotEmpty &&
-          _confirmPasswordController.text.isNotEmpty &&
-          _selectedSubAccount != null &&
-          _passwordController.text == _confirmPasswordController.text &&
-          _selectedRoles!.isNotEmpty;
-    });
+    if (mounted) {
+      setState(() {
+        _isButtonEnabled = _fullNameController.text.isNotEmpty &&
+            _usernameController.text.isNotEmpty &&
+            _passwordController.text.isNotEmpty &&
+            _confirmPasswordController.text.isNotEmpty &&
+            _selectedSubAccount != null &&
+            _passwordController.text == _confirmPasswordController.text &&
+            _selectedRoles!.isNotEmpty;
+      });
+    }
   }
-
-  // Future<void> getBankDetails() async {
-  //   final url =
-  //       Uri.parse('${AppConfig.baseUrl}/bank-details-by-sub-account-ID');
-  //   final response = await http.get(url, headers: AppConfig.headers);
-  //   if (response.statusCode == 200) {
-  //     final List<dynamic> jsonData = json.decode(response.body);
-  //     if (jsonData.isNotEmpty) {
-  //       setState(() {
-  //         _selectedBank = jsonData[0]['Bank ID'].toString();
-  //         _accountOwnerNameController.text = jsonData[0]['Account Holder Name'];
-  //         _accountNumberController.text = jsonData[0]['Account Number'];
-  //         _ibanController.text = jsonData[0]['IBAN'];
-  //         _swiftCodeController.text = jsonData[0]['Swift Code'];
-  //         _dataExists = true;
-  //         isLoading = false;
-  //       });
-  //     }
-  //   } else {
-  //     throw Exception('Failed to load data');
-  //   }
-  // }
 
   Future<void> getSubAccounts() async {
     final url =
@@ -78,15 +58,16 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
-
-      setState(() {
-        _subAccounts = jsonData.map<Map<String, dynamic>>((dynamic item) {
-          return {
-            'ID': item['ID'],
-            'Sub Account Name': item['Sub Account Name'],
-          };
-        }).toList();
-      });
+      if (mounted) {
+        setState(() {
+          _subAccounts = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {
+              'ID': item['ID'],
+              'Sub Account Name': item['Sub Account Name'],
+            };
+          }).toList();
+        });
+      }
     } else {
       throw Exception('Failed to load data');
     }
@@ -97,15 +78,16 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
-
-      setState(() {
-        _roles = jsonData.map<Map<String, dynamic>>((dynamic item) {
-          return {
-            'Role ID': item['Role ID'],
-            'Role': item['Role'],
-          };
-        }).toList();
-      });
+      if (mounted) {
+        setState(() {
+          _roles = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {
+              'Role ID': item['Role ID'],
+              'Role': item['Role'],
+            };
+          }).toList();
+        });
+      }
     } else {
       throw Exception('Failed to load data');
     }
@@ -202,10 +184,12 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
                                         value: _selectedSubAccount,
                                         onChanged: !_dataExists
                                             ? (newValue) {
-                                                setState(() {
-                                                  _selectedSubAccount =
-                                                      newValue!;
-                                                });
+                                                if (mounted) {
+                                                  setState(() {
+                                                    _selectedSubAccount =
+                                                        newValue!;
+                                                  });
+                                                }
                                               }
                                             : null,
                                         items: _subAccounts
@@ -276,9 +260,12 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
                                     labelText: 'Password',
                                     suffixIcon: GestureDetector(
                                       onTap: () {
-                                        setState(() {
-                                          _passwordVisible = !_passwordVisible;
-                                        });
+                                        if (mounted) {
+                                          setState(() {
+                                            _passwordVisible =
+                                                !_passwordVisible;
+                                          });
+                                        }
                                       },
                                       child: Icon(
                                         _passwordVisible
@@ -307,10 +294,12 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
                                     labelText: 'Confirm Password',
                                     suffixIcon: GestureDetector(
                                       onTap: () {
-                                        setState(() {
-                                          _confirmPasswordVisible =
-                                              !_confirmPasswordVisible;
-                                        });
+                                        if (mounted) {
+                                          setState(() {
+                                            _confirmPasswordVisible =
+                                                !_confirmPasswordVisible;
+                                          });
+                                        }
                                       },
                                       child: Icon(
                                         _confirmPasswordVisible
@@ -339,22 +328,24 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
                                       title: Text(roleName),
                                       value: _selectedRoles!.contains(roleID),
                                       onChanged: (value) {
-                                        setState(() {
-                                          if (value!) {
-                                            _selectedRoles!.add(roleID);
-                                            if (roleName == "Admin") {
-                                              isAdminChecked = true;
-                                              _selectedRoles!.clear();
+                                        if (mounted) {
+                                          setState(() {
+                                            if (value!) {
                                               _selectedRoles!.add(roleID);
+                                              if (roleName == "Admin") {
+                                                isAdminChecked = true;
+                                                _selectedRoles!.clear();
+                                                _selectedRoles!.add(roleID);
+                                              }
+                                            } else {
+                                              _selectedRoles!.remove(roleID);
+                                              if (roleName == "Admin") {
+                                                isAdminChecked = false;
+                                              }
                                             }
-                                          } else {
-                                            _selectedRoles!.remove(roleID);
-                                            if (roleName == "Admin") {
-                                              isAdminChecked = false;
-                                            }
-                                          }
-                                          _updateButtonEnabledStatus();
-                                        });
+                                            _updateButtonEnabledStatus();
+                                          });
+                                        }
                                       },
                                       enabled:
                                           isAdminChecked && roleName != "Admin"

@@ -53,18 +53,24 @@ class _WalletPageState extends State<WalletPage> {
   void _validateWalletNumber(String walletNumber) {
     log(walletNumber);
     if (walletNumber.isEmpty) {
-      setState(() {
-        _walletNumberErrorText = 'Enter a wallet number';
-      });
+      if (mounted) {
+        setState(() {
+          _walletNumberErrorText = 'Enter a wallet number';
+        });
+      }
     } else if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(walletNumber)) {
-      setState(() {
-        _walletNumberErrorText =
-            'Wallet number should contain only letters and numbers';
-      });
+      if (mounted) {
+        setState(() {
+          _walletNumberErrorText =
+              'Wallet number should contain only letters and numbers';
+        });
+      }
     } else {
-      setState(() {
-        _walletNumberErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _walletNumberErrorText = '';
+        });
+      }
     }
 
     _updateButtonEnabledStatus(); // Call this here to update the button status
@@ -72,27 +78,35 @@ class _WalletPageState extends State<WalletPage> {
 
   void _validateMobileNumber(String mobileNumber) {
     if (mobileNumber.isEmpty) {
-      setState(() {
-        _mobileNumberErrorText = 'Mobile number is required';
-      });
+      if (mounted) {
+        setState(() {
+          _mobileNumberErrorText = 'Mobile number is required';
+        });
+      }
     } else if (mobileNumber.length != 11) {
-      setState(() {
-        _mobileNumberErrorText = 'Mobile number must be 11 digits';
-      });
+      if (mounted) {
+        setState(() {
+          _mobileNumberErrorText = 'Mobile number must be 11 digits';
+        });
+      }
     } else {
-      setState(() {
-        _mobileNumberErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _mobileNumberErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _updateButtonEnabledStatus() {
-    setState(() {
-      _isButtonEnabled = _walletNumberErrorText.isEmpty &&
-          _mobileNumberErrorText.isEmpty &&
-          _walletNumberController.text.isNotEmpty;
-    });
+    if (mounted) {
+      setState(() {
+        _isButtonEnabled = _walletNumberErrorText.isEmpty &&
+            _mobileNumberErrorText.isEmpty &&
+            _walletNumberController.text.isNotEmpty;
+      });
+    }
   }
 
   Future<void> getWalletDetails() async {
@@ -102,19 +116,24 @@ class _WalletPageState extends State<WalletPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (jsonData.isNotEmpty) {
-        setState(() {
-          _walletNumberController.text = jsonData[0]['Wallet Number'];
-          _mobileNumberController.text = jsonData[0]['Mobile Number'];
-          _dataExists = true;
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _walletNumberController.text = jsonData[0]['Wallet Number'];
+            _mobileNumberController.text = jsonData[0]['Mobile Number'];
+            _dataExists = true;
+            isLoading = false;
+          });
+        }
       } else {
-        setState(() {
-          isLoading = false;
-          _dataExists = false;
-        });
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+            _dataExists = false;
+          });
+        }
       }
     } else {
+      isLoading = false;
       throw Exception('Failed to load data');
     }
   }

@@ -25,15 +25,19 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (jsonData.isNotEmpty) {
-        setState(() {
-          _teamMembers = jsonData;
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _teamMembers = jsonData;
+            isLoading = false;
+          });
+        }
       } else {
-        setState(() {
-          _teamMembers = [];
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _teamMembers = [];
+            isLoading = false;
+          });
+        }
       }
     } else {
       isLoading = false;

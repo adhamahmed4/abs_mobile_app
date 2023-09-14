@@ -34,15 +34,18 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
-      setState(() {
-        _nameController.text = jsonData[0]['firstName'] +
-            ' ' +
-            jsonData[0]['lastName']; // Concatenate first and last name
-        _phoneController.text = jsonData[0]['contactNumber'];
-        _emailController.text = jsonData[0]['email'];
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _nameController.text = jsonData[0]['firstName'] +
+              ' ' +
+              jsonData[0]['lastName']; // Concatenate first and last name
+          _phoneController.text = jsonData[0]['contactNumber'];
+          _emailController.text = jsonData[0]['email'];
+          isLoading = false;
+        });
+      }
     } else {
+      isLoading = false;
       throw Exception('Failed to load data');
     }
   }

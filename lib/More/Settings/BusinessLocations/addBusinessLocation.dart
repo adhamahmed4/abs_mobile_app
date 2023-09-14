@@ -31,6 +31,8 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
   TextEditingController _phoneNumberController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   String? _selectedAddressType;
+  double lat = 30.0444;
+  double lng = 31.2357;
   String? _selectedCity;
   bool? _isActive;
 
@@ -103,142 +105,180 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
 
   void _validateLocationName(String locationName) {
     if (locationName.isEmpty) {
-      setState(() {
-        __locationNameErrorText = 'Location Name is required';
-      });
+      if (mounted) {
+        setState(() {
+          __locationNameErrorText = 'Location Name is required';
+        });
+      }
     } else {
-      setState(() {
-        __locationNameErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          __locationNameErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _validateStreetName(String streetName) {
     if (streetName.isEmpty) {
-      setState(() {
-        _streetNameErrorText = 'Street name is required';
-      });
+      if (mounted) {
+        setState(() {
+          _streetNameErrorText = 'Street name is required';
+        });
+      }
     } else {
-      setState(() {
-        _streetNameErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _streetNameErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _validateBuilding(String building) {
     if (building.isEmpty) {
-      setState(() {
-        _buildingErrorText = 'Building number is required';
-      });
+      if (mounted) {
+        setState(() {
+          _buildingErrorText = 'Building number is required';
+        });
+      }
     } else {
-      setState(() {
-        _buildingErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _buildingErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _validateFloor(String floor) {
     if (floor.isEmpty) {
-      setState(() {
-        _floorErrorText = 'Floor number is required';
-      });
+      if (mounted) {
+        setState(() {
+          _floorErrorText = 'Floor number is required';
+        });
+      }
     } else {
-      setState(() {
-        _floorErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _floorErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _validateApt(String apt) {
     if (apt.isEmpty) {
-      setState(() {
-        _aptErrorText = 'Apt. number is required';
-      });
+      if (mounted) {
+        setState(() {
+          _aptErrorText = 'Apt. number is required';
+        });
+      }
     } else {
-      setState(() {
-        _aptErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _aptErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _validateFirstName(String firstName) {
     if (firstName.isEmpty) {
-      setState(() {
-        _firstNameErrorText = 'First name is required';
-      });
+      if (mounted) {
+        setState(() {
+          _firstNameErrorText = 'First name is required';
+        });
+      }
     } else {
-      setState(() {
-        _firstNameErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _firstNameErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _validateLastName(String lastName) {
     if (lastName.isEmpty) {
-      setState(() {
-        _lastNameErrorText = 'Last name is required';
-      });
+      if (mounted) {
+        setState(() {
+          _lastNameErrorText = 'Last name is required';
+        });
+      }
     } else {
-      setState(() {
-        _lastNameErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _lastNameErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _validatePhoneNumber(String phoneNumber) {
     if (phoneNumber.isEmpty) {
-      setState(() {
-        _phoneNumberErrorText = 'Phone number is required';
-      });
+      if (mounted) {
+        setState(() {
+          _phoneNumberErrorText = 'Phone number is required';
+        });
+      }
     } else {
-      setState(() {
-        _phoneNumberErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _phoneNumberErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _validateEmail(String email) {
     if (email.isEmpty) {
-      setState(() {
-        _emailErrorText = 'Email is required';
-      });
+      if (mounted) {
+        setState(() {
+          _emailErrorText = 'Email is required';
+        });
+      }
     } else {
-      setState(() {
-        _emailErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _emailErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _updateButtonEnabledStatus() {
-    setState(() {
-      _isButtonEnabled = __locationNameErrorText.isEmpty &&
-          _streetNameErrorText.isEmpty &&
-          _buildingErrorText.isEmpty &&
-          _floorErrorText.isEmpty &&
-          _aptErrorText.isEmpty &&
-          _firstNameErrorText.isEmpty &&
-          _lastNameErrorText.isEmpty &&
-          _phoneNumberErrorText.isEmpty &&
-          _emailErrorText.isEmpty &&
-          _locationNameController.text.isNotEmpty &&
-          _streetNameController.text.isNotEmpty &&
-          _buildingController.text.isNotEmpty &&
-          _floorController.text.isNotEmpty &&
-          _aptController.text.isNotEmpty &&
-          _firstNameController.text.isNotEmpty &&
-          _lastNameController.text.isNotEmpty &&
-          _phoneNumberController.text.isNotEmpty &&
-          _emailController.text.isNotEmpty;
-    });
+    if (mounted) {
+      setState(() {
+        _isButtonEnabled = __locationNameErrorText.isEmpty &&
+            _streetNameErrorText.isEmpty &&
+            _buildingErrorText.isEmpty &&
+            _floorErrorText.isEmpty &&
+            _aptErrorText.isEmpty &&
+            _firstNameErrorText.isEmpty &&
+            _lastNameErrorText.isEmpty &&
+            _phoneNumberErrorText.isEmpty &&
+            _emailErrorText.isEmpty &&
+            _locationNameController.text.isNotEmpty &&
+            _streetNameController.text.isNotEmpty &&
+            _buildingController.text.isNotEmpty &&
+            _floorController.text.isNotEmpty &&
+            _aptController.text.isNotEmpty &&
+            _firstNameController.text.isNotEmpty &&
+            _lastNameController.text.isNotEmpty &&
+            _phoneNumberController.text.isNotEmpty &&
+            _emailController.text.isNotEmpty;
+      });
+    }
   }
 
   Future<void> getBusinessLocation() async {
@@ -248,25 +288,28 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (jsonData.isNotEmpty) {
-        setState(() {
-          _selectedAddressType = jsonData[0]['locationTypeID'].toString();
-          _locationNameController.text = jsonData[0]['locationName'];
-          _selectedCity = jsonData[0]['cityID'].toString();
-          _streetNameController.text = jsonData[0]['streetName'];
-          _buildingController.text = jsonData[0]['buildingNumber'];
-          _floorController.text = jsonData[0]['floorNumber'];
-          _aptController.text = jsonData[0]['apartmentNumber'];
-          _postalCodeController.text = jsonData[0]['postalCode'];
-          _firstNameController.text = jsonData[0]['firstName'];
-          _lastNameController.text = jsonData[0]['lastName'];
-          _phoneNumberController.text = jsonData[0]['contactNumber'];
-          _emailController.text = jsonData[0]['email'];
-          _isActive = jsonData[0]['isActive'];
-          _dataExists = true;
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _selectedAddressType = jsonData[0]['locationTypeID'].toString();
+            _locationNameController.text = jsonData[0]['locationName'];
+            _selectedCity = jsonData[0]['cityID'].toString();
+            _streetNameController.text = jsonData[0]['streetName'];
+            _buildingController.text = jsonData[0]['buildingNumber'];
+            _floorController.text = jsonData[0]['floorNumber'];
+            _aptController.text = jsonData[0]['apartmentNumber'];
+            _postalCodeController.text = jsonData[0]['postalCode'];
+            _firstNameController.text = jsonData[0]['firstName'];
+            _lastNameController.text = jsonData[0]['lastName'];
+            _phoneNumberController.text = jsonData[0]['contactNumber'];
+            _emailController.text = jsonData[0]['email'];
+            _isActive = jsonData[0]['isActive'];
+            _dataExists = true;
+            isLoading = false;
+          });
+        }
       }
     } else {
+      isLoading = false;
       throw Exception('Failed to load data');
     }
   }
@@ -276,15 +319,16 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
-
-      setState(() {
-        _addressTypes = jsonData.map<Map<String, dynamic>>((dynamic item) {
-          return {
-            'ID': item['ID'],
-            'enAddressType': item['enAddressType'],
-          };
-        }).toList();
-      });
+      if (mounted) {
+        setState(() {
+          _addressTypes = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {
+              'ID': item['ID'],
+              'enAddressType': item['enAddressType'],
+            };
+          }).toList();
+        });
+      }
     } else {
       throw Exception('Failed to load data');
     }
@@ -295,17 +339,19 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
-
-      setState(() {
-        _cities = jsonData.map<Map<String, dynamic>>((dynamic item) {
-          return {
-            'City ID': item['City ID'],
-            'City Name': item['City Name'],
-          };
-        }).toList();
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _cities = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {
+              'City ID': item['City ID'],
+              'City Name': item['City Name'],
+            };
+          }).toList();
+          isLoading = false;
+        });
+      }
     } else {
+      isLoading = false;
       throw Exception('Failed to load data');
     }
   }
@@ -320,6 +366,8 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
       'cityID': _selectedCity,
       'postalCode': _postalCodeController.text,
       'addressTypeID': _selectedAddressType,
+      'longitude': lng,
+      'latitude': lat,
       'locationName': _locationNameController.text,
       'firstName': _firstNameController.text,
       'lastName': _lastNameController.text,
@@ -467,12 +515,15 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                                           context,
                                                           PageRouteBuilder(
                                                             transitionDuration:
-                                                                Duration(
+                                                                const Duration(
                                                                     milliseconds:
-                                                                        300), // Adjust the animation duration
+                                                                        300),
                                                             pageBuilder:
                                                                 (_, __, ___) =>
-                                                                    MapsPage(),
+                                                                    MapsPage(
+                                                              lat: lat,
+                                                              lng: lng,
+                                                            ),
                                                             transitionsBuilder: (_,
                                                                 Animation<
                                                                         double>
@@ -523,10 +574,12 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                             child: DropdownButton<String>(
                                               value: _selectedAddressType,
                                               onChanged: (newValue) {
-                                                setState(() {
-                                                  _selectedAddressType =
-                                                      newValue!;
-                                                });
+                                                if (mounted) {
+                                                  setState(() {
+                                                    _selectedAddressType =
+                                                        newValue!;
+                                                  });
+                                                }
                                               },
                                               items: _addressTypes.map<
                                                   DropdownMenuItem<String>>(
@@ -551,7 +604,7 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                       child: TextField(
                                         controller: _locationNameController,
                                         decoration: InputDecoration(
-                                          fillColor: Color.fromARGB(
+                                          fillColor: const Color.fromARGB(
                                               255, 250, 250, 250),
                                           filled: true,
                                           border: const OutlineInputBorder(
@@ -589,9 +642,11 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                             child: DropdownButton<String>(
                                               value: _selectedCity,
                                               onChanged: (newValue) {
-                                                setState(() {
-                                                  _selectedCity = newValue!;
-                                                });
+                                                if (mounted) {
+                                                  setState(() {
+                                                    _selectedCity = newValue!;
+                                                  });
+                                                }
                                               },
                                               items: _cities.map<
                                                   DropdownMenuItem<String>>(

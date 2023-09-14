@@ -55,13 +55,17 @@ class _HomePageState extends State<HomePage> {
         getTotalCash(),
         getAbsFees(),
       ]);
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     } catch (error) {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
     }
   }
 
@@ -71,10 +75,12 @@ class _HomePageState extends State<HomePage> {
 
     if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
-      setState(() {
-        userName = responseBody[0]['firstName'];
-        email = responseBody[0]['email'];
-      });
+      if (mounted) {
+        setState(() {
+          userName = responseBody[0]['firstName'];
+          email = responseBody[0]['email'];
+        });
+      }
     } else {
       throw Exception('Failed to get user info');
     }
@@ -89,19 +95,23 @@ class _HomePageState extends State<HomePage> {
       final responseBody = json.decode(response.body) as List<dynamic>;
 
       for (final data in responseBody) {
+        if (mounted) {
+          setState(() {
+            validationData.add(data);
+            if (data["isVerified"]) {
+              validatedConditionsCount++;
+            }
+          });
+        }
+      }
+      if (mounted) {
         setState(() {
-          validationData.add(data);
-          if (data["isVerified"]) {
-            validatedConditionsCount++;
+          totalConditionsCount = validationData.length;
+          if (totalConditionsCount == validatedConditionsCount) {
+            isRowVisible = false;
           }
         });
       }
-      setState(() {
-        totalConditionsCount = validationData.length;
-        if (totalConditionsCount == validatedConditionsCount) {
-          isRowVisible = false;
-        }
-      });
     } else {
       throw Exception('Failed to get user validations');
     }
@@ -155,19 +165,23 @@ class _HomePageState extends State<HomePage> {
                 ),
               );
             }
-            setState(() {
-              emailVerificationClicked = true;
-              emailVerificationTime = DateTime.now();
-            });
+            if (mounted) {
+              setState(() {
+                emailVerificationClicked = true;
+                emailVerificationTime = DateTime.now();
+              });
+            }
           } else if (emailVerificationClicked) {
             final currentTime = DateTime.now();
             if (emailVerificationTime != null &&
                 currentTime.difference(emailVerificationTime!) >
                     const Duration(minutes: 2)) {
-              setState(() {
-                emailVerificationClicked = false;
-                emailVerificationTime = null;
-              });
+              if (mounted) {
+                setState(() {
+                  emailVerificationClicked = false;
+                  emailVerificationTime = null;
+                });
+              }
             } else {
               final timeRemainingInSeconds = (2 * 60) -
                   currentTime.difference(emailVerificationTime!).inSeconds;
@@ -286,33 +300,34 @@ class _HomePageState extends State<HomePage> {
           for (final statusData in responseBody) {
             String status = statusData['Status'];
             int count = statusData['Count'];
+            if (mounted) {
+              setState(() {
+                if (status == 'New') {
+                  newShipmentsCount = count;
+                } else if (status == 'In Transit') {
+                  inTransitCount = count;
+                } else if (status == 'Out For Delivery') {
+                  outForDeliveryCount = count;
+                } else if (status == 'Out for return') {
+                  outForReturnCount = count;
+                } else if (status == 'On hold') {
+                  onHoldCount = count;
+                } else if (status == 'Delivered') {
+                  deliveredCount = count;
+                } else if (status == 'Undelivered') {
+                  undeliveredCount = count;
+                } else if (status == 'Returned To Shipper') {
+                  returnedToShipperCount = count;
+                }
 
-            setState(() {
-              if (status == 'New') {
-                newShipmentsCount = count;
-              } else if (status == 'In Transit') {
-                inTransitCount = count;
-              } else if (status == 'Out For Delivery') {
-                outForDeliveryCount = count;
-              } else if (status == 'Out for return') {
-                outForReturnCount = count;
-              } else if (status == 'On hold') {
-                onHoldCount = count;
-              } else if (status == 'Delivered') {
-                deliveredCount = count;
-              } else if (status == 'Undelivered') {
-                undeliveredCount = count;
-              } else if (status == 'Returned To Shipper') {
-                returnedToShipperCount = count;
-              }
-
-              if (status != 'Delivered' &&
-                  status != 'New' &&
-                  status != 'Returned To Shipper' &&
-                  status != 'Undelivered') {
-                processingShipmentsCount += int.parse(count.toString());
-              }
-            });
+                if (status != 'Delivered' &&
+                    status != 'New' &&
+                    status != 'Returned To Shipper' &&
+                    status != 'Undelivered') {
+                  processingShipmentsCount += int.parse(count.toString());
+                }
+              });
+            }
           }
         }
       } else {
@@ -331,9 +346,11 @@ class _HomePageState extends State<HomePage> {
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
         if (responseBody.isNotEmpty) {
-          setState(() {
-            totalCash = int.parse(responseBody[0]['Total Cash'].toString());
-          });
+          if (mounted) {
+            setState(() {
+              totalCash = int.parse(responseBody[0]['Total Cash'].toString());
+            });
+          }
         }
       } else {
         throw Exception('HTTP Error: ${response.statusCode}');
@@ -351,9 +368,11 @@ class _HomePageState extends State<HomePage> {
       if (response.statusCode == 200) {
         final responseBody = json.decode(response.body);
         if (responseBody.isNotEmpty) {
-          setState(() {
-            absFees = int.parse(responseBody[0]['ABS Fees'].toString());
-          });
+          if (mounted) {
+            setState(() {
+              absFees = int.parse(responseBody[0]['ABS Fees'].toString());
+            });
+          }
         }
       } else {
         throw Exception('HTTP Error: ${response.statusCode}');
@@ -499,7 +518,7 @@ class _HomePageState extends State<HomePage> {
                               const Text(
                                 'Shipments Overview',
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(249, 0, 0, 0),
                                 ),
@@ -612,7 +631,7 @@ class _HomePageState extends State<HomePage> {
                               const Text(
                                 'Processing Shipments',
                                 style: TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                   color: Color.fromARGB(249, 0, 0, 0),
                                 ),
@@ -717,106 +736,108 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const SizedBox(height: 20),
                       Center(
-                        child: Container(
-                          width: 380,
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 1,
-                                blurRadius: 10,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Processed Shipments',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(249, 0, 0, 0),
+                        child: Expanded(
+                          child: Container(
+                            width: 380,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 3),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              const Text(
-                                'Status for all processed Shipments',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey,
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Processed Shipments',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(249, 0, 0, 0),
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    "Delivered",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color.fromARGB(255, 75, 75, 75),
-                                    ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                const Text(
+                                  'Status for all processed Shipments',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
                                   ),
-                                  Text(
-                                    deliveredCount.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
+                                ),
+                                const SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      "Delivered",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Color.fromARGB(255, 75, 75, 75),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    "Undelivered",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color.fromARGB(255, 75, 75, 75),
+                                    Text(
+                                      deliveredCount.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    undeliveredCount.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      "Undelivered",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Color.fromARGB(255, 75, 75, 75),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    "Returned To Shipper",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color.fromARGB(255, 75, 75, 75),
+                                    Text(
+                                      undeliveredCount.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    returnedToShipperCount.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      "Returned To Shipper",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Color.fromARGB(255, 75, 75, 75),
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                    Text(
+                                      returnedToShipperCount.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
@@ -837,56 +858,58 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ],
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    'Your Balance',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(249, 0, 0, 0),
+                                  const Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
+                                    child: Text(
+                                      'Your Balance',
+                                      style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(249, 0, 0, 0),
+                                      ),
                                     ),
                                   ),
-                                  Container(
-                                    width: 70,
-                                    height: 70,
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color(0xFF2B2E83),
-                                    ),
-                                    child: const Icon(
-                                      Icons.account_balance_wallet,
-                                      color: Colors.white,
-                                      size: 45,
-                                    ),
+                                  Row(
+                                    children: [
+                                      Text(
+                                        ((totalCash - absFees).toString()),
+                                        style: const TextStyle(
+                                          fontSize: 45,
+                                          color: Color(0xFF2B2E83),
+                                        ),
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Text(
+                                          'EGP',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    ((totalCash - absFees).toString()),
-                                    style: const TextStyle(
-                                      fontSize: 45,
-                                      color: Color(0xFF2B2E83),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  const Text(
-                                    'EGP',
-                                    style: TextStyle(
-                                      fontSize: 25,
-                                      color: Color(0xFF2B2E83),
-                                    ),
-                                  ),
-                                ],
+                              Container(
+                                width: 70,
+                                height: 70,
+                                decoration: const BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Color(0xFF2B2E83),
+                                ),
+                                child: const Icon(
+                                  Icons.account_balance_wallet,
+                                  color: Colors.white,
+                                  size: 45,
+                                ),
                               ),
                             ],
                           ),
@@ -900,7 +923,7 @@ class _HomePageState extends State<HomePage> {
           ),
           Visibility(
             visible: _isLoading,
-            child: Center(
+            child: const Center(
               child: CircularProgressIndicator(),
             ),
           ),

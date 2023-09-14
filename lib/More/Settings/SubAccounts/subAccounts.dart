@@ -32,15 +32,19 @@ class _SubAccountsPageState extends State<SubAccountsPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (jsonData.isNotEmpty) {
-        setState(() {
-          _subAccounts = jsonData;
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _subAccounts = jsonData;
+            isLoading = false;
+          });
+        }
       } else {
-        setState(() {
-          _subAccounts = [];
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _subAccounts = [];
+            isLoading = false;
+          });
+        }
       }
     } else {
       isLoading = false;

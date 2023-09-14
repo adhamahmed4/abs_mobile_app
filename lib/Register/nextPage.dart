@@ -232,12 +232,13 @@ class _NextPageState extends State<NextPage> {
               guestPlans.add(plan);
             }
           }
-
-          setState(() {
-            // Update the UI after fetching and processing the data
-            this.guestPlans = guestPlans;
-            this.plans = plans;
-          });
+          if (mounted) {
+            setState(() {
+              // Update the UI after fetching and processing the data
+              this.guestPlans = guestPlans;
+              this.plans = plans;
+            });
+          }
         }
       } else {
         print('Failed to fetch plans from the API.');
@@ -285,28 +286,30 @@ class _NextPageState extends State<NextPage> {
                               plan: plans[i],
                               isSelected: selectedCardIndex == i,
                               onSelect: () {
-                                setState(() {
-                                  if (selectedCardIndex == i) {
-                                    selectedCardIndex =
-                                        -1; // Deselect if already selected
-                                    setState(() {
-                                      selectedPricePlanId = null;
-                                    });
-                                  } else {
-                                    selectedCardIndex =
-                                        i; // Select if not selected
-                                    setState(() {
-                                      selectedPricePlanId =
-                                          plans[i].pricePlanId;
-                                    });
+                                if (mounted) {
+                                  setState(() {
+                                    if (selectedCardIndex == i) {
+                                      selectedCardIndex =
+                                          -1; // Deselect if already selected
+                                      setState(() {
+                                        selectedPricePlanId = null;
+                                      });
+                                    } else {
+                                      selectedCardIndex =
+                                          i; // Select if not selected
+                                      setState(() {
+                                        selectedPricePlanId =
+                                            plans[i].pricePlanId;
+                                      });
 
-                                    setState(() {
-                                      clientTypeID = 2;
-                                    });
-                                    selectedNewCardIndex =
-                                        -1; // Deselect any new card
-                                  }
-                                });
+                                      setState(() {
+                                        clientTypeID = 2;
+                                      });
+                                      selectedNewCardIndex =
+                                          -1; // Deselect any new card
+                                    }
+                                  });
+                                }
                               },
                             ),
                       ],
@@ -337,28 +340,30 @@ class _NextPageState extends State<NextPage> {
                               plan: plans[i],
                               isSelected: selectedNewCardIndex == i,
                               onSelect: () {
-                                setState(() {
-                                  if (selectedNewCardIndex == i) {
-                                    selectedNewCardIndex =
-                                        -1; // Deselect if already selected
-                                    setState(() {
-                                      selectedPricePlanId = null;
-                                    });
-                                  } else {
-                                    selectedNewCardIndex =
-                                        i; // Select if not selected
-                                    setState(() {
-                                      selectedPricePlanId =
-                                          plans[i].pricePlanId;
-                                    });
+                                if (mounted) {
+                                  setState(() {
+                                    if (selectedNewCardIndex == i) {
+                                      selectedNewCardIndex =
+                                          -1; // Deselect if already selected
+                                      setState(() {
+                                        selectedPricePlanId = null;
+                                      });
+                                    } else {
+                                      selectedNewCardIndex =
+                                          i; // Select if not selected
+                                      setState(() {
+                                        selectedPricePlanId =
+                                            plans[i].pricePlanId;
+                                      });
 
-                                    setState(() {
-                                      clientTypeID = 3;
-                                    });
-                                    selectedCardIndex =
-                                        -1; // Deselect any new card
-                                  }
-                                });
+                                      setState(() {
+                                        clientTypeID = 3;
+                                      });
+                                      selectedCardIndex =
+                                          -1; // Deselect any new card
+                                    }
+                                  });
+                                }
                               },
                             ),
                       ],

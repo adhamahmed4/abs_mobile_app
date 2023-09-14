@@ -24,24 +24,32 @@ class _ZoneDetailsPageState extends State<ZoneDetailsPage> {
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
-      setState(() {
-        zones = jsonData;
-      });
+      if (mounted) {
+        setState(() {
+          zones = jsonData;
+        });
+      }
 
       for (var zone in zones) {
         final zoneID = zone['Zone ID'];
         final cities = await getZoneCities(zoneID);
+        if (mounted) {
+          setState(() {
+            zoneCities[zoneID] = cities;
+          });
+        }
+      }
+      if (mounted) {
         setState(() {
-          zoneCities[zoneID] = cities;
+          isLoading = false;
         });
       }
-      setState(() {
-        isLoading = false;
-      });
     } else {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
       throw Exception('Failed to load data');
     }
   }

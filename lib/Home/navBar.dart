@@ -48,9 +48,11 @@ class _NavBarState extends State<NavBar> {
               padding: const EdgeInsets.all(16),
               gap: 8,
               onTabChange: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
+                if (mounted) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                }
               },
               tabs: const [
                 GButton(

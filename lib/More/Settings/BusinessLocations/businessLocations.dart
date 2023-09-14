@@ -22,17 +22,22 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (jsonData.isNotEmpty) {
-        setState(() {
-          locations = jsonData;
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            locations = jsonData;
+            isLoading = false;
+          });
+        }
       } else {
-        setState(() {
-          locations = [];
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            locations = [];
+            isLoading = false;
+          });
+        }
       }
     } else {
+      isLoading = false;
       throw Exception('Failed to load data');
     }
   }
