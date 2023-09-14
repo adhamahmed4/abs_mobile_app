@@ -24,12 +24,14 @@ class _WalletPageState extends State<WalletPage> {
     );
 
     if (selectedRange != null) {
-      setState(() {
-        _selectedStartDate = selectedRange.start;
-        _selectedEndDate = selectedRange.end;
-        _dateController.text =
-            "${_dateFormat.format(_selectedStartDate)} - ${_dateFormat.format(_selectedEndDate)}";
-      });
+      if (mounted) {
+        setState(() {
+          _selectedStartDate = selectedRange.start;
+          _selectedEndDate = selectedRange.end;
+          _dateController.text =
+              "${_dateFormat.format(_selectedStartDate)} - ${_dateFormat.format(_selectedEndDate)}";
+        });
+      }
     }
   }
 

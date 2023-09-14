@@ -1,4 +1,6 @@
 import 'package:abs_mobile_app/Login/login.dart';
+import 'package:abs_mobile_app/More/SupportTickets/tickets.dart';
+import 'package:abs_mobile_app/More/TermsAndConditions/termsAndConditions.dart';
 import 'package:abs_mobile_app/More/Wallet/wallet.dart';
 import 'package:abs_mobile_app/More/Settings/settings.dart';
 import 'package:flutter/material.dart';
@@ -35,13 +37,15 @@ class _MorePageState extends State<MorePage> {
 
     if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
-      setState(() {
-        _nameController.text =
-            responseBody[0]['firstName'] + ' ' + responseBody[0]['lastName'];
-        _mobileController.text = responseBody[0]['contactNumber'];
-        _avatarController.text = responseBody[0]['avatar'] ?? '';
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _nameController.text =
+              responseBody[0]['firstName'] + ' ' + responseBody[0]['lastName'];
+          _mobileController.text = responseBody[0]['contactNumber'];
+          _avatarController.text = responseBody[0]['avatar'] ?? '';
+          isLoading = false;
+        });
+      }
     } else {
       showDialog(
         context: context,
@@ -194,7 +198,29 @@ class _MorePageState extends State<MorePage> {
                                 leading: const Icon(Icons.support),
                                 title: const Text('Support Tickets'),
                                 trailing: const Icon(Icons.arrow_forward),
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                      transitionDuration:
+                                          const Duration(milliseconds: 300),
+                                      pageBuilder: (_, __, ___) =>
+                                          TicketsPage(),
+                                      transitionsBuilder: (_,
+                                          Animation<double> animation,
+                                          __,
+                                          Widget child) {
+                                        return SlideTransition(
+                                          position: Tween<Offset>(
+                                            begin: const Offset(1.0, 0.0),
+                                            end: Offset.zero,
+                                          ).animate(animation),
+                                          child: child,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
                               ),
                             ],
                           ),
@@ -217,7 +243,29 @@ class _MorePageState extends State<MorePage> {
                                 leading: const Icon(Icons.text_snippet),
                                 title: const Text('Terms & Conditions'),
                                 trailing: const Icon(Icons.arrow_forward),
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                      transitionDuration:
+                                          const Duration(milliseconds: 300),
+                                      pageBuilder: (_, __, ___) =>
+                                          TermsAndConditionsPage(),
+                                      transitionsBuilder: (_,
+                                          Animation<double> animation,
+                                          __,
+                                          Widget child) {
+                                        return SlideTransition(
+                                          position: Tween<Offset>(
+                                            begin: const Offset(1.0, 0.0),
+                                            end: Offset.zero,
+                                          ).animate(animation),
+                                          child: child,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
                               ),
                             ],
                           ),

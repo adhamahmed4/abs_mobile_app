@@ -44,25 +44,33 @@ class _MobileCashPageState extends State<MobileCashPage> {
 
   void _validateMobileNumber(String mobileNumber) {
     if (mobileNumber.isEmpty) {
-      setState(() {
-        _mobileNumberErrorText = 'Mobile number is required';
-      });
+      if (mounted) {
+        setState(() {
+          _mobileNumberErrorText = 'Mobile number is required';
+        });
+      }
     } else if (mobileNumber.length != 11) {
-      setState(() {
-        _mobileNumberErrorText = 'Mobile number must be 11 digits';
-      });
+      if (mounted) {
+        setState(() {
+          _mobileNumberErrorText = 'Mobile number must be 11 digits';
+        });
+      }
     } else {
-      setState(() {
-        _mobileNumberErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _mobileNumberErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _updateButtonEnabledStatus() {
-    setState(() {
-      _isButtonEnabled = _mobileNumberErrorText.isEmpty;
-    });
+    if (mounted) {
+      setState(() {
+        _isButtonEnabled = _mobileNumberErrorText.isEmpty;
+      });
+    }
   }
 
   Future<void> getMobileCashDetails() async {
@@ -71,18 +79,23 @@ class _MobileCashPageState extends State<MobileCashPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (jsonData.isNotEmpty) {
-        setState(() {
-          _mobileNumberController.text = jsonData[0]['mobileNumber'];
-          _dataExists = true;
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _mobileNumberController.text = jsonData[0]['mobileNumber'];
+            _dataExists = true;
+            isLoading = false;
+          });
+        }
       } else {
-        setState(() {
-          isLoading = false;
-          _dataExists = false;
-        });
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+            _dataExists = false;
+          });
+        }
       }
     } else {
+      isLoading = false;
       throw Exception('Failed to load data');
     }
   }

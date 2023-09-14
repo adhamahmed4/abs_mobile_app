@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: primarySwatchColor,
           scaffoldBackgroundColor: const Color.fromARGB(
               255, 244, 246, 248), // Set the background color here
-          fontFamily: GoogleFonts.lexend().fontFamily),
+          fontFamily: GoogleFonts.openSans().fontFamily),
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {'/': (context) => LoginPage()},

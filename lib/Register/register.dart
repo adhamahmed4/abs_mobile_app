@@ -84,13 +84,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
     List<String> nameParts = fullName.split(' ');
 
     if (nameParts.length != 2 || nameParts.any((part) => part.isEmpty)) {
-      setState(() {
-        _fullNameErrorText = 'Enter your first and last name';
-      });
+      if (mounted) {
+        setState(() {
+          _fullNameErrorText = 'Enter your first and last name';
+        });
+      }
     } else {
-      setState(() {
-        _fullNameErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _fullNameErrorText = '';
+        });
+      }
     }
 
     _updateButtonEnabledStatus(); // Call this here to update the button status
@@ -98,22 +102,30 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   void _validateUserName(String userName) {
     if (userName.isEmpty) {
-      setState(() {
-        _userNameErrorText = 'Enter a user name';
-      });
+      if (mounted) {
+        setState(() {
+          _userNameErrorText = 'Enter a user name';
+        });
+      }
     } else if (userName.length <= 7) {
-      setState(() {
-        _userNameErrorText = 'User name should be at least 8 characters long';
-      });
+      if (mounted) {
+        setState(() {
+          _userNameErrorText = 'User name should be at least 8 characters long';
+        });
+      }
     } else if (!RegExp(r'^[a-zA-Z0-9\s]+$').hasMatch(userName)) {
-      setState(() {
-        _userNameErrorText =
-            'User name should contain only letters, numbers, and spaces';
-      });
+      if (mounted) {
+        setState(() {
+          _userNameErrorText =
+              'User name should contain only letters, numbers, and spaces';
+        });
+      }
     } else {
-      setState(() {
-        _userNameErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _userNameErrorText = '';
+        });
+      }
     }
 
     _updateButtonEnabledStatus(); // Call this here to update the button status
@@ -121,13 +133,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   void _validateEmail(String email) {
     if (!EmailValidator.validate(email)) {
-      setState(() {
-        _emailErrorText = 'Enter a valid email';
-      });
+      if (mounted) {
+        setState(() {
+          _emailErrorText = 'Enter a valid email';
+        });
+      }
     } else {
-      setState(() {
-        _emailErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _emailErrorText = '';
+        });
+      }
     }
 
     _updateButtonEnabledStatus(); // Call this here to update the button status
@@ -194,40 +210,52 @@ class _RegistrationPageState extends State<RegistrationPage> {
     String password = _passwordController.text;
 
     if (confirmPassword != password) {
-      setState(() {
-        _confirmPasswordErrorText = 'Passwords do not match';
-      });
+      if (mounted) {
+        setState(() {
+          _confirmPasswordErrorText = 'Passwords do not match';
+        });
+      }
     } else {
-      setState(() {
-        _confirmPasswordErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _confirmPasswordErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _validatePhoneNumber(String phoneNumber) {
     if (phoneNumber.isEmpty) {
-      setState(() {
-        _phoneNumberErrorText = 'Phone number is required';
-      });
+      if (mounted) {
+        setState(() {
+          _phoneNumberErrorText = 'Phone number is required';
+        });
+      }
     } else if (phoneNumber.length != 11) {
-      setState(() {
-        _phoneNumberErrorText = 'Phone number must be 11 digits';
-      });
+      if (mounted) {
+        setState(() {
+          _phoneNumberErrorText = 'Phone number must be 11 digits';
+        });
+      }
     } else {
-      setState(() {
-        _phoneNumberErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _phoneNumberErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _updateCheckboxStatus(bool? newValue) {
     if (newValue != null) {
-      setState(() {
-        _isCheckboxChecked = newValue;
-        _updateButtonEnabledStatus(); // Update the button status based on the new checkbox state
-      });
+      if (mounted) {
+        setState(() {
+          _isCheckboxChecked = newValue;
+          _updateButtonEnabledStatus(); // Update the button status based on the new checkbox state
+        });
+      }
     }
   }
 
@@ -336,16 +364,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
     log("_emailErrorText: $_emailErrorText");
     log("_confirmPasswordErrorText: $_confirmPasswordErrorText");
     log("_phoneNumberErrorText: $_phoneNumberErrorText");
-
-    setState(() {
-      _isButtonEnabled = _fullNameErrorText.isEmpty &&
-          _userNameErrorText.isEmpty &&
-          _emailErrorText.isEmpty &&
-          _phoneNumberErrorText.isEmpty &&
-          _passwordIsValid &&
-          _confirmPasswordController.text == _passwordController.text;
-    });
-    log("_isButtonEnabled: $_isButtonEnabled");
+    if (mounted) {
+      setState(() {
+        _isButtonEnabled = _fullNameErrorText.isEmpty &&
+            _userNameErrorText.isEmpty &&
+            _emailErrorText.isEmpty &&
+            _phoneNumberErrorText.isEmpty &&
+            _passwordIsValid &&
+            _confirmPasswordController.text == _passwordController.text;
+      });
+    }
   }
 
   final GlobalKey<FlutterPwValidatorState> validatorKey =
@@ -446,10 +474,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         controller: _passwordController,
                         obscureText: !_passwordVisible,
                         onTap: () {
-                          setState(() {
-                            _showPasswordValidation =
-                                true; // Show password validation on tap
-                          });
+                          if (mounted) {
+                            setState(() {
+                              _showPasswordValidation =
+                                  true; // Show password validation on tap
+                            });
+                          }
                         },
                         decoration: InputDecoration(
                           filled: true,
@@ -457,9 +487,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           hintText: "Password",
                           suffixIcon: GestureDetector(
                             onTap: () {
-                              setState(() {
-                                _passwordVisible = !_passwordVisible;
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  _passwordVisible = !_passwordVisible;
+                                });
+                              }
                             },
                             child: Icon(
                               _passwordVisible
@@ -485,15 +517,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         width: 400,
                         height: 130,
                         onSuccess: () {
-                          setState(() {
-                            _passwordIsValid = true;
-                          });
+                          if (mounted) {
+                            setState(() {
+                              _passwordIsValid = true;
+                            });
+                          }
                           _updateButtonEnabledStatus();
                         },
                         onFail: () {
-                          setState(() {
-                            _passwordIsValid = false;
-                          });
+                          if (mounted) {
+                            setState(() {
+                              _passwordIsValid = false;
+                            });
+                          }
                           _updateButtonEnabledStatus();
                         },
                       ),
@@ -508,10 +544,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         border: const OutlineInputBorder(),
                         suffixIcon: GestureDetector(
                           onTap: () {
-                            setState(() {
-                              _confirmPasswordVisible =
-                                  !_confirmPasswordVisible;
-                            });
+                            if (mounted) {
+                              setState(() {
+                                _confirmPasswordVisible =
+                                    !_confirmPasswordVisible;
+                              });
+                            }
                           },
                           child: Icon(
                             _confirmPasswordVisible
@@ -545,10 +583,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           value: _isCheckboxChecked,
                           onChanged: (bool? newValue) {
                             if (newValue != null) {
-                              setState(() {
-                                _isCheckboxChecked = newValue;
-                                _updateButtonEnabledStatus(); // Update the button status based on the new checkbox state
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  _isCheckboxChecked = newValue;
+                                  _updateButtonEnabledStatus(); // Update the button status based on the new checkbox state
+                                });
+                              }
                             }
                           },
                         ),

@@ -27,17 +27,23 @@ class _PricePlanPageState extends State<PricePlanPage> {
         for (var key in apiRow.keys) {
           row[key] = apiRow[key];
         }
+        if (mounted) {
+          setState(() {
+            parsedTableData.add(row);
+          });
+        }
+      }
+      if (mounted) {
         setState(() {
-          parsedTableData.add(row);
+          isLoading = false;
         });
       }
-      setState(() {
-        isLoading = false;
-      });
     } else {
-      setState(() {
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
       throw Exception('Failed to load data');
     }
   }

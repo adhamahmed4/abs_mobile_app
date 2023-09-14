@@ -56,67 +56,85 @@ class _BankTransferPageState extends State<BankTransferPage> {
 
   void _validateAccountOwnerName(String accountOwnerName) {
     if (accountOwnerName.isEmpty) {
-      setState(() {
-        _accountOwnerNameErrorText = 'Account Owner Name is required';
-      });
+      if (mounted) {
+        setState(() {
+          _accountOwnerNameErrorText = 'Account Owner Name is required';
+        });
+      }
     } else {
-      setState(() {
-        _accountOwnerNameErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _accountOwnerNameErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _validateAccountNumber(String accountNumber) {
     if (accountNumber.isEmpty) {
-      setState(() {
-        _accountNumberErrorText = 'Account Number is required';
-      });
+      if (mounted) {
+        setState(() {
+          _accountNumberErrorText = 'Account Number is required';
+        });
+      }
     } else {
-      setState(() {
-        _accountNumberErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _accountNumberErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _validateIBAN(String iban) {
     if (iban.isEmpty) {
-      setState(() {
-        _ibanErrorText = 'IBAN is required';
-      });
+      if (mounted) {
+        setState(() {
+          _ibanErrorText = 'IBAN is required';
+        });
+      }
     } else {
-      setState(() {
-        _ibanErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _ibanErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _validateSwiftCode(String swiftCode) {
     if (swiftCode.isEmpty) {
-      setState(() {
-        _swiftCodeErrorText = 'Swift Code is required';
-      });
+      if (mounted) {
+        setState(() {
+          _swiftCodeErrorText = 'Swift Code is required';
+        });
+      }
     } else {
-      setState(() {
-        _swiftCodeErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _swiftCodeErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _updateButtonEnabledStatus() {
-    setState(() {
-      _isButtonEnabled = _accountOwnerNameErrorText.isEmpty &&
-          _accountNumberErrorText.isEmpty &&
-          _ibanErrorText.isEmpty &&
-          _swiftCodeErrorText.isEmpty &&
-          _accountOwnerNameController.text.isNotEmpty &&
-          _accountNumberController.text.isNotEmpty &&
-          _ibanController.text.isNotEmpty &&
-          _swiftCodeController.text.isNotEmpty;
-    });
+    if (mounted) {
+      setState(() {
+        _isButtonEnabled = _accountOwnerNameErrorText.isEmpty &&
+            _accountNumberErrorText.isEmpty &&
+            _ibanErrorText.isEmpty &&
+            _swiftCodeErrorText.isEmpty &&
+            _accountOwnerNameController.text.isNotEmpty &&
+            _accountNumberController.text.isNotEmpty &&
+            _ibanController.text.isNotEmpty &&
+            _swiftCodeController.text.isNotEmpty;
+      });
+    }
   }
 
   Future<void> getBankDetails() async {
@@ -126,22 +144,28 @@ class _BankTransferPageState extends State<BankTransferPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (jsonData.isNotEmpty) {
-        setState(() {
-          _selectedBank = jsonData[0]['Bank ID'].toString();
-          _accountOwnerNameController.text = jsonData[0]['Account Holder Name'];
-          _accountNumberController.text = jsonData[0]['Account Number'];
-          _ibanController.text = jsonData[0]['IBAN'];
-          _swiftCodeController.text = jsonData[0]['Swift Code'];
-          _dataExists = true;
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _selectedBank = jsonData[0]['Bank ID'].toString();
+            _accountOwnerNameController.text =
+                jsonData[0]['Account Holder Name'];
+            _accountNumberController.text = jsonData[0]['Account Number'];
+            _ibanController.text = jsonData[0]['IBAN'];
+            _swiftCodeController.text = jsonData[0]['Swift Code'];
+            _dataExists = true;
+            isLoading = false;
+          });
+        }
       } else {
-        setState(() {
-          isLoading = false;
-          _dataExists = false;
-        });
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+            _dataExists = false;
+          });
+        }
       }
     } else {
+      isLoading = false;
       throw Exception('Failed to load data');
     }
   }
@@ -151,15 +175,16 @@ class _BankTransferPageState extends State<BankTransferPage> {
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
-
-      setState(() {
-        _banks = jsonData.map<Map<String, dynamic>>((dynamic item) {
-          return {
-            'ID': item['ID'],
-            'enBankName': item['enBankName'],
-          };
-        }).toList();
-      });
+      if (mounted) {
+        setState(() {
+          _banks = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {
+              'ID': item['ID'],
+              'enBankName': item['enBankName'],
+            };
+          }).toList();
+        });
+      }
     } else {
       throw Exception('Failed to load data');
     }
@@ -231,9 +256,11 @@ class _BankTransferPageState extends State<BankTransferPage> {
                                       value: _selectedBank,
                                       onChanged: !_dataExists
                                           ? (newValue) {
-                                              setState(() {
-                                                _selectedBank = newValue!;
-                                              });
+                                              if (mounted) {
+                                                setState(() {
+                                                  _selectedBank = newValue!;
+                                                });
+                                              }
                                             }
                                           : null,
                                       items:
