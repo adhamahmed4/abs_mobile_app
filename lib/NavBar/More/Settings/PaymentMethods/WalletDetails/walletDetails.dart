@@ -4,12 +4,12 @@ import '../../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
 
-class WalletPage extends StatefulWidget {
+class WalletDetailsPage extends StatefulWidget {
   @override
-  _WalletPageState createState() => _WalletPageState();
+  _WalletDetailsPageState createState() => _WalletDetailsPageState();
 }
 
-class _WalletPageState extends State<WalletPage> {
+class _WalletDetailsPageState extends State<WalletDetailsPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   bool isLoading = true;

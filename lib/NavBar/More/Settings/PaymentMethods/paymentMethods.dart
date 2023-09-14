@@ -1,7 +1,7 @@
 import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/BankTransfer/bankTransfer.dart';
 import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/MobileCash/mobileCash.dart';
 import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/NearestBranch/nearestBranch.dart';
-import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/Wallet/wallet.dart';
+import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/WalletDetails/walletDetails.dart';
 import 'package:flutter/material.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
@@ -90,7 +90,7 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
                   PageRouteBuilder(
                     transitionDuration: Duration(
                         milliseconds: 300), // Adjust the animation duration
-                    pageBuilder: (_, __, ___) => WalletPage(),
+                    pageBuilder: (_, __, ___) => WalletDetailsPage(),
                     transitionsBuilder:
                         (_, Animation<double> animation, __, Widget child) {
                       return SlideTransition(
