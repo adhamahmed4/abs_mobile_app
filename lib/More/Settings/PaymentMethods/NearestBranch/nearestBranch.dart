@@ -28,9 +28,11 @@ class _NearestBranchPageState extends State<NearestBranchPage> {
   }
 
   void _updateButtonEnabledStatus() {
-    setState(() {
-      _isButtonEnabled = _selectedBranch != null;
-    });
+    if (mounted) {
+      setState(() {
+        _isButtonEnabled = _selectedBranch != null;
+      });
+    }
   }
 
   Future<void> getNearestBranchDetails() async {
@@ -40,13 +42,23 @@ class _NearestBranchPageState extends State<NearestBranchPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (jsonData.isNotEmpty) {
-        setState(() {
-          _selectedBranch = jsonData[0]['Nearest Branch ID'].toString();
-          _dataExists = true;
-          isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _selectedBranch = jsonData[0]['Nearest Branch ID'].toString();
+            _dataExists = true;
+            isLoading = false;
+          });
+        }
+      } else {
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+            _dataExists = false;
+          });
+        }
       }
     } else {
+      isLoading = false;
       throw Exception('Failed to load data');
     }
   }
@@ -56,15 +68,16 @@ class _NearestBranchPageState extends State<NearestBranchPage> {
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
-
-      setState(() {
-        _branches = jsonData.map<Map<String, dynamic>>((dynamic item) {
-          return {
-            'Branch ID': item['Branch ID'],
-            'Branch': item['Branch'],
-          };
-        }).toList();
-      });
+      if (mounted) {
+        setState(() {
+          _branches = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {
+              'Branch ID': item['Branch ID'],
+              'Branch': item['Branch'],
+            };
+          }).toList();
+        });
+      }
     } else {
       throw Exception('Failed to load data');
     }
@@ -130,10 +143,12 @@ class _NearestBranchPageState extends State<NearestBranchPage> {
                                   value: _selectedBranch,
                                   onChanged: !_dataExists
                                       ? (newValue) {
-                                          setState(() {
-                                            _selectedBranch = newValue!;
-                                          });
-                                          _updateButtonEnabledStatus();
+                                          if (mounted) {
+                                            setState(() {
+                                              _selectedBranch = newValue!;
+                                            });
+                                            _updateButtonEnabledStatus();
+                                          }
                                         }
                                       : null,
                                   items:

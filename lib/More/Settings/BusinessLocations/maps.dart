@@ -4,14 +4,17 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class MapsPage extends StatefulWidget {
+  double? lat;
+  double? lng;
+
+  MapsPage({this.lat, this.lng});
+
   @override
   _MapsPageState createState() => _MapsPageState();
 }
 
 class _MapsPageState extends State<MapsPage> {
   late GoogleMapController mapController;
-  double lat = 30.0444;
-  double lng = 31.2357;
   bool isButtonLoading = false;
 
   // Define a marker to represent the current location
@@ -26,28 +29,31 @@ class _MapsPageState extends State<MapsPage> {
       Position position = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high,
       );
-      setState(() {
-        lat = position.latitude;
-        lng = position.longitude;
-      });
+      if (mounted) {
+        setState(() {
+          widget.lat = position.latitude;
+          widget.lng = position.longitude;
+        });
+      }
       // Update the camera position to the new location
       mapController.animateCamera(
         CameraUpdate.newLatLngZoom(
-          LatLng(lat, lng),
+          LatLng(widget.lat!, widget.lng!),
           18,
         ),
       );
 
       // Update the marker's position
-      setState(() {
-        currentLocationMarker = Marker(
-          markerId: MarkerId('currentLocation'),
-          position: LatLng(lat, lng),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
-        );
-      });
-
-      print('Current Location: Lat $lat, Lng $lng');
+      if (mounted) {
+        setState(() {
+          currentLocationMarker = Marker(
+            markerId: MarkerId('currentLocation'),
+            position: LatLng(widget.lat!, widget.lng!),
+            icon:
+                BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+          );
+        });
+      }
     } catch (e) {
       print("Error getting current location: $e");
     }
@@ -79,7 +85,7 @@ class _MapsPageState extends State<MapsPage> {
         children: [
           GoogleMap(
             initialCameraPosition: CameraPosition(
-              target: LatLng(lat, lng),
+              target: LatLng(widget.lat!, widget.lng!),
               zoom: 18,
             ),
             onMapCreated: (GoogleMapController controller) {
@@ -89,20 +95,26 @@ class _MapsPageState extends State<MapsPage> {
             // markers: {currentLocationMarker}, // Set the markers on the map
             onCameraMove: (CameraPosition newPosition) {
               // Update the lat and lng variables with the new location
-              setState(() {
-                lat = newPosition.target.latitude;
-                lng = newPosition.target.longitude;
-              });
+              if (mounted) {
+                setState(() {
+                  widget.lat = newPosition.target.latitude;
+                  widget.lng = newPosition.target.longitude;
+                });
+              }
             },
             onCameraMoveStarted: () {
-              setState(() {
-                isButtonLoading = true;
-              });
+              if (mounted) {
+                setState(() {
+                  isButtonLoading = true;
+                });
+              }
             },
             onCameraIdle: () {
-              setState(() {
-                isButtonLoading = false;
-              });
+              if (mounted) {
+                setState(() {
+                  isButtonLoading = false;
+                });
+              }
             },
           ),
           Positioned(
@@ -124,8 +136,7 @@ class _MapsPageState extends State<MapsPage> {
               onPressed: isButtonLoading
                   ? null // Disable the button when loading
                   : () {
-                      // Implement your logic to confirm the location
-                      print('Location Confirmed: Lat $lat, Lng $lng');
+                      Navigator.pop(context);
                     },
               child: isButtonLoading
                   ? SizedBox(

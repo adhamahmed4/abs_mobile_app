@@ -1,5 +1,6 @@
 import 'package:abs_mobile_app/More/More.dart';
 import 'package:abs_mobile_app/Home/Home.dart';
+import 'package:abs_mobile_app/Track/track.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 
@@ -13,19 +14,18 @@ class NavBar extends StatefulWidget {
 class _NavBarState extends State<NavBar> {
   int _selectedIndex = 0;
 
-  // Define the list of pages for the IndexedStack
   final List<Widget> _pages = [
-    HomePage(), // Home page
     HomePage(),
     HomePage(),
+    TrackPage(),
     MorePage(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEEF1F5),
-      body: _pages[_selectedIndex], // Use the selected page
+      backgroundColor: const Color(0xFFEEF1F5),
+      body: _pages[_selectedIndex],
       bottomNavigationBar: Stack(
         alignment: Alignment.bottomCenter,
         children: [
@@ -37,7 +37,7 @@ class _NavBarState extends State<NavBar> {
                   color: Colors.black.withOpacity(0.1),
                   spreadRadius: 0.25,
                   blurRadius: 5,
-                  offset: Offset(0, 0),
+                  offset: const Offset(0, 0),
                 ),
               ],
             ),
@@ -45,14 +45,16 @@ class _NavBarState extends State<NavBar> {
               backgroundColor: Colors.white,
               color: Colors.grey,
               activeColor: Colors.orange,
-              padding: EdgeInsets.all(16),
+              padding: const EdgeInsets.all(16),
               gap: 8,
               onTabChange: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
+                if (mounted) {
+                  setState(() {
+                    _selectedIndex = index;
+                  });
+                }
               },
-              tabs: [
+              tabs: const [
                 GButton(
                   icon: Icons.home,
                   text: 'Home',
@@ -79,7 +81,7 @@ class _NavBarState extends State<NavBar> {
               alignment: Alignment.topCenter,
               width: MediaQuery.of(context).size.width / 4,
               height: 4,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: Colors.orange,
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(2),

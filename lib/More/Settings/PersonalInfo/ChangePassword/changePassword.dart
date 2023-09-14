@@ -25,12 +25,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   bool _confirmNewPasswordVisible = false;
 
   void _updateButtonEnabledStatus() {
-    setState(() {
-      _isButtonEnabled = _oldPasswordController.text.isNotEmpty &&
-          _newPasswordController.text.isNotEmpty &&
-          _confirmNewPasswordController.text.isNotEmpty &&
-          _newPasswordController.text == _confirmNewPasswordController.text;
-    });
+    if (mounted) {
+      setState(() {
+        _isButtonEnabled = _oldPasswordController.text.isNotEmpty &&
+            _newPasswordController.text.isNotEmpty &&
+            _confirmNewPasswordController.text.isNotEmpty &&
+            _newPasswordController.text == _confirmNewPasswordController.text;
+      });
+    }
   }
 
   Future<void> changePassword() async {
@@ -129,9 +131,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             labelText: 'Old Password',
                             suffixIcon: GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  _oldPasswordVisible = !_oldPasswordVisible;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    _oldPasswordVisible = !_oldPasswordVisible;
+                                  });
+                                }
                               },
                               child: Icon(
                                 _oldPasswordVisible
@@ -157,9 +161,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             labelText: 'New Password',
                             suffixIcon: GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  _newPasswordVisible = !_newPasswordVisible;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    _newPasswordVisible = !_newPasswordVisible;
+                                  });
+                                }
                               },
                               child: Icon(
                                 _newPasswordVisible
@@ -185,10 +191,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             labelText: 'Confirm Password',
                             suffixIcon: GestureDetector(
                               onTap: () {
-                                setState(() {
-                                  _confirmNewPasswordVisible =
-                                      !_confirmNewPasswordVisible;
-                                });
+                                if (mounted) {
+                                  setState(() {
+                                    _confirmNewPasswordVisible =
+                                        !_confirmNewPasswordVisible;
+                                  });
+                                }
                               },
                               child: Icon(
                                 _confirmNewPasswordVisible

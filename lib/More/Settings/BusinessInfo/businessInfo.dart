@@ -69,28 +69,41 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
     final url = Uri.parse('${AppConfig.baseUrl}/business-info');
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
-      _dataExists = true;
       final List<dynamic> jsonData = json.decode(response.body);
 
-      setState(() {
-        _englishNameController.text = jsonData[0]['English Business Name'];
-        _arabicNameController.text = jsonData[0]['Arabic Business Name'];
-        _selectedSalesChannel = jsonData[0]['Sales Channel Type'].toString();
-        _salesChannelNameController.text = jsonData[0]['Sales Channel Name'];
-        _storeURLController.text = jsonData[0]['Sales Channel URL'];
-        _selectedProduct = jsonData[0]['Product Type'].toString();
-        _prefixController.text = jsonData[0]['Prefix'];
-        _selectedCity = jsonData[0]['City ID'].toString();
-        _streetNameController.text = jsonData[0]['Street Name'];
-        _buildingNumberController.text = jsonData[0]['Building Number'];
-        _floorNumberController.text = jsonData[0]['Floor Number'];
-        _apartmentNumberController.text = jsonData[0]['Apartment Number'];
-        _selectedServices = jsonData[0]['Services ID']
-            .split(',')
-            .map((str) => int.parse(str))
-            .toList();
-        isLoading = false;
-      });
+      if (jsonData.isNotEmpty) {
+        if (mounted) {
+          setState(() {
+            _englishNameController.text = jsonData[0]['English Business Name'];
+            _arabicNameController.text = jsonData[0]['Arabic Business Name'];
+            _selectedSalesChannel =
+                jsonData[0]['Sales Channel Type'].toString();
+            _salesChannelNameController.text =
+                jsonData[0]['Sales Channel Name'];
+            _storeURLController.text = jsonData[0]['Sales Channel URL'];
+            _selectedProduct = jsonData[0]['Product Type'].toString();
+            _prefixController.text = jsonData[0]['Prefix'] ?? '';
+            _selectedCity = jsonData[0]['City ID'].toString();
+            _streetNameController.text = jsonData[0]['Street Name'];
+            _buildingNumberController.text = jsonData[0]['Building Number'];
+            _floorNumberController.text = jsonData[0]['Floor Number'];
+            _apartmentNumberController.text = jsonData[0]['Apartment Number'];
+            _selectedServices = jsonData[0]['Services ID']
+                .split(',')
+                .map((str) => int.parse(str))
+                .toList();
+            isLoading = false;
+            _dataExists = true;
+          });
+        }
+      } else {
+        if (mounted) {
+          setState(() {
+            isLoading = false;
+            _dataExists = false;
+          });
+        }
+      }
     } else {
       throw Exception('Failed to load data');
     }
@@ -120,15 +133,16 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
-
-      setState(() {
-        _products = jsonData.map<Map<String, dynamic>>((dynamic item) {
-          return {
-            'ID': item['ID'],
-            'enProduct': item['enProduct'],
-          };
-        }).toList();
-      });
+      if (mounted) {
+        setState(() {
+          _products = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {
+              'ID': item['ID'],
+              'enProduct': item['enProduct'],
+            };
+          }).toList();
+        });
+      }
     } else {
       throw Exception('Failed to load data');
     }
@@ -139,15 +153,16 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
-
-      setState(() {
-        _cities = jsonData.map<Map<String, dynamic>>((dynamic item) {
-          return {
-            'City ID': item['City ID'],
-            'City Name': item['City Name'],
-          };
-        }).toList();
-      });
+      if (mounted) {
+        setState(() {
+          _cities = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {
+              'City ID': item['City ID'],
+              'City Name': item['City Name'],
+            };
+          }).toList();
+        });
+      }
     } else {
       throw Exception('Failed to load data');
     }
@@ -158,18 +173,19 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
-
-      setState(() {
-        _services = jsonData.map<Map<String, dynamic>>((dynamic item) {
-          return {
-            'Service Type ID': item['Service Type ID'],
-            'Service Type': item['Service Type'] +
-                ' (' +
-                item['Price'].toString() +
-                ' EGP)',
-          };
-        }).toList();
-      });
+      if (mounted) {
+        setState(() {
+          _services = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {
+              'Service Type ID': item['Service Type ID'],
+              'Service Type': item['Service Type'] +
+                  ' (' +
+                  item['Price'].toString() +
+                  ' EGP)',
+            };
+          }).toList();
+        });
+      }
     } else {
       throw Exception('Failed to load data');
     }
@@ -202,9 +218,11 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
     );
 
     if (response.statusCode == 200) {
-      setState(() {
-        _nationalID = response.data['url'];
-      });
+      if (mounted) {
+        setState(() {
+          _nationalID = response.data['url'];
+        });
+      }
       _updateButtonEnabledStatus();
       showDialog(
           context: context,
@@ -252,9 +270,11 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
     );
 
     if (response.statusCode == 200) {
-      setState(() {
-        _commercialRegister = response.data['url'];
-      });
+      if (mounted) {
+        setState(() {
+          _commercialRegister = response.data['url'];
+        });
+      }
       _updateButtonEnabledStatus();
       showDialog(
           context: context,
@@ -296,9 +316,7 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
       'floorNumber': _floorNumberController.text,
       'buildingNumber': _buildingNumberController.text,
       'cityID': int.parse(_selectedCity.toString()),
-      'serviceTypesIDs': selectedServices!.isNotEmpty
-          ? selectedServices.join(',')
-          : _selectedServices,
+      'serviceTypesIDs': selectedServices,
       'nationalID': _nationalID,
       'commercialRegister': _commercialRegister,
     };
@@ -340,19 +358,21 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
   }
 
   void _updateButtonEnabledStatus() {
-    setState(() {
-      _isButtonEnabled = _englishNameController.text.isNotEmpty &&
-          _arabicNameController.text.isNotEmpty &&
-          _streetNameController.text.isNotEmpty &&
-          _buildingNumberController.text.isNotEmpty &&
-          _floorNumberController.text.isNotEmpty &&
-          _apartmentNumberController.text.isNotEmpty &&
-          _selectedSalesChannel != null &&
-          _selectedProduct != null &&
-          _selectedCity != null &&
-          _nationalID != null &&
-          _commercialRegister != null;
-    });
+    if (mounted) {
+      setState(() {
+        _isButtonEnabled = _englishNameController.text.isNotEmpty &&
+            _arabicNameController.text.isNotEmpty &&
+            _streetNameController.text.isNotEmpty &&
+            _buildingNumberController.text.isNotEmpty &&
+            _floorNumberController.text.isNotEmpty &&
+            _apartmentNumberController.text.isNotEmpty &&
+            _selectedSalesChannel != null &&
+            _selectedProduct != null &&
+            _selectedCity != null &&
+            _nationalID != null &&
+            _commercialRegister != null;
+      });
+    }
   }
 
   @override
@@ -431,10 +451,12 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                                       value: _selectedSalesChannel,
                                       onChanged: !_dataExists
                                           ? (newValue) {
-                                              setState(() {
-                                                _selectedSalesChannel =
-                                                    newValue!;
-                                              });
+                                              if (mounted) {
+                                                setState(() {
+                                                  _selectedSalesChannel =
+                                                      newValue!;
+                                                });
+                                              }
                                               _updateButtonEnabledStatus();
                                             }
                                           : null,
@@ -502,9 +524,11 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                                       value: _selectedProduct,
                                       onChanged: !_dataExists
                                           ? (newValue) {
-                                              setState(() {
-                                                _selectedProduct = newValue!;
-                                              });
+                                              if (mounted) {
+                                                setState(() {
+                                                  _selectedProduct = newValue!;
+                                                });
+                                              }
                                               _updateButtonEnabledStatus();
                                             }
                                           : null,
@@ -555,9 +579,11 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                                       value: _selectedCity,
                                       onChanged: !_dataExists
                                           ? (newValue) {
-                                              setState(() {
-                                                _selectedCity = newValue!;
-                                              });
+                                              if (mounted) {
+                                                setState(() {
+                                                  _selectedCity = newValue!;
+                                                });
+                                              }
                                               _updateButtonEnabledStatus();
                                             }
                                           : null,
@@ -670,10 +696,12 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                                         .toList(),
                                     listType: MultiSelectListType.CHIP,
                                     onConfirm: (selectedItems) {
-                                      setState(() {
-                                        _selectedServices =
-                                            List<int>.from(selectedItems);
-                                      });
+                                      if (mounted) {
+                                        setState(() {
+                                          _selectedServices =
+                                              List<int>.from(selectedItems);
+                                        });
+                                      }
                                     },
                                     buttonText: !_dataExists
                                         ? Text('Select Services')

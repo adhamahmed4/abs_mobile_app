@@ -1,11 +1,12 @@
 import 'package:abs_mobile_app/Login/login.dart';
+import 'package:abs_mobile_app/More/SupportTickets/tickets.dart';
+import 'package:abs_mobile_app/More/TermsAndConditions/termsAndConditions.dart';
 import 'package:abs_mobile_app/More/Wallet/wallet.dart';
 import 'package:abs_mobile_app/More/Settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../Configurations/app_config.dart';
-import 'package:http/http.dart' as http; // Import the http package
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class MorePage extends StatefulWidget {
@@ -15,10 +16,9 @@ class MorePage extends StatefulWidget {
 
 class _MorePageState extends State<MorePage> {
   bool isLoading = true;
-
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _mobileController = TextEditingController();
-  TextEditingController _avatarController = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
+  final TextEditingController _mobileController = TextEditingController();
+  final TextEditingController _avatarController = TextEditingController();
 
   String generateAvatarLetter(String name) {
     if (name.isEmpty) return '';
@@ -31,23 +31,21 @@ class _MorePageState extends State<MorePage> {
     return '';
   }
 
-  Future<void> fetchUserInfo() async {
+  Future<void> getUserInfo() async {
     final url = Uri.parse('${AppConfig.baseUrl}/users-with-info-client');
     final response = await http.get(url, headers: AppConfig.headers);
 
     if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
-      setState(() {
-        _nameController.text = responseBody[0]['firstName'] +
-            ' ' +
-            responseBody[0]['lastName']; // Update the name controller
-        _mobileController.text =
-            responseBody[0]['contactNumber']; // Update the mobile controller
-        _avatarController.text = responseBody[0]['avatar'] != null
-            ? responseBody[0]['avatar']
-            : ''; // Update the avatar controller
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _nameController.text =
+              responseBody[0]['firstName'] + ' ' + responseBody[0]['lastName'];
+          _mobileController.text = responseBody[0]['contactNumber'];
+          _avatarController.text = responseBody[0]['avatar'] ?? '';
+          isLoading = false;
+        });
+      }
     } else {
       showDialog(
         context: context,
@@ -58,7 +56,7 @@ class _MorePageState extends State<MorePage> {
             actions: <Widget>[
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
+                  Navigator.of(context).pop();
                 },
                 child: const Text('OK'),
               ),
@@ -72,17 +70,14 @@ class _MorePageState extends State<MorePage> {
   @override
   void initState() {
     super.initState();
-    fetchUserInfo(); // Call the method to fetch user info on page load
+    getUserInfo();
   }
 
   @override
   Widget build(BuildContext context) {
-    // final String fullName = 'Adham Ahmed';
-    // final String Mobile = '+201001307530';
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('More'),
+        title: const Text('More'),
         centerTitle: true,
       ),
       body: Stack(
@@ -93,7 +88,7 @@ class _MorePageState extends State<MorePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Container(
-                    padding: EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(16),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Row(
@@ -101,11 +96,11 @@ class _MorePageState extends State<MorePage> {
                         children: [
                           ClipOval(
                             child: Container(
-                                color: Color(0xFFEEF1F5),
+                                color: const Color(0xFFEEF1F5),
                                 child: _avatarController.text != ''
                                     ? FadeInImage.assetNetwork(
                                         placeholder:
-                                            'assets/images/profile_picture.jpg', // Placeholder image asset
+                                            'assets/images/profile_picture.jpg',
                                         image:
                                             '${AppConfig.baseUrl}/images/getImage?name=${_avatarController.text}',
                                         width: 80,
@@ -113,46 +108,30 @@ class _MorePageState extends State<MorePage> {
                                         fit: BoxFit.cover,
                                       )
                                     : CircleAvatar(
-                                        backgroundColor: Color(0xFFEEF1F5),
+                                        backgroundColor:
+                                            const Color(0xFFEEF1F5),
                                         radius: 40,
                                         child: Text(
                                           generateAvatarLetter(
                                               _nameController.text),
-                                          style: TextStyle(fontSize: 24),
+                                          style: const TextStyle(fontSize: 24),
                                         ),
-                                      )
-                                // Image.asset(
-                                //   'assets/images/profile_picture.jpg',
-                                //   width: 80,
-                                //   height: 80,
-                                //   errorBuilder: (BuildContext context, Object exception,
-                                //       StackTrace? stackTrace) {
-                                //     return CircleAvatar(
-                                //       backgroundColor: Color(0xFFEEF1F5),
-                                //       radius: 40,
-                                //       child: Text(
-                                //         generateAvatarLetter(_nameController.text),
-                                //         style: TextStyle(fontSize: 24),
-                                //       ),
-                                //     );
-                                //   },
-                                // ),
-                                ),
+                                      )),
                           ),
-                          SizedBox(width: 16),
+                          const SizedBox(width: 16),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 _nameController.text,
-                                style: TextStyle(
+                                style: const TextStyle(
                                     fontSize: 18, fontWeight: FontWeight.bold),
                               ),
-                              SizedBox(height: 8),
+                              const SizedBox(height: 8),
                               Text(
                                 _mobileController.text,
-                                style:
-                                    TextStyle(fontSize: 16, color: Colors.grey),
+                                style: const TextStyle(
+                                    fontSize: 16, color: Colors.grey),
                               ),
                             ],
                           ),
@@ -163,8 +142,7 @@ class _MorePageState extends State<MorePage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
                     child: ClipRRect(
-                      borderRadius:
-                          BorderRadius.circular(12), // Add border radius
+                      borderRadius: BorderRadius.circular(12),
                       child: Container(
                         color: Colors.grey.shade200,
                         child: ListTileTheme(
@@ -173,16 +151,15 @@ class _MorePageState extends State<MorePage> {
                             children: [
                               ListTile(
                                 tileColor: Colors.white,
-                                leading: Icon(Icons.settings),
-                                title: Text('Settings'),
-                                trailing: Icon(Icons.arrow_forward),
+                                leading: const Icon(Icons.settings),
+                                title: const Text('Settings'),
+                                trailing: const Icon(Icons.arrow_forward),
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     PageRouteBuilder(
-                                      transitionDuration: Duration(
-                                          milliseconds:
-                                              300), // Adjust the animation duration
+                                      transitionDuration:
+                                          const Duration(milliseconds: 300),
                                       pageBuilder: (_, __, ___) =>
                                           SettingsPage(),
                                       transitionsBuilder: (_,
@@ -191,7 +168,7 @@ class _MorePageState extends State<MorePage> {
                                           Widget child) {
                                         return SlideTransition(
                                           position: Tween<Offset>(
-                                            begin: Offset(1.0, 0.0),
+                                            begin: const Offset(1.0, 0.0),
                                             end: Offset.zero,
                                           ).animate(animation),
                                           child: child,
@@ -201,29 +178,48 @@ class _MorePageState extends State<MorePage> {
                                   );
                                 },
                               ),
-                              Divider(),
+                              const Divider(),
                               ListTile(
                                 tileColor: Colors.white,
-                                leading: Icon(Icons.wallet),
-                                title: Text('Wallet'),
-                                trailing: Icon(Icons.arrow_forward),
+                                leading: const Icon(Icons.wallet),
+                                title: const Text('Wallet'),
+                                trailing: const Icon(Icons.arrow_forward),
                                 onTap: () {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                        builder: (context) =>
-                                            WalletPage()), // Navigate to WalletPage
+                                        builder: (context) => WalletPage()),
                                   );
                                 },
                               ),
-                              Divider(),
+                              const Divider(),
                               ListTile(
                                 tileColor: Colors.white,
-                                leading: Icon(Icons.support),
-                                title: Text('Support Tickets'),
-                                trailing: Icon(Icons.arrow_forward),
+                                leading: const Icon(Icons.support),
+                                title: const Text('Support Tickets'),
+                                trailing: const Icon(Icons.arrow_forward),
                                 onTap: () {
-                                  // Handle profile tap
+                                  Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                      transitionDuration:
+                                          const Duration(milliseconds: 300),
+                                      pageBuilder: (_, __, ___) =>
+                                          TicketsPage(),
+                                      transitionsBuilder: (_,
+                                          Animation<double> animation,
+                                          __,
+                                          Widget child) {
+                                        return SlideTransition(
+                                          position: Tween<Offset>(
+                                            begin: const Offset(1.0, 0.0),
+                                            end: Offset.zero,
+                                          ).animate(animation),
+                                          child: child,
+                                        );
+                                      },
+                                    ),
+                                  );
                                 },
                               ),
                             ],
@@ -235,8 +231,7 @@ class _MorePageState extends State<MorePage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 0, 16, 32),
                     child: ClipRRect(
-                      borderRadius:
-                          BorderRadius.circular(12), // Add border radius
+                      borderRadius: BorderRadius.circular(12),
                       child: Container(
                         color: Colors.grey.shade200,
                         child: ListTileTheme(
@@ -245,21 +240,31 @@ class _MorePageState extends State<MorePage> {
                             children: [
                               ListTile(
                                 tileColor: Colors.white,
-                                leading: Icon(Icons.text_snippet),
-                                title: Text('Terms & Conditions'),
-                                trailing: Icon(Icons.arrow_forward),
+                                leading: const Icon(Icons.text_snippet),
+                                title: const Text('Terms & Conditions'),
+                                trailing: const Icon(Icons.arrow_forward),
                                 onTap: () {
-                                  // Handle email tap
-                                },
-                              ),
-                              Divider(),
-                              ListTile(
-                                tileColor: Colors.white,
-                                leading: Icon(Icons.policy),
-                                title: Text('Privacy Policy'),
-                                trailing: Icon(Icons.arrow_forward),
-                                onTap: () {
-                                  // Handle location tap
+                                  Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                      transitionDuration:
+                                          const Duration(milliseconds: 300),
+                                      pageBuilder: (_, __, ___) =>
+                                          TermsAndConditionsPage(),
+                                      transitionsBuilder: (_,
+                                          Animation<double> animation,
+                                          __,
+                                          Widget child) {
+                                        return SlideTransition(
+                                          position: Tween<Offset>(
+                                            begin: const Offset(1.0, 0.0),
+                                            end: Offset.zero,
+                                          ).animate(animation),
+                                          child: child,
+                                        );
+                                      },
+                                    ),
+                                  );
                                 },
                               ),
                             ],
@@ -273,15 +278,15 @@ class _MorePageState extends State<MorePage> {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
                       child: Container(
-                        color: Color.fromARGB(255, 255, 233, 233),
+                        color: const Color.fromARGB(255, 255, 233, 233),
                         child: ListTileTheme(
                           iconColor: Colors.red,
                           child: Column(
                             children: [
                               ListTile(
                                 tileColor: Colors.white,
-                                leading: Icon(Icons.logout),
-                                title: Text(
+                                leading: const Icon(Icons.logout),
+                                title: const Text(
                                   'Logout',
                                   style: TextStyle(
                                     color: Colors.red,
@@ -292,17 +297,16 @@ class _MorePageState extends State<MorePage> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: Center(
+                                        title: const Center(
                                             child: Text('Confirm Logout')),
-                                        content: Text(
+                                        content: const Text(
                                             'Are you sure you want to logout?'),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
-                                              Navigator.of(context)
-                                                  .pop(); // Close the dialog
+                                              Navigator.of(context).pop();
                                             },
-                                            child: Text('Cancel'),
+                                            child: const Text('Cancel'),
                                           ),
                                           TextButton(
                                             onPressed: () async {
@@ -310,8 +314,7 @@ class _MorePageState extends State<MorePage> {
                                                   await SharedPreferences
                                                       .getInstance();
                                               await prefs.clear();
-                                              Navigator.of(context)
-                                                  .pop(); // Close the dialog
+                                              Navigator.of(context).pop();
                                               Navigator.push(
                                                 context,
                                                 MaterialPageRoute(
@@ -319,7 +322,7 @@ class _MorePageState extends State<MorePage> {
                                                         LoginPage()),
                                               );
                                             },
-                                            child: Text(
+                                            child: const Text(
                                               'Logout',
                                               style: TextStyle(
                                                 color: Colors.red,

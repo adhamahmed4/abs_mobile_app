@@ -1,7 +1,8 @@
+import 'package:abs_mobile_app/Register/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
-import 'NextPage.dart';
+import './nextPage.dart';
 import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -83,13 +84,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
     List<String> nameParts = fullName.split(' ');
 
     if (nameParts.length != 2 || nameParts.any((part) => part.isEmpty)) {
-      setState(() {
-        _fullNameErrorText = 'Enter your first and last name';
-      });
+      if (mounted) {
+        setState(() {
+          _fullNameErrorText = 'Enter your first and last name';
+        });
+      }
     } else {
-      setState(() {
-        _fullNameErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _fullNameErrorText = '';
+        });
+      }
     }
 
     _updateButtonEnabledStatus(); // Call this here to update the button status
@@ -97,22 +102,30 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   void _validateUserName(String userName) {
     if (userName.isEmpty) {
-      setState(() {
-        _userNameErrorText = 'Enter a user name';
-      });
+      if (mounted) {
+        setState(() {
+          _userNameErrorText = 'Enter a user name';
+        });
+      }
     } else if (userName.length <= 7) {
-      setState(() {
-        _userNameErrorText = 'User name should be at least 8 characters long';
-      });
+      if (mounted) {
+        setState(() {
+          _userNameErrorText = 'User name should be at least 8 characters long';
+        });
+      }
     } else if (!RegExp(r'^[a-zA-Z0-9\s]+$').hasMatch(userName)) {
-      setState(() {
-        _userNameErrorText =
-            'User name should contain only letters, numbers, and spaces';
-      });
+      if (mounted) {
+        setState(() {
+          _userNameErrorText =
+              'User name should contain only letters, numbers, and spaces';
+        });
+      }
     } else {
-      setState(() {
-        _userNameErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _userNameErrorText = '';
+        });
+      }
     }
 
     _updateButtonEnabledStatus(); // Call this here to update the button status
@@ -120,13 +133,17 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   void _validateEmail(String email) {
     if (!EmailValidator.validate(email)) {
-      setState(() {
-        _emailErrorText = 'Enter a valid email';
-      });
+      if (mounted) {
+        setState(() {
+          _emailErrorText = 'Enter a valid email';
+        });
+      }
     } else {
-      setState(() {
-        _emailErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _emailErrorText = '';
+        });
+      }
     }
 
     _updateButtonEnabledStatus(); // Call this here to update the button status
@@ -193,40 +210,52 @@ class _RegistrationPageState extends State<RegistrationPage> {
     String password = _passwordController.text;
 
     if (confirmPassword != password) {
-      setState(() {
-        _confirmPasswordErrorText = 'Passwords do not match';
-      });
+      if (mounted) {
+        setState(() {
+          _confirmPasswordErrorText = 'Passwords do not match';
+        });
+      }
     } else {
-      setState(() {
-        _confirmPasswordErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _confirmPasswordErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _validatePhoneNumber(String phoneNumber) {
     if (phoneNumber.isEmpty) {
-      setState(() {
-        _phoneNumberErrorText = 'Phone number is required';
-      });
+      if (mounted) {
+        setState(() {
+          _phoneNumberErrorText = 'Phone number is required';
+        });
+      }
     } else if (phoneNumber.length != 11) {
-      setState(() {
-        _phoneNumberErrorText = 'Phone number must be 11 digits';
-      });
+      if (mounted) {
+        setState(() {
+          _phoneNumberErrorText = 'Phone number must be 11 digits';
+        });
+      }
     } else {
-      setState(() {
-        _phoneNumberErrorText = '';
-      });
+      if (mounted) {
+        setState(() {
+          _phoneNumberErrorText = '';
+        });
+      }
     }
     _updateButtonEnabledStatus();
   }
 
   void _updateCheckboxStatus(bool? newValue) {
     if (newValue != null) {
-      setState(() {
-        _isCheckboxChecked = newValue;
-        _updateButtonEnabledStatus(); // Update the button status based on the new checkbox state
-      });
+      if (mounted) {
+        setState(() {
+          _isCheckboxChecked = newValue;
+          _updateButtonEnabledStatus(); // Update the button status based on the new checkbox state
+        });
+      }
     }
   }
 
@@ -335,16 +364,16 @@ class _RegistrationPageState extends State<RegistrationPage> {
     log("_emailErrorText: $_emailErrorText");
     log("_confirmPasswordErrorText: $_confirmPasswordErrorText");
     log("_phoneNumberErrorText: $_phoneNumberErrorText");
-
-    setState(() {
-      _isButtonEnabled = _fullNameErrorText.isEmpty &&
-          _userNameErrorText.isEmpty &&
-          _emailErrorText.isEmpty &&
-          _phoneNumberErrorText.isEmpty &&
-          _passwordIsValid &&
-          _confirmPasswordController.text == _passwordController.text;
-    });
-    log("_isButtonEnabled: $_isButtonEnabled");
+    if (mounted) {
+      setState(() {
+        _isButtonEnabled = _fullNameErrorText.isEmpty &&
+            _userNameErrorText.isEmpty &&
+            _emailErrorText.isEmpty &&
+            _phoneNumberErrorText.isEmpty &&
+            _passwordIsValid &&
+            _confirmPasswordController.text == _passwordController.text;
+      });
+    }
   }
 
   final GlobalKey<FlutterPwValidatorState> validatorKey =
@@ -445,10 +474,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         controller: _passwordController,
                         obscureText: !_passwordVisible,
                         onTap: () {
-                          setState(() {
-                            _showPasswordValidation =
-                                true; // Show password validation on tap
-                          });
+                          if (mounted) {
+                            setState(() {
+                              _showPasswordValidation =
+                                  true; // Show password validation on tap
+                            });
+                          }
                         },
                         decoration: InputDecoration(
                           filled: true,
@@ -456,9 +487,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           hintText: "Password",
                           suffixIcon: GestureDetector(
                             onTap: () {
-                              setState(() {
-                                _passwordVisible = !_passwordVisible;
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  _passwordVisible = !_passwordVisible;
+                                });
+                              }
                             },
                             child: Icon(
                               _passwordVisible
@@ -484,15 +517,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         width: 400,
                         height: 130,
                         onSuccess: () {
-                          setState(() {
-                            _passwordIsValid = true;
-                          });
+                          if (mounted) {
+                            setState(() {
+                              _passwordIsValid = true;
+                            });
+                          }
                           _updateButtonEnabledStatus();
                         },
                         onFail: () {
-                          setState(() {
-                            _passwordIsValid = false;
-                          });
+                          if (mounted) {
+                            setState(() {
+                              _passwordIsValid = false;
+                            });
+                          }
                           _updateButtonEnabledStatus();
                         },
                       ),
@@ -507,10 +544,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         border: const OutlineInputBorder(),
                         suffixIcon: GestureDetector(
                           onTap: () {
-                            setState(() {
-                              _confirmPasswordVisible =
-                                  !_confirmPasswordVisible;
-                            });
+                            if (mounted) {
+                              setState(() {
+                                _confirmPasswordVisible =
+                                    !_confirmPasswordVisible;
+                              });
+                            }
                           },
                           child: Icon(
                             _confirmPasswordVisible
@@ -544,10 +583,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           value: _isCheckboxChecked,
                           onChanged: (bool? newValue) {
                             if (newValue != null) {
-                              setState(() {
-                                _isCheckboxChecked = newValue;
-                                _updateButtonEnabledStatus(); // Update the button status based on the new checkbox state
-                              });
+                              if (mounted) {
+                                setState(() {
+                                  _isCheckboxChecked = newValue;
+                                  _updateButtonEnabledStatus(); // Update the button status based on the new checkbox state
+                                });
+                              }
                             }
                           },
                         ),
@@ -579,67 +620,95 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           const SizedBox(
                               width:
                                   30), // Add spacing between the back button and "Next" button
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.white,
-                              fixedSize: const Size(282, 50),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(7),
-                                side: const BorderSide(
-                                  color: Color.fromARGB(255, 138, 138, 138),
-                                  width: 1.4,
+                          Expanded(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                fixedSize: const Size(282, 50),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(7),
+                                  side: const BorderSide(
+                                    color: Color.fromARGB(255, 138, 138, 138),
+                                    width: 1.4,
+                                  ),
                                 ),
                               ),
-                            ),
-                            onPressed: _isButtonEnabled && _isCheckboxChecked
-                                ? () async {
-                                    if (_formKey.currentState!.validate()) {
-                                      bool isEmailValid =
-                                          await _validateEmailExistence(
-                                              _emailController.text);
-                                      bool isUsernameValid =
-                                          await _validateUsernameExistence(
-                                              _userNameController.text);
-                                      bool isMobileValid =
-                                          await _validateMobileExistence(
-                                              _phoneNumberController.text);
+                              onPressed: _isButtonEnabled && _isCheckboxChecked
+                                  ? () async {
+                                      if (_formKey.currentState!.validate()) {
+                                        bool isEmailValid =
+                                            await _validateEmailExistence(
+                                                _emailController.text);
+                                        bool isUsernameValid =
+                                            await _validateUsernameExistence(
+                                                _userNameController.text);
+                                        bool isMobileValid =
+                                            await _validateMobileExistence(
+                                                _phoneNumberController.text);
 
-                                      if (isEmailValid &&
-                                          isUsernameValid &&
-                                          isMobileValid) {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) => NextPage()),
-                                        );
-                                      } else {
-                                        String errorMessage = '';
-                                        if (!isEmailValid)
-                                          errorMessage =
-                                              'Email is already taken.';
-                                        if (!isUsernameValid)
-                                          errorMessage =
-                                              'Username is already taken.';
-                                        if (!isMobileValid)
-                                          errorMessage =
-                                              'Mobile number is already taken.';
+                                        if (isEmailValid &&
+                                            isUsernameValid &&
+                                            isMobileValid) {
+                                          UserData userData = UserData(
+                                            fullName: _fullNameController.text,
+                                            userName: _userNameController.text,
+                                            email: _emailController.text,
+                                            phoneNumber:
+                                                _phoneNumberController.text,
+                                            password: _passwordController.text,
+                                          );
+                                          Navigator.push(
+                                            context,
+                                            PageRouteBuilder(
+                                              transitionDuration:
+                                                  Duration(milliseconds: 300),
+                                              pageBuilder: (_, __, ___) =>
+                                                  NextPage(
+                                                userData: userData,
+                                              ),
+                                              transitionsBuilder: (_,
+                                                  Animation<double> animation,
+                                                  __,
+                                                  Widget child) {
+                                                return SlideTransition(
+                                                  position: Tween<Offset>(
+                                                    begin: Offset(1.0, 0.0),
+                                                    end: Offset.zero,
+                                                  ).animate(animation),
+                                                  child: child,
+                                                );
+                                              },
+                                            ),
+                                          );
+                                        } else {
+                                          String errorMessage = '';
+                                          if (!isEmailValid)
+                                            errorMessage =
+                                                'Email is already taken.';
+                                          if (!isUsernameValid)
+                                            errorMessage =
+                                                'Username is already taken.';
+                                          if (!isMobileValid)
+                                            errorMessage =
+                                                'Mobile number is already taken.';
 
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(
-                                          SnackBar(
-                                            content: Text(errorMessage),
-                                            duration: Duration(seconds: 3),
-                                          ),
-                                        );
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(
+                                            SnackBar(
+                                              content: Text(errorMessage),
+                                              duration: Duration(seconds: 3),
+                                            ),
+                                          );
+                                        }
                                       }
                                     }
-                                  }
-                                : null,
-                            child: const Text(
-                              'Next',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Color.fromARGB(249, 95, 95, 95),
+                                  : null,
+                              child: const Text(
+                                'Next',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Color.fromARGB(249, 95, 95, 95),
+                                ),
                               ),
                             ),
                           ),

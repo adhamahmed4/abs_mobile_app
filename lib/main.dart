@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:image_picker/image_picker.dart';
-
-import 'Configurations/app_config.dart';
 import 'Login/login.dart';
 
 void main() async {
@@ -38,9 +35,9 @@ class MyApp extends StatelessWidget {
       title: 'ABS Courier & Freight Systems',
       theme: ThemeData(
           primarySwatch: primarySwatchColor,
-          scaffoldBackgroundColor: Color.fromARGB(
+          scaffoldBackgroundColor: const Color.fromARGB(
               255, 244, 246, 248), // Set the background color here
-          fontFamily: GoogleFonts.lexend().fontFamily),
+          fontFamily: GoogleFonts.openSans().fontFamily),
       debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {'/': (context) => LoginPage()},

@@ -6,6 +6,8 @@ import 'package:abs_mobile_app/More/Settings/PaymentMethods/NearestBranch/neares
 import 'package:abs_mobile_app/More/Settings/PaymentMethods/Wallet/wallet.dart';
 import 'package:abs_mobile_app/More/Settings/PaymentMethods/paymentMethods.dart';
 import 'package:abs_mobile_app/More/Settings/PersonalInfo/personalInfo.dart';
+import 'package:abs_mobile_app/More/Settings/PricePlan/pricePlan.dart';
+import 'package:abs_mobile_app/More/Settings/SubAccounts/subAccounts.dart';
 import 'package:abs_mobile_app/More/Settings/TeamMembers/teamMembers.dart';
 import 'package:flutter/material.dart';
 import '../../../../Configurations/app_config.dart';
@@ -210,11 +212,61 @@ class _SettingsPageState extends State<SettingsPage> {
                         Divider(),
                         ListTile(
                           tileColor: Colors.white,
+                          leading: Icon(Icons.account_tree),
+                          title: Text('Sub Accounts'),
+                          trailing: Icon(Icons.arrow_forward),
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                transitionDuration: Duration(
+                                    milliseconds:
+                                        300), // Adjust the animation duration
+                                pageBuilder: (_, __, ___) => SubAccountsPage(),
+                                transitionsBuilder: (_,
+                                    Animation<double> animation,
+                                    __,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                        ),
+                        Divider(),
+                        ListTile(
+                          tileColor: Colors.white,
                           leading: Icon(Icons.request_quote_outlined),
                           title: Text('Pricing Plan'),
                           trailing: Icon(Icons.arrow_forward),
                           onTap: () {
-                            // Handle profile tap
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                transitionDuration: Duration(
+                                    milliseconds:
+                                        300), // Adjust the animation duration
+                                pageBuilder: (_, __, ___) => PricePlanPage(),
+                                transitionsBuilder: (_,
+                                    Animation<double> animation,
+                                    __,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
                           },
                         ),
                         Divider(),
