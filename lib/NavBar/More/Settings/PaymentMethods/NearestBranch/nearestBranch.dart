@@ -109,9 +109,14 @@ class _NearestBranchPageState extends State<NearestBranchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Nearest Branch'),
-        centerTitle: true,
-      ),
+          title: const Text(
+            'Nearest Branch',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 244, 246, 248),
+          shadowColor: Colors.transparent,
+          iconTheme: IconThemeData(color: Colors.black)),
       body: Stack(
         children: [
           if (!isLoading)

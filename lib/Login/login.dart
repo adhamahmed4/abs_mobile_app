@@ -1,11 +1,7 @@
 import 'package:abs_mobile_app/Configurations/app_config.dart';
 import 'package:abs_mobile_app/NavBar/navBar.dart';
-import 'package:abs_mobile_app/Register/nextPage.dart';
 import 'package:flutter/material.dart';
 import 'package:abs_mobile_app/Register/register.dart';
-import 'package:abs_mobile_app/Home/Home.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http; // Import the http package
 

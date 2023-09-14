@@ -384,9 +384,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return Scaffold(
       backgroundColor: Color(0xFFEEF1F5),
       appBar: AppBar(
-        title: Text('Create an Account'),
-        automaticallyImplyLeading: false,
-      ),
+          title: const Text(
+            'Create an account',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 244, 246, 248),
+          shadowColor: Colors.transparent,
+          iconTheme: IconThemeData(color: Colors.black)),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,

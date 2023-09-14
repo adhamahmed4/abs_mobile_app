@@ -172,9 +172,14 @@ class _AddTicketPageState extends State<AddTicketPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create Ticket'),
-        centerTitle: true,
-      ),
+          title: const Text(
+            'Create Ticket',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 244, 246, 248),
+          shadowColor: Colors.transparent,
+          iconTheme: IconThemeData(color: Colors.black)),
       body: Column(
         children: [
           if (!isLoading)

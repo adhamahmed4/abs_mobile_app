@@ -70,9 +70,14 @@ class _ZoneDetailsPageState extends State<ZoneDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Zones Details'),
-        centerTitle: true,
-      ),
+          title: const Text(
+            'Zone Details',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 244, 246, 248),
+          shadowColor: Colors.transparent,
+          iconTheme: IconThemeData(color: Colors.black)),
       body: Stack(
         children: [
           if (!isLoading)

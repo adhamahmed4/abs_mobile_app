@@ -10,9 +10,15 @@ class _TermsAndConditionsState extends State<TermsAndConditionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: const Text('Terms & Conditions'),
-          centerTitle: true,
-        ),
+            title: const Text(
+              'Terms & Conditions',
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+            centerTitle: true,
+            backgroundColor: Color.fromARGB(255, 244, 246, 248),
+            shadowColor: Colors.transparent,
+            iconTheme: IconThemeData(color: Colors.black)),
         body: const SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(16.0),

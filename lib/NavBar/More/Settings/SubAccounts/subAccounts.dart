@@ -56,9 +56,14 @@ class _SubAccountsPageState extends State<SubAccountsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Sub Accounts'),
-        centerTitle: true,
-      ),
+          title: const Text(
+            'Sub Accounts',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 244, 246, 248),
+          shadowColor: Colors.transparent,
+          iconTheme: IconThemeData(color: Colors.black)),
       body: Column(
         children: [
           Expanded(
