@@ -17,9 +17,14 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Payment Methods'),
-        centerTitle: true,
-      ),
+          title: const Text(
+            'Payment Methods',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 244, 246, 248),
+          shadowColor: Colors.transparent,
+          iconTheme: IconThemeData(color: Colors.black)),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,

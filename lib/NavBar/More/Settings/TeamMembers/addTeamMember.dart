@@ -146,9 +146,14 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Add Member'),
-        centerTitle: true,
-      ),
+          title: const Text(
+            'Add Team Member',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 244, 246, 248),
+          shadowColor: Colors.transparent,
+          iconTheme: IconThemeData(color: Colors.black)),
       body: Column(
         children: [
           if (!isLoading)

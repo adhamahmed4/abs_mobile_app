@@ -77,8 +77,13 @@ class _MorePageState extends State<MorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('More'),
+        title: const Text(
+          'More',
+          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        ),
         centerTitle: true,
+        backgroundColor: Color.fromARGB(255, 244, 246, 248),
+        shadowColor: Colors.transparent,
       ),
       body: Stack(
         children: [

@@ -459,9 +459,14 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Business Locations'),
-        centerTitle: true,
-      ),
+          title: const Text(
+            'Business Locations',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 244, 246, 248),
+          shadowColor: Colors.transparent,
+          iconTheme: IconThemeData(color: Colors.black)),
       body: Stack(
         children: [
           if (!isLoading)

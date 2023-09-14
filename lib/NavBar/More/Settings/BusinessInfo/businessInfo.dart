@@ -114,15 +114,16 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
-
-      setState(() {
-        _salesChannels = jsonData.map<Map<String, dynamic>>((dynamic item) {
-          return {
-            'Sales Channeel Type ID': item['Sales Channeel Type ID'],
-            'Sales Channeel Type': item['Sales Channeel Type'],
-          };
-        }).toList();
-      });
+      if (mounted) {
+        setState(() {
+          _salesChannels = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {
+              'Sales Channeel Type ID': item['Sales Channeel Type ID'],
+              'Sales Channeel Type': item['Sales Channeel Type'],
+            };
+          }).toList();
+        });
+      }
     } else {
       throw Exception('Failed to load data');
     }
@@ -379,9 +380,14 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Business Info'),
-        centerTitle: true,
-      ),
+          title: const Text(
+            'Business Info',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 244, 246, 248),
+          shadowColor: Colors.transparent,
+          iconTheme: IconThemeData(color: Colors.black)),
       body: Stack(
         children: [
           if (!isLoading)

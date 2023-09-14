@@ -58,9 +58,14 @@ class _PricePlanPageState extends State<PricePlanPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Price Plan'),
-        centerTitle: true,
-      ),
+          title: const Text(
+            'Price Plan',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          ),
+          centerTitle: true,
+          backgroundColor: Color.fromARGB(255, 244, 246, 248),
+          shadowColor: Colors.transparent,
+          iconTheme: IconThemeData(color: Colors.black)),
       body: Stack(
         children: [
           if (!isLoading)
