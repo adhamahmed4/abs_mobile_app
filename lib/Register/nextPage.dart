@@ -1,4 +1,4 @@
-import 'package:abs_mobile_app/Home/navBar.dart';
+import 'package:abs_mobile_app/NavBar/navBar.dart';
 import 'package:abs_mobile_app/Register/table_widget.dart';
 import 'package:abs_mobile_app/Register/user_data.dart';
 import 'package:abs_mobile_app/Register/zoneDetails.dart';
