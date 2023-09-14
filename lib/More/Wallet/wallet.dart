@@ -63,8 +63,8 @@ class _WalletPageState extends State<WalletPage> {
             Container(
               padding: EdgeInsets.all(16.0),
               decoration: BoxDecoration(
-                color:
-                    Color(0xFF2B2E83), // Background color for the title 'AWB'
+                color: Color.fromARGB(
+                    255, 255, 255, 255), // Background color for the title 'AWB'
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12.0),
                   topRight: Radius.circular(12.0),
@@ -76,10 +76,12 @@ class _WalletPageState extends State<WalletPage> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
-                  color: Colors.white, // Text color for the title 'AWB'
+                  color: const Color.fromARGB(
+                      255, 0, 0, 0), // Text color for the title 'AWB'
                 ),
               ),
             ),
+            Divider(),
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
