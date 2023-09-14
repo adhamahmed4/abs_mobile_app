@@ -1,7 +1,7 @@
 import 'package:abs_mobile_app/Login/login.dart';
 import 'package:abs_mobile_app/NavBar/More/SupportTickets/tickets.dart';
 import 'package:abs_mobile_app/NavBar/More/TermsAndConditions/termsAndConditions.dart';
-import 'package:abs_mobile_app/NavBar/More/Wallet/wallet.dart';
+import 'package:abs_mobile_app/More/Wallet/wallet.dart';
 import 'package:abs_mobile_app/NavBar/More/Settings/settings.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
