@@ -96,6 +96,33 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                     color: Colors.white, fontSize: 16),
                               ),
                             ),
+                            const Spacer(),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                              child: Card(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                                elevation: 2,
+                                child: const Padding(
+                                  padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.filter_list,
+                                          color: Colors.black, size: 18),
+                                      SizedBox(width: 8),
+                                      Text(
+                                        'Filter',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -128,11 +155,10 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                       Row(
                                         children: [
                                           Text(
-                                            shipment["AWB"].toString(),
+                                            '${shipment["AWB"]}',
                                             style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.black,
+                                              fontSize: 14,
+                                              color: Colors.grey,
                                             ),
                                           ),
                                           const Spacer(),
@@ -149,6 +175,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                               shipment["Status"],
                                               style: const TextStyle(
                                                   color: Colors.black,
+                                                  fontWeight: FontWeight.bold,
                                                   fontSize: 14),
                                             ),
                                           ),
@@ -157,11 +184,58 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                       const SizedBox(height: 8),
                                       Row(
                                         children: [
-                                          const Icon(Icons.location_on_outlined,
-                                              size: 16),
-                                          const SizedBox(width: 6),
                                           Text(
-                                            shipment["Special Instructions"],
+                                            shipment["Consignee Name"],
+                                            style: const TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          const Spacer(),
+                                          Container(
+                                            padding: const EdgeInsets.fromLTRB(
+                                                10, 2, 10, 2),
+                                            decoration: BoxDecoration(
+                                              color: Colors.black,
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                            ),
+                                            child: Text(
+                                              '${shipment["Cash"].abs()} EGP',
+                                              style: const TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 14),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Row(
+                                        children: [
+                                          Text(
+                                            shipment[
+                                                    "Consignee Phone Number"] ??
+                                                '',
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          Text(
+                                            shipment["Consignee Phone Number"] !=
+                                                        null &&
+                                                    shipment[
+                                                            "Consignee City"] !=
+                                                        null
+                                                ? '|'
+                                                : '',
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                          Text(
+                                            shipment["Consignee City"] ?? '',
                                             style: const TextStyle(
                                               fontSize: 14,
                                               color: Colors.grey,
@@ -179,23 +253,26 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                       if (!isClicked &&
                               _shipments.length + 5 == _shipmentsLimit ||
                           _shipments.length == _shipmentsLimit)
-                        Center(
-                          child: TextButton(
-                            onPressed: () {
-                              if (mounted) {
-                                setState(() {
-                                  isClicked = true;
-                                  _shipmentsLimit += 5;
-                                  getShipments();
-                                });
-                              }
-                            },
-                            child: const Text(
-                              'Load More',
-                              style: TextStyle(
-                                color: Colors.orange,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(8, 0, 8, 40),
+                          child: Center(
+                            child: TextButton(
+                              onPressed: () {
+                                if (mounted) {
+                                  setState(() {
+                                    isClicked = true;
+                                    _shipmentsLimit += 5;
+                                    getShipments();
+                                  });
+                                }
+                              },
+                              child: const Text(
+                                'Load More',
+                                style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
