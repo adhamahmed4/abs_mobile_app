@@ -74,7 +74,7 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
-          backgroundColor: Color.fromARGB(255, 244, 246, 248),
+          backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
           iconTheme: IconThemeData(color: Colors.black)),
       body: Column(
@@ -99,7 +99,8 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
                   ListView(
                     children: _teamMembers.map((teamMember) {
                       return Card(
-                        elevation: 2,
+                        color: const Color.fromARGB(255, 229, 229, 229),
+                        elevation: 4,
                         margin: EdgeInsets.all(10),
                         child: ListTile(
                           leading: teamMember["Avatar"] != null

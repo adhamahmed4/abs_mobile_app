@@ -108,7 +108,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
-          backgroundColor: Color.fromARGB(255, 244, 246, 248),
+          backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
           iconTheme: IconThemeData(color: Colors.black)),
       body: Form(

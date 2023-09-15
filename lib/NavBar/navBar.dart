@@ -1,6 +1,6 @@
 import 'package:abs_mobile_app/NavBar/More/More.dart';
 import 'package:abs_mobile_app/NavBar/Home/Home.dart';
-import 'package:abs_mobile_app/NavBar/Shipments/shipments.dart';
+import 'package:abs_mobile_app/NavBar/Orders/orders.dart';
 import 'package:abs_mobile_app/Track/track.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
@@ -17,7 +17,7 @@ class _NavBarState extends State<NavBar> {
 
   final List<Widget> _pages = [
     HomePage(),
-    ShipmentsPage(),
+    OrdersPage(),
     TrackPage(),
     MorePage(),
   ];

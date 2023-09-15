@@ -61,7 +61,7 @@ class _SubAccountsPageState extends State<SubAccountsPage> {
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
-          backgroundColor: Color.fromARGB(255, 244, 246, 248),
+          backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
           iconTheme: IconThemeData(color: Colors.black)),
       body: Column(
@@ -85,6 +85,7 @@ class _SubAccountsPageState extends State<SubAccountsPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: _subAccounts.map((subAccount) {
                       return Card(
+                        color: const Color.fromARGB(255, 229, 229, 229),
                         elevation: 4, // Adjust the elevation as needed
                         margin: const EdgeInsets.symmetric(
                             horizontal: 16, vertical: 8), // Adjust margins
