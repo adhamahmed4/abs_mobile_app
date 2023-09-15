@@ -75,7 +75,7 @@ class _ZoneDetailsPageState extends State<ZoneDetailsPage> {
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
-          backgroundColor: Color.fromARGB(255, 244, 246, 248),
+          backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
           iconTheme: IconThemeData(color: Colors.black)),
       body: Stack(
@@ -86,46 +86,52 @@ class _ZoneDetailsPageState extends State<ZoneDetailsPage> {
                 children: zones.map((zone) {
                   final cities = zoneCities[zone['Zone ID']] ?? [];
 
-                  return Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: Text(
-                              zone['Zone'],
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
+                      elevation: 4,
+                      color: const Color.fromARGB(255, 229, 229, 229),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: Text(
+                                zone['Zone'],
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
                               ),
                             ),
-                          ),
-                          Wrap(
-                            spacing: 8.0,
-                            runSpacing: 8.0,
-                            children: cities.map((city) {
-                              return InkWell(
-                                onTap: () {
-                                  // Handle city tap if needed
-                                },
-                                child: Container(
-                                  padding: EdgeInsets.all(8.0),
-                                  decoration: BoxDecoration(
-                                    color: Colors.orange,
-                                    borderRadius: BorderRadius.circular(20),
-                                  ),
-                                  child: Text(
-                                    city['City Name'],
-                                    style: TextStyle(
-                                      color: Colors.white,
+                            Divider(),
+                            Wrap(
+                              spacing: 8.0,
+                              runSpacing: 8.0,
+                              children: cities.map((city) {
+                                return InkWell(
+                                  onTap: () {
+                                    // Handle city tap if needed
+                                  },
+                                  child: Container(
+                                    padding: EdgeInsets.all(8.0),
+                                    decoration: BoxDecoration(
+                                      color: Colors.orange,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Text(
+                                      city['City Name'],
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              );
-                            }).toList(),
-                          ),
-                        ],
+                                );
+                              }).toList(),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   );

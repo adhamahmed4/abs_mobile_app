@@ -58,6 +58,7 @@ dependencies:
   intl: ^0.18.1
   flutter_date_range_picker: ^0.0.14
   timeline_tile: ^2.0.0
+  toggle_switch: ^2.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

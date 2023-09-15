@@ -82,7 +82,7 @@ class _MorePageState extends State<MorePage> {
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 244, 246, 248),
+        backgroundColor: Colors.white,
         shadowColor: Colors.transparent,
       ),
       body: Stack(

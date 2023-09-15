@@ -386,357 +386,121 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 246, 248),
-      body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.topLeft,
-                  child: Container(
-                    padding: const EdgeInsets.all(4),
-                    child: Image.asset(
-                      'assets/images/logo.png',
-                      width: 180,
-                      height: 150,
+      body: Container(
+        color: const Color.fromARGB(255, 237, 237, 237),
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.topLeft,
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      child: Image.asset(
+                        'assets/images/logo.png',
+                        width: 180,
+                        height: 150,
+                      ),
                     ),
                   ),
-                ),
-                if (!_isLoading)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(16, 3, 16, 16),
-                        child: Row(
-                          children: [
-                            Text(
-                              'Hello, $userName',
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(width: 8),
-                            const Text('👋', style: TextStyle(fontSize: 24)),
-                          ],
-                        ),
-                      ),
-                      Visibility(
-                        visible: isRowVisible,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Container(
-                                  width: 380,
-                                  padding: const EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.1),
-                                        spreadRadius: 1,
-                                        blurRadius: 10,
-                                        offset: const Offset(0, 3),
-                                      ),
-                                    ],
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        children: [
-                                          const SizedBox(width: 8),
-                                          const Text(
-                                            'Complete your'
-                                            '\n'
-                                            'account for'
-                                            '\n'
-                                            'a full experience',
-                                            style: TextStyle(
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.bold,
-                                              color:
-                                                  Color.fromARGB(249, 0, 0, 0),
-                                            ),
-                                          ),
-                                          const SizedBox(width: 70),
-                                          _buildStatusCircle(
-                                              validatedConditionsCount,
-                                              totalConditionsCount),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: validationData.map((data) {
-                                          final verificationType =
-                                              data['Verification Type']
-                                                  as String;
-                                          final isVerified =
-                                              data['isVerified'] as bool;
-                                          return Builder(
-                                            builder: (context) {
-                                              return _buildStatusRow(context,
-                                                  verificationType, isVerified);
-                                            },
-                                          );
-                                        }).toList(),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      Center(
-                        child: Container(
-                          width: 380,
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 1,
-                                blurRadius: 10,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                  if (!_isLoading)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 3, 16, 16),
+                          child: Row(
                             children: [
-                              const Text(
-                                'Shipments Overview',
-                                style: TextStyle(
-                                  fontSize: 18,
+                              Text(
+                                'Hello, $userName',
+                                style: const TextStyle(
+                                  fontSize: 24,
                                   fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(249, 0, 0, 0),
                                 ),
                               ),
-                              const SizedBox(height: 16),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width: 4,
-                                            height: 50,
-                                            color: const Color(0xFF2B2E83),
-                                          ),
-                                          const SizedBox(height: 8),
-                                          const Text(
-                                            'New Shipments',
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: Color.fromARGB(
-                                                  248, 125, 125, 125),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        left: 8,
-                                        child: Text(
-                                          newShipmentsCount.toString(),
-                                          style: const TextStyle(
-                                            fontSize: 30,
-                                            color:
-                                                Color.fromARGB(248, 79, 79, 79),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Stack(
-                                    alignment: Alignment.center,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            width: 4,
-                                            height: 50,
-                                            color: Colors.orange,
-                                          ),
-                                          const SizedBox(height: 8),
-                                          const Text(
-                                            'Processing Shipments',
-                                            style: TextStyle(
-                                              fontSize: 15,
-                                              color: Color.fromARGB(
-                                                  248, 125, 125, 125),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Positioned(
-                                        top: 0,
-                                        left: 8,
-                                        child: Text(
-                                          processingShipmentsCount.toString(),
-                                          style: const TextStyle(
-                                            fontSize: 30,
-                                            color:
-                                                Color.fromARGB(248, 79, 79, 79),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                              const SizedBox(width: 8),
+                              const Text('👋', style: TextStyle(fontSize: 24)),
                             ],
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      Center(
-                        child: Container(
-                          width: 380,
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 1,
-                                blurRadius: 10,
-                                offset: const Offset(0, 3),
-                              ),
-                            ],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                        Visibility(
+                          visible: isRowVisible,
+                          child: Row(
                             children: [
-                              const Text(
-                                'Processing Shipments',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color.fromARGB(249, 0, 0, 0),
+                              Expanded(
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                    width: 380,
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(10),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.black.withOpacity(0.1),
+                                          spreadRadius: 1,
+                                          blurRadius: 10,
+                                          offset: const Offset(0, 3),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          children: [
+                                            const SizedBox(width: 8),
+                                            const Text(
+                                              'Complete your'
+                                              '\n'
+                                              'account for'
+                                              '\n'
+                                              'a full experience',
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                fontWeight: FontWeight.bold,
+                                                color: Color.fromARGB(
+                                                    249, 0, 0, 0),
+                                              ),
+                                            ),
+                                            const SizedBox(width: 70),
+                                            _buildStatusCircle(
+                                                validatedConditionsCount,
+                                                totalConditionsCount),
+                                          ],
+                                        ),
+                                        Column(
+                                          children: validationData.map((data) {
+                                            final verificationType =
+                                                data['Verification Type']
+                                                    as String;
+                                            final isVerified =
+                                                data['isVerified'] as bool;
+                                            return Builder(
+                                              builder: (context) {
+                                                return _buildStatusRow(
+                                                    context,
+                                                    verificationType,
+                                                    isVerified);
+                                              },
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              const Text(
-                                'Status for all Shipments under processing',
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.grey,
-                                ),
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    "In Transit",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color.fromARGB(255, 75, 75, 75),
-                                    ),
-                                  ),
-                                  Text(
-                                    inTransitCount.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    "Out for Delivery",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color.fromARGB(255, 75, 75, 75),
-                                    ),
-                                  ),
-                                  Text(
-                                    outForDeliveryCount.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    "Out for Return",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color.fromARGB(255, 75, 75, 75),
-                                    ),
-                                  ),
-                                  Text(
-                                    outForReturnCount.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 20),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  const Text(
-                                    "On Hold",
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Color.fromARGB(255, 75, 75, 75),
-                                    ),
-                                  ),
-                                  Text(
-                                    onHoldCount.toString(),
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
                               ),
                             ],
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      Center(
-                        child: Expanded(
+                        const SizedBox(height: 20),
+                        Center(
                           child: Container(
                             width: 380,
                             padding: const EdgeInsets.all(16),
@@ -756,7 +520,120 @@ class _HomePageState extends State<HomePage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                  'Processed Shipments',
+                                  'Shipments Overview',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: Color.fromARGB(249, 0, 0, 0),
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              width: 4,
+                                              height: 50,
+                                              color: const Color(0xFF2B2E83),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            const Text(
+                                              'New Shipments',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                color: Color.fromARGB(
+                                                    248, 125, 125, 125),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Positioned(
+                                          top: 0,
+                                          left: 8,
+                                          child: Text(
+                                            newShipmentsCount.toString(),
+                                            style: const TextStyle(
+                                              fontSize: 30,
+                                              color: Color.fromARGB(
+                                                  248, 79, 79, 79),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    Stack(
+                                      alignment: Alignment.center,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                              width: 4,
+                                              height: 50,
+                                              color: Colors.orange,
+                                            ),
+                                            const SizedBox(height: 8),
+                                            const Text(
+                                              'Processing Shipments',
+                                              style: TextStyle(
+                                                fontSize: 15,
+                                                color: Color.fromARGB(
+                                                    248, 125, 125, 125),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Positioned(
+                                          top: 0,
+                                          left: 8,
+                                          child: Text(
+                                            processingShipmentsCount.toString(),
+                                            style: const TextStyle(
+                                              fontSize: 30,
+                                              color: Color.fromARGB(
+                                                  248, 79, 79, 79),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Center(
+                          child: Container(
+                            width: 380,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Processing Shipments',
                                   style: TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
@@ -767,7 +644,7 @@ class _HomePageState extends State<HomePage> {
                                   height: 5,
                                 ),
                                 const Text(
-                                  'Status for all processed Shipments',
+                                  'Status for all Shipments under processing',
                                   style: TextStyle(
                                     fontSize: 14,
                                     color: Colors.grey,
@@ -779,14 +656,14 @@ class _HomePageState extends State<HomePage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text(
-                                      "Delivered",
+                                      "In Transit",
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Color.fromARGB(255, 75, 75, 75),
                                       ),
                                     ),
                                     Text(
-                                      deliveredCount.toString(),
+                                      inTransitCount.toString(),
                                       style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.grey,
@@ -800,14 +677,14 @@ class _HomePageState extends State<HomePage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text(
-                                      "Undelivered",
+                                      "Out for Delivery",
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Color.fromARGB(255, 75, 75, 75),
                                       ),
                                     ),
                                     Text(
-                                      undeliveredCount.toString(),
+                                      outForDeliveryCount.toString(),
                                       style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.grey,
@@ -821,14 +698,35 @@ class _HomePageState extends State<HomePage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text(
-                                      "Returned To Shipper",
+                                      "Out for Return",
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: Color.fromARGB(255, 75, 75, 75),
                                       ),
                                     ),
                                     Text(
-                                      returnedToShipperCount.toString(),
+                                      outForReturnCount.toString(),
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 20),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text(
+                                      "On Hold",
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: Color.fromARGB(255, 75, 75, 75),
+                                      ),
+                                    ),
+                                    Text(
+                                      onHoldCount.toString(),
                                       style: const TextStyle(
                                         fontSize: 16,
                                         color: Colors.grey,
@@ -840,94 +738,204 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                      Center(
-                        child: Container(
-                          width: 380,
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                spreadRadius: 1,
-                                blurRadius: 10,
-                                offset: const Offset(0, 3),
+                        const SizedBox(height: 20),
+                        Center(
+                          child: Expanded(
+                            child: Container(
+                              width: 380,
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withOpacity(0.1),
+                                    spreadRadius: 1,
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
+                              child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
-                                    child: Text(
-                                      'Your Balance',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color.fromARGB(249, 0, 0, 0),
-                                      ),
+                                  const Text(
+                                    'Processed Shipments',
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color.fromARGB(249, 0, 0, 0),
                                     ),
                                   ),
+                                  const SizedBox(
+                                    height: 5,
+                                  ),
+                                  const Text(
+                                    'Status for all processed Shipments',
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
                                   Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Text(
-                                        ((totalCash - absFees).toString()),
-                                        style: const TextStyle(
-                                          fontSize: 45,
-                                          color: Color(0xFF2B2E83),
+                                      const Text(
+                                        "Delivered",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color:
+                                              Color.fromARGB(255, 75, 75, 75),
                                         ),
                                       ),
-                                      const Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: Text(
-                                          'EGP',
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            color: Colors.grey,
-                                          ),
+                                      Text(
+                                        deliveredCount.toString(),
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        "Undelivered",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color:
+                                              Color.fromARGB(255, 75, 75, 75),
+                                        ),
+                                      ),
+                                      Text(
+                                        undeliveredCount.toString(),
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text(
+                                        "Returned To Shipper",
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color:
+                                              Color.fromARGB(255, 75, 75, 75),
+                                        ),
+                                      ),
+                                      Text(
+                                        returnedToShipperCount.toString(),
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.grey,
                                         ),
                                       ),
                                     ],
                                   ),
                                 ],
                               ),
-                              Container(
-                                width: 70,
-                                height: 70,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Color(0xFF2B2E83),
-                                ),
-                                child: const Icon(
-                                  Icons.account_balance_wallet,
-                                  color: Colors.white,
-                                  size: 45,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-              ],
+                        const SizedBox(height: 20),
+                        Center(
+                          child: Container(
+                            width: 380,
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  spreadRadius: 1,
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    const Padding(
+                                      padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
+                                      child: Text(
+                                        'Your Balance',
+                                        style: TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color.fromARGB(249, 0, 0, 0),
+                                        ),
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Text(
+                                          ((totalCash - absFees).toString()),
+                                          style: const TextStyle(
+                                            fontSize: 45,
+                                            color: Color(0xFF2B2E83),
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.all(8.0),
+                                          child: Text(
+                                            'EGP',
+                                            style: TextStyle(
+                                              fontSize: 20,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  width: 70,
+                                  height: 70,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: Color(0xFF2B2E83),
+                                  ),
+                                  child: const Icon(
+                                    Icons.account_balance_wallet,
+                                    color: Colors.white,
+                                    size: 45,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                ],
+              ),
             ),
-          ),
-          Visibility(
-            visible: _isLoading,
-            child: const Center(
-              child: CircularProgressIndicator(),
+            Visibility(
+              visible: _isLoading,
+              child: const Center(
+                child: CircularProgressIndicator(),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
