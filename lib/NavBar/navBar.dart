@@ -14,6 +14,8 @@ class NavBar extends StatefulWidget {
 
 class _NavBarState extends State<NavBar> {
   int _selectedIndex = 0;
+  final PageController _pageController =
+      PageController(); // Added PageController
 
   final List<Widget> _pages = [
     HomePage(),
@@ -22,11 +24,28 @@ class _NavBarState extends State<NavBar> {
     MorePage(),
   ];
 
+  void switchPage(int index) {
+    _pageController.animateToPage(
+      index,
+      duration:
+          Duration(milliseconds: 300), // You can adjust the animation duration
+      curve: Curves.ease,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFEEF1F5),
-      body: _pages[_selectedIndex],
+      body: PageView(
+        controller: _pageController, // Use the PageController
+        children: _pages,
+        onPageChanged: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+      ),
       bottomNavigationBar: Stack(
         alignment: Alignment.bottomCenter,
         children: [
@@ -48,12 +67,9 @@ class _NavBarState extends State<NavBar> {
               activeColor: Colors.orange,
               padding: const EdgeInsets.all(16),
               gap: 8,
+              selectedIndex: _selectedIndex, // Set the selected index
               onTabChange: (index) {
-                if (mounted) {
-                  setState(() {
-                    _selectedIndex = index;
-                  });
-                }
+                switchPage(index); // Call your switchPage function
               },
               tabs: const [
                 GButton(
