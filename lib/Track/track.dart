@@ -6,6 +6,9 @@ import 'dart:convert';
 import 'package:intl/intl.dart';
 
 class TrackPage extends StatefulWidget {
+  String? awb;
+
+  TrackPage({super.key, this.awb});
   @override
   _TrackPageState createState() => _TrackPageState();
 }
@@ -38,6 +41,16 @@ class _TrackPageState extends State<TrackPage> {
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    if (widget.awb != null) {
+      _searchController.text = widget.awb!;
+      getShipmentHistory();
+      getShipmentData();
+    }
+  }
+
   String formatDateTime(String dateTimeString) {
     final dateTime = DateTime.parse(dateTimeString).toLocal();
     final formatter = DateFormat('dd-MM-yyyy h:mm a');
@@ -58,31 +71,31 @@ class _TrackPageState extends State<TrackPage> {
       final response = await http.get(url, headers: AppConfig.headers);
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
-        print(data);
         if (data.isEmpty) {
           if (mounted) {
             setState(() {
               trackingNumberEntered = false;
               isLoading = false;
             });
+
+            showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    title: const Text('Error'),
+                    content: const Text('AWB is incorrect'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  );
+                });
+            return;
           }
-          showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: Text('Error'),
-                  content: Text('AWB is incorrect'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Text('OK'),
-                    ),
-                  ],
-                );
-              });
-          return;
         }
 
         if (mounted) {
@@ -172,7 +185,7 @@ class _TrackPageState extends State<TrackPage> {
             trackingNumberEntered = true;
             _serviceController.text = jsonData['Service'];
             _productController.text = jsonData['Product'];
-            _codController.text = (jsonData['Cash'].abs()).toString() + ' EGP';
+            _codController.text = '${jsonData['Cash'].abs()} EGP';
             _specialInstructionsController.text =
                 jsonData['Special Instructions'];
             _nameController.text = jsonData['Consignee'];
@@ -201,10 +214,10 @@ class _TrackPageState extends State<TrackPage> {
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: Container(
         height: double.infinity,
-        color: Color.fromARGB(255, 226, 226, 226),
+        color: const Color.fromARGB(255, 226, 226, 226),
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center, // Center vertically
@@ -214,7 +227,7 @@ class _TrackPageState extends State<TrackPage> {
                 padding: const EdgeInsets.fromLTRB(8, 8, 8, 0),
                 child: Card(
                   shadowColor: Colors.transparent,
-                  color: Color.fromARGB(255, 226, 226, 226),
+                  color: const Color.fromARGB(255, 226, 226, 226),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
@@ -222,7 +235,7 @@ class _TrackPageState extends State<TrackPage> {
                     children: [
                       Expanded(
                         child: Container(
-                          padding: EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8.0),
                           width: double.infinity,
                           child: TextField(
                             controller: _searchController,
@@ -233,7 +246,7 @@ class _TrackPageState extends State<TrackPage> {
                               ),
                               filled: true,
                               fillColor: Colors.white,
-                              contentPadding: EdgeInsets.symmetric(
+                              contentPadding: const EdgeInsets.symmetric(
                                 vertical: 8.0,
                                 horizontal: 16.0,
                               ),
@@ -246,14 +259,14 @@ class _TrackPageState extends State<TrackPage> {
                         ),
                       ),
                       IconButton(
-                        icon: Icon(Icons.search),
+                        icon: const Icon(Icons.search),
                         onPressed: () {
                           getShipmentHistory();
                           getShipmentData();
                         },
                       ),
                       IconButton(
-                        icon: Icon(Icons.clear),
+                        icon: const Icon(Icons.clear),
                         onPressed: () {
                           setState(() {
                             _searchController.clear();
@@ -279,7 +292,7 @@ class _TrackPageState extends State<TrackPage> {
               ),
               Visibility(
                 visible: !trackingNumberEntered && !isLoading,
-                child: Text(
+                child: const Text(
                   'No Data',
                   style: TextStyle(
                     fontSize: 18,
@@ -292,7 +305,7 @@ class _TrackPageState extends State<TrackPage> {
                 visible: trackingNumberEntered && !isLoading,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
+                  child: SizedBox(
                     width: double.infinity,
                     child: Card(
                       elevation: 4,
@@ -302,7 +315,7 @@ class _TrackPageState extends State<TrackPage> {
                       child: Column(
                         children: [
                           const Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: EdgeInsets.all(16.0),
                             child: Row(
                               children: [
                                 Icon(
@@ -373,7 +386,7 @@ class _TrackPageState extends State<TrackPage> {
                 visible: trackingNumberEntered && !isLoading,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
+                  child: SizedBox(
                     width: double.infinity,
                     child: Card(
                       elevation: 4,
@@ -383,7 +396,7 @@ class _TrackPageState extends State<TrackPage> {
                       child: Column(
                         children: [
                           const Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: EdgeInsets.all(16.0),
                             child: Row(
                               children: [
                                 Icon(
@@ -488,7 +501,7 @@ class _TrackPageState extends State<TrackPage> {
                 visible: trackingNumberEntered && !isLoading,
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Container(
+                  child: SizedBox(
                     width: double.infinity,
                     child: Card(
                       elevation: 4,
@@ -498,7 +511,7 @@ class _TrackPageState extends State<TrackPage> {
                       child: Column(
                         children: [
                           const Padding(
-                            padding: const EdgeInsets.all(16.0),
+                            padding: EdgeInsets.all(16.0),
                             child: Row(
                               children: [
                                 Icon(
@@ -572,7 +585,7 @@ class _TrackPageState extends State<TrackPage> {
                 ),
               ),
               if (isLoading)
-                Center(
+                const Center(
                   child: CircularProgressIndicator(),
                 ),
             ],
