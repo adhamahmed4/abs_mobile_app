@@ -1,4 +1,5 @@
-import 'package:abs_mobile_app/NavBar/Orders/Pickups/addPickups.dart';
+import 'package:abs_mobile_app/NavBar/Orders/Shipments/addShipments.dart';
+import 'package:abs_mobile_app/Track/track.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../Configurations/app_config.dart';
@@ -140,110 +141,138 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                   : 82),
                           child: Column(
                             children: _shipments.map((shipment) {
-                              return Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                                elevation: 4,
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(16, 16, 16, 16),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Text(
-                                            '${shipment["AWB"]}',
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.grey,
-                                            ),
-                                          ),
-                                          const Spacer(),
-                                          Container(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                10, 2, 10, 2),
-                                            decoration: BoxDecoration(
-                                              color: Color.fromARGB(
-                                                  255, 203, 255, 251),
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                            child: Text(
-                                              shipment["Status"],
+                              return InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                      transitionDuration:
+                                          const Duration(milliseconds: 300),
+                                      pageBuilder: (_, __, ___) => TrackPage(
+                                        awb: shipment["AWB"],
+                                      ),
+                                      transitionsBuilder: (_,
+                                          Animation<double> animation,
+                                          __,
+                                          Widget child) {
+                                        return SlideTransition(
+                                          position: Tween<Offset>(
+                                            begin: const Offset(1.0, 0.0),
+                                            end: Offset.zero,
+                                          ).animate(animation),
+                                          child: child,
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  elevation: 4,
+                                  child: Padding(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        16, 16, 16, 16),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              '${shipment["AWB"]}',
                                               style: const TextStyle(
-                                                  color: Colors.black,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 14),
+                                                fontSize: 14,
+                                                color: Colors.grey,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            shipment["Consignee Name"],
-                                            style: const TextStyle(
-                                              fontSize: 15,
-                                              color: Colors.black,
+                                            const Spacer(),
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      10, 2, 10, 2),
+                                              decoration: BoxDecoration(
+                                                color: Color.fromARGB(
+                                                    255, 203, 255, 251),
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              child: Text(
+                                                shipment["Status"],
+                                                style: const TextStyle(
+                                                    color: Colors.black,
+                                                    fontWeight: FontWeight.bold,
+                                                    fontSize: 14),
+                                              ),
                                             ),
-                                          ),
-                                          const Spacer(),
-                                          Container(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                10, 2, 10, 2),
-                                            decoration: BoxDecoration(
-                                              color: Colors.black,
-                                              borderRadius:
-                                                  BorderRadius.circular(20),
-                                            ),
-                                            child: Text(
-                                              '${shipment["Cash"].abs()} EGP',
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              shipment["Consignee Name"],
                                               style: const TextStyle(
-                                                  color: Colors.white,
-                                                  fontSize: 14),
+                                                fontSize: 15,
+                                                color: Colors.black,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 8),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            shipment[
-                                                    "Consignee Phone Number"] ??
-                                                '',
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.grey,
+                                            const Spacer(),
+                                            Container(
+                                              padding:
+                                                  const EdgeInsets.fromLTRB(
+                                                      10, 2, 10, 2),
+                                              decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                borderRadius:
+                                                    BorderRadius.circular(20),
+                                              ),
+                                              child: Text(
+                                                '${shipment["Cash"].abs()} EGP',
+                                                style: const TextStyle(
+                                                    color: Colors.white,
+                                                    fontSize: 14),
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            shipment["Consignee Phone Number"] !=
-                                                        null &&
-                                                    shipment[
-                                                            "Consignee City"] !=
-                                                        null
-                                                ? '|'
-                                                : '',
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.grey,
+                                          ],
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              shipment[
+                                                      "Consignee Phone Number"] ??
+                                                  '',
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey,
+                                              ),
                                             ),
-                                          ),
-                                          Text(
-                                            shipment["Consignee City"] ?? '',
-                                            style: const TextStyle(
-                                              fontSize: 14,
-                                              color: Colors.grey,
+                                            Text(
+                                              shipment["Consignee Phone Number"] !=
+                                                          null &&
+                                                      shipment[
+                                                              "Consignee City"] !=
+                                                          null
+                                                  ? '|'
+                                                  : '',
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey,
+                                              ),
                                             ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
+                                            Text(
+                                              shipment["Consignee City"] ?? '',
+                                              style: const TextStyle(
+                                                fontSize: 14,
+                                                color: Colors.grey,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               );
@@ -302,7 +331,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                   context,
                   PageRouteBuilder(
                     transitionDuration: const Duration(milliseconds: 300),
-                    pageBuilder: (_, __, ___) => AddPickupPage(),
+                    pageBuilder: (_, __, ___) => AddShipmentPage(),
                     transitionsBuilder:
                         (_, Animation<double> animation, __, Widget child) {
                       return SlideTransition(
