@@ -1,7 +1,7 @@
-import 'package:abs_mobile_app/NavBar/Orders/Shipments/addShipments.dart';
-import 'package:abs_mobile_app/Track/track.dart';
+import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
+import 'package:toggle_switch/toggle_switch.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
@@ -19,10 +19,20 @@ class _ReturnPageState extends State<ReturnPage> {
   TextEditingController _buildingController = TextEditingController();
   TextEditingController _floorController = TextEditingController();
   TextEditingController _aptController = TextEditingController();
+  TextEditingController _cashAmountController = TextEditingController();
+  TextEditingController _contentController = TextEditingController();
+  TextEditingController _specialInstructionsController =
+      TextEditingController();
 
   List<Map<String, dynamic>> _cities = [];
 
   String? _selectedCity;
+
+  int _currentIndex = 1;
+
+  int _numberOfItems = 1;
+  int _weight = 1;
+  bool _refundCash = true;
 
   Future<void> getCities() async {
     final url = Uri.parse('${AppConfig.baseUrl}/cities/1');
@@ -95,7 +105,6 @@ class _ReturnPageState extends State<ReturnPage> {
                               padding: const EdgeInsets.fromLTRB(16, 16, 4, 4),
                               child: TextField(
                                 controller: _firstNameController,
-                                readOnly: true,
                                 decoration: const InputDecoration(
                                   fillColor: Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
@@ -113,7 +122,6 @@ class _ReturnPageState extends State<ReturnPage> {
                               padding: const EdgeInsets.fromLTRB(4, 16, 16, 4),
                               child: TextField(
                                 controller: _lastNameController,
-                                readOnly: true,
                                 decoration: const InputDecoration(
                                   fillColor: Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
@@ -132,7 +140,6 @@ class _ReturnPageState extends State<ReturnPage> {
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
                         child: TextField(
                           controller: _phoneNumberController,
-                          readOnly: true,
                           decoration: const InputDecoration(
                             fillColor: Color.fromARGB(255, 250, 250, 250),
                             filled: true,
@@ -264,6 +271,246 @@ class _ReturnPageState extends State<ReturnPage> {
                     ],
                   ),
                 ),
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons
+                                  .price_change, // Add the icon here, this is the icon of the notification
+                              color:
+                                  Colors.black, // Set the icon color as needed
+                            ),
+                            SizedBox(
+                                width:
+                                    8), // Add some spacing between the icon and text
+                            Text(
+                              'Cash on delivery',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
+                        child: Row(
+                          children: [
+                            const Text('Refund cash'),
+                            Switch(
+                              value: _refundCash,
+                              onChanged: (value) {
+                                setState(() {
+                                  _refundCash = value;
+                                });
+                              },
+                            ),
+                            const Spacer(),
+                            Visibility(
+                              visible: _refundCash,
+                              child: Expanded(
+                                child: Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                      0, 0, 16, 8), // Adjust padding as needed
+                                  child: SizedBox(
+                                    width: double
+                                        .infinity, // Makes the TextField take up 100% width
+                                    child: TextField(
+                                      controller: _cashAmountController,
+                                      keyboardType: TextInputType
+                                          .number, // Accepts numbers only
+                                      decoration: InputDecoration(
+                                        fillColor:
+                                            Color.fromARGB(255, 250, 250, 250),
+                                        filled: true,
+                                        border: const OutlineInputBorder(
+                                          borderSide: BorderSide(
+                                              color: Color(0xFFFFAB4A)),
+                                        ),
+                                        labelText: 'COD',
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons
+                                  .local_shipping, // Add the icon here, this is the icon of the notification
+                              color:
+                                  Colors.black, // Set the icon color as needed
+                            ),
+                            SizedBox(
+                                width:
+                                    8), // Add some spacing between the icon and text
+                            Text(
+                              'Return Shipment Details',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Center(
+                          child: ToggleSwitch(
+                            initialLabelIndex: _currentIndex - 1,
+                            totalSwitches: 3,
+                            cornerRadius: 10.0,
+                            minHeight: 20.0,
+                            minWidth: 100.0, // Set a minimum width for labels
+                            labels: const ['Parcel', 'Document', 'Bulk'],
+                            onToggle: (index) {
+                              setState(() {
+                                _currentIndex = index! + 1;
+                              });
+                              print('switched to: $_currentIndex');
+                            },
+                            borderColor: [
+                              const Color.fromARGB(255, 227, 227, 227)
+                            ],
+                            activeBgColor: [Colors.white],
+                            activeFgColor: Colors.black,
+                            inactiveBgColor:
+                                const Color.fromARGB(255, 227, 227, 227),
+                            radiusStyle: true,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        child: Row(
+                          children: [
+                            const Text('Number of items'),
+                            const Spacer(),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              elevation: 4,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.remove),
+                                    onPressed: () {
+                                      setState(() {
+                                        if (_numberOfItems > 1) {
+                                          _numberOfItems--;
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                    child: Text('$_numberOfItems'),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.add),
+                                    onPressed: () {
+                                      setState(() {
+                                        _numberOfItems++;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        child: Row(
+                          children: [
+                            const Text('Weight'),
+                            const Spacer(),
+                            Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              elevation: 4,
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.remove),
+                                    onPressed: () {
+                                      setState(() {
+                                        if (_weight > 1) {
+                                          _weight--;
+                                        }
+                                      });
+                                    },
+                                  ),
+                                  Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8, 0, 8, 0),
+                                    child: Text('$_weight'),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.add),
+                                    onPressed: () {
+                                      setState(() {
+                                        _weight++;
+                                      });
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        child: TextField(
+                          controller: _contentController,
+                          maxLines: null, // Allow multiple lines of text
+                          decoration: const InputDecoration(
+                            border:
+                                OutlineInputBorder(), // Add a border around the text area
+                            labelText: 'Content',
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                        child: TextField(
+                          controller: _specialInstructionsController,
+                          maxLines: null, // Allow multiple lines of text
+                          decoration: const InputDecoration(
+                            border:
+                                OutlineInputBorder(), // Add a border around the text area
+                            labelText: 'Special Instructions',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
           ),
