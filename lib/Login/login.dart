@@ -40,11 +40,12 @@ class _LoginPageState extends State<LoginPage> {
       final accessToken = responseBody["accessToken"];
       await AppConfig.storeToken(accessToken);
       await AppConfig.initialize();
-
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => NavBar()),
-      );
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => NavBar()),
+        );
+      }
     } else {
       // Failed login
       showDialog(

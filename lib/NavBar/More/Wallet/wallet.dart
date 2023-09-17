@@ -299,13 +299,14 @@ class _WalletPageState extends State<WalletPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 244, 246, 248),
       appBar: AppBar(
         title: const Text(
           'Wallet',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Color.fromARGB(255, 244, 246, 248),
+        backgroundColor: Colors.white,
         shadowColor: Colors.transparent,
         iconTheme: IconThemeData(color: Colors.black),
         actions: <Widget>[
