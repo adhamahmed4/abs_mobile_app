@@ -1,9 +1,10 @@
-import 'package:multi_select_flutter/multi_select_flutter.dart';
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../../../../Configurations/app_config.dart';
-import 'dart:convert'; // for JSON decoding and encoding
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ReturnPage extends StatefulWidget {
@@ -12,27 +13,63 @@ class ReturnPage extends StatefulWidget {
 }
 
 class _ReturnPageState extends State<ReturnPage> {
-  TextEditingController _firstNameController = TextEditingController();
-  TextEditingController _lastNameController = TextEditingController();
-  TextEditingController _phoneNumberController = TextEditingController();
-  TextEditingController _streetNameController = TextEditingController();
-  TextEditingController _buildingController = TextEditingController();
-  TextEditingController _floorController = TextEditingController();
-  TextEditingController _aptController = TextEditingController();
-  TextEditingController _cashAmountController = TextEditingController();
-  TextEditingController _contentController = TextEditingController();
-  TextEditingController _specialInstructionsController =
+  List<Map<String, dynamic>> _subAccounts = [];
+  String? _selectedSubAccount;
+
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _streetNameController = TextEditingController();
+  final TextEditingController _buildingController = TextEditingController();
+  final TextEditingController _floorController = TextEditingController();
+  final TextEditingController _aptController = TextEditingController();
+  final TextEditingController _cashAmountController = TextEditingController();
+  final TextEditingController _contentController = TextEditingController();
+  final TextEditingController _orderReferenceController =
       TextEditingController();
+  final TextEditingController _specialInstructionsController =
+      TextEditingController();
+  final TextEditingController _notesController = TextEditingController();
+
+  final TextEditingController _dateController = TextEditingController();
 
   List<Map<String, dynamic>> _cities = [];
 
   String? _selectedCity;
 
-  int _currentIndex = 1;
+  int _packageTypeID = 1;
 
   int _numberOfItems = 1;
   int _weight = 1;
   bool _refundCash = true;
+  DateTime? _selectedStartDate;
+  DateTime? _selectedEndDate;
+  List<Map<String, dynamic>> returnLocations = [];
+  List<Map<String, dynamic>> vehicleTypes = [];
+
+  String? _selectedReturnLocation;
+  String? _selectedVehicleType;
+
+  Future<void> getSubAccounts() async {
+    final url =
+        Uri.parse('${AppConfig.baseUrl}/sub-accounts-by-main-account-ID/1');
+    final response = await http.get(url, headers: AppConfig.headers);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
+      if (mounted) {
+        setState(() {
+          _subAccounts = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {
+              'ID': item['ID'],
+              'Sub Account Name': item['Sub Account Name'],
+            };
+          }).toList();
+        });
+      }
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
 
   Future<void> getCities() async {
     final url = Uri.parse('${AppConfig.baseUrl}/cities/1');
@@ -54,10 +91,183 @@ class _ReturnPageState extends State<ReturnPage> {
     }
   }
 
+  Future<void> getReturnLocations() async {
+    final url = Uri.parse(
+        '${AppConfig.baseUrl}/pickup-return-locations-by-subAccountID');
+    final body = {"locationType": "Return"};
+    final jsonBody = json.encode(body);
+    final response =
+        await http.post(url, headers: AppConfig.headers, body: jsonBody);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
+      if (mounted) {
+        setState(() {
+          returnLocations = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {'ID': item["ID"], 'Location Name': item['Location Name']};
+          }).toList();
+        });
+      }
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<void> getVehicleTypes() async {
+    final url = Uri.parse('${AppConfig.baseUrl}/vehicle-types/1');
+    final response = await http.get(url, headers: AppConfig.headers);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
+      if (mounted) {
+        setState(() {
+          vehicleTypes = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {
+              'Vehicle Type ID': item['Vehicle Type ID'],
+              'Vehicle Type': item['Vehicle Type'],
+            };
+          }).toList();
+        });
+      }
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<void> _selectDateRange(BuildContext context) async {
+    DateTime? initialStartDate = _selectedStartDate ?? DateTime.now();
+    DateTime? initialEndDate = _selectedEndDate ?? DateTime.now();
+
+    DateTimeRange? selectedRange = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(1950),
+      lastDate: DateTime(2100),
+      initialDateRange: DateTimeRange(
+        start: initialStartDate,
+        end: initialEndDate,
+      ),
+    );
+
+    if (selectedRange != null) {
+      if (mounted) {
+        setState(() {
+          _selectedStartDate = selectedRange.start;
+          _selectedEndDate = selectedRange.end;
+
+          String startDateText = _selectedStartDate != null
+              ? DateFormat('yyyy-MM-dd').format(_selectedStartDate!)
+              : '';
+
+          String endDateText = _selectedEndDate != null
+              ? DateFormat('yyyy-MM-dd').format(_selectedEndDate!)
+              : '';
+
+          if (startDateText.isNotEmpty && endDateText.isNotEmpty) {
+            _dateController.text = "$startDateText - $endDateText";
+          } else if (startDateText.isNotEmpty) {
+            _dateController.text = startDateText;
+          } else if (endDateText.isNotEmpty) {
+            _dateController.text = endDateText;
+          }
+        });
+      }
+    }
+  }
+
+  Future<void> createShipment() async {
+    final url = Uri.parse('${AppConfig.baseUrl}/create-single-shipment');
+    final requestBody = {
+      "subAccountID": _selectedSubAccount,
+      "serviceID": 2,
+
+      //Pickup
+      "returnLocationID": _selectedReturnLocation,
+      "pickupTypeID": 1,
+      "vehicleTypeID": _selectedVehicleType,
+      "timeFrom": _selectedStartDate.toString(),
+      "toTime": _selectedEndDate.toString(),
+      "pickupNotes": _notesController.text,
+
+      //Transaction
+      "Ref": _orderReferenceController.text,
+      "specialInstructions": _specialInstructionsController.text,
+      "packageTypeID": _packageTypeID,
+      "noOfPcs": _numberOfItems,
+      "contents": _contentController.text,
+      "weight": _weight,
+      "actualWeight": _weight,
+      "Cash": _refundCash ? _cashAmountController.text : 0,
+
+      //ContactPerson - ContactNumber - Address
+      "firstName": _firstNameController.text,
+      "lastName": _lastNameController.text,
+      "contactNumber": _phoneNumberController.text,
+      "numberTypeID": 1,
+      "cityID": _selectedCity,
+      "streetName": _streetNameController.text,
+      "buildingNumber": _buildingController.text,
+      "floorNumber": _floorController.text,
+      "apartmentNumber": _aptController.text,
+      "longitude": 0,
+      "latitude": 0,
+
+      "serviceTypeIDs": [],
+    };
+    final jsonBody = json.encode(requestBody);
+    final response =
+        await http.post(url, headers: AppConfig.headers, body: jsonBody);
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      if (responseData == 'Account is not verified') {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Account is not verified'),
+              content: const Text('Please verify your account first'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      } else if (responseData == 'Ref already exists') {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Ref already exists'),
+              content: const Text('Please enter a different reference'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      }
+
+      Navigator.pop(context);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getCities();
+    getReturnLocations();
+    getVehicleTypes();
+    getSubAccounts();
   }
 
   @override
@@ -76,6 +286,48 @@ class _ReturnPageState extends State<ReturnPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                    child: InputDecorator(
+                      decoration: const InputDecoration(
+                        fillColor: Color.fromARGB(255, 250, 250, 250),
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFFFAB4A)),
+                        ),
+                        labelText: 'Sub Account Name',
+                      ),
+                      child: SizedBox(
+                        height: 20,
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: _selectedSubAccount,
+                            onChanged: (newValue) {
+                              if (mounted) {
+                                setState(() {
+                                  _selectedSubAccount = newValue!;
+                                });
+                              }
+                            },
+                            items: _subAccounts.map<DropdownMenuItem<String>>(
+                              (Map<String, dynamic> value) {
+                                return DropdownMenuItem<String>(
+                                  value: value['ID'].toString(),
+                                  child: Text(value['Sub Account Name']),
+                                );
+                              },
+                            ).toList(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: Column(
                     children: [
                       const Padding(
@@ -83,14 +335,10 @@ class _ReturnPageState extends State<ReturnPage> {
                         child: Row(
                           children: [
                             Icon(
-                              Icons
-                                  .person, // Add the icon here, this is the icon of the notification
-                              color:
-                                  Colors.black, // Set the icon color as needed
+                              Icons.person,
+                              color: Colors.black,
                             ),
-                            SizedBox(
-                                width:
-                                    8), // Add some spacing between the icon and text
+                            SizedBox(width: 8),
                             Text(
                               'Customer Details',
                               style: TextStyle(fontWeight: FontWeight.bold),
@@ -150,8 +398,8 @@ class _ReturnPageState extends State<ReturnPage> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                      const Padding(
+                        padding: EdgeInsets.fromLTRB(16, 16, 16, 4),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -200,10 +448,10 @@ class _ReturnPageState extends State<ReturnPage> {
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
                         child: TextField(
                           controller: _streetNameController,
-                          decoration: InputDecoration(
+                          decoration: const InputDecoration(
                             fillColor: Color.fromARGB(255, 250, 250, 250),
                             filled: true,
-                            border: const OutlineInputBorder(
+                            border: OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Color(0xFFFFAB4A))),
                             labelText: 'Street name',
@@ -214,14 +462,13 @@ class _ReturnPageState extends State<ReturnPage> {
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                  16, 16, 8, 16), // Adjust padding as needed
+                              padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
                               child: TextField(
                                 controller: _buildingController,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   fillColor: Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: const OutlineInputBorder(
+                                  border: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A)),
                                   ),
@@ -232,14 +479,13 @@ class _ReturnPageState extends State<ReturnPage> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                  0, 16, 8, 16), // Adjust padding as needed
+                              padding: const EdgeInsets.fromLTRB(0, 16, 8, 16),
                               child: TextField(
                                 controller: _floorController,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   fillColor: Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: const OutlineInputBorder(
+                                  border: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A)),
                                   ),
@@ -250,14 +496,13 @@ class _ReturnPageState extends State<ReturnPage> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(
-                                  0, 16, 16, 16), // Adjust padding as needed
+                              padding: const EdgeInsets.fromLTRB(0, 16, 16, 16),
                               child: TextField(
                                 controller: _aptController,
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   fillColor: Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: const OutlineInputBorder(
+                                  border: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A)),
                                   ),
@@ -282,15 +527,8 @@ class _ReturnPageState extends State<ReturnPage> {
                         padding: EdgeInsets.all(16.0),
                         child: Row(
                           children: [
-                            Icon(
-                              Icons
-                                  .price_change, // Add the icon here, this is the icon of the notification
-                              color:
-                                  Colors.black, // Set the icon color as needed
-                            ),
-                            SizedBox(
-                                width:
-                                    8), // Add some spacing between the icon and text
+                            Icon(Icons.price_change, color: Colors.black),
+                            SizedBox(width: 8),
                             Text(
                               'Cash on delivery',
                               style: TextStyle(fontWeight: FontWeight.bold),
@@ -311,25 +549,22 @@ class _ReturnPageState extends State<ReturnPage> {
                                 });
                               },
                             ),
-                            const Spacer(),
                             Visibility(
                               visible: _refundCash,
                               child: Expanded(
                                 child: Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                      0, 0, 16, 8), // Adjust padding as needed
+                                  padding:
+                                      const EdgeInsets.fromLTRB(0, 0, 16, 8),
                                   child: SizedBox(
-                                    width: double
-                                        .infinity, // Makes the TextField take up 100% width
+                                    width: double.infinity,
                                     child: TextField(
                                       controller: _cashAmountController,
-                                      keyboardType: TextInputType
-                                          .number, // Accepts numbers only
-                                      decoration: InputDecoration(
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
                                         fillColor:
                                             Color.fromARGB(255, 250, 250, 250),
                                         filled: true,
-                                        border: const OutlineInputBorder(
+                                        border: OutlineInputBorder(
                                           borderSide: BorderSide(
                                               color: Color(0xFFFFAB4A)),
                                         ),
@@ -358,14 +593,10 @@ class _ReturnPageState extends State<ReturnPage> {
                         child: Row(
                           children: [
                             Icon(
-                              Icons
-                                  .local_shipping, // Add the icon here, this is the icon of the notification
-                              color:
-                                  Colors.black, // Set the icon color as needed
+                              Icons.local_shipping,
+                              color: Colors.black,
                             ),
-                            SizedBox(
-                                width:
-                                    8), // Add some spacing between the icon and text
+                            SizedBox(width: 8),
                             Text(
                               'Return Shipment Details',
                               style: TextStyle(fontWeight: FontWeight.bold),
@@ -377,22 +608,21 @@ class _ReturnPageState extends State<ReturnPage> {
                         padding: const EdgeInsets.all(16.0),
                         child: Center(
                           child: ToggleSwitch(
-                            initialLabelIndex: _currentIndex - 1,
+                            initialLabelIndex: _packageTypeID - 1,
                             totalSwitches: 3,
                             cornerRadius: 10.0,
                             minHeight: 20.0,
-                            minWidth: 100.0, // Set a minimum width for labels
+                            minWidth: 100.0,
                             labels: const ['Parcel', 'Document', 'Bulk'],
                             onToggle: (index) {
                               setState(() {
-                                _currentIndex = index! + 1;
+                                _packageTypeID = index! + 1;
                               });
-                              print('switched to: $_currentIndex');
                             },
-                            borderColor: [
-                              const Color.fromARGB(255, 227, 227, 227)
+                            borderColor: const [
+                              Color.fromARGB(255, 227, 227, 227)
                             ],
-                            activeBgColor: [Colors.white],
+                            activeBgColor: const [Colors.white],
                             activeFgColor: Colors.black,
                             inactiveBgColor:
                                 const Color.fromARGB(255, 227, 227, 227),
@@ -485,13 +715,26 @@ class _ReturnPageState extends State<ReturnPage> {
                         ),
                       ),
                       Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                        child: TextField(
+                          controller: _orderReferenceController,
+                          decoration: const InputDecoration(
+                            fillColor: Color.fromARGB(255, 250, 250, 250),
+                            filled: true,
+                            border: OutlineInputBorder(
+                                borderSide:
+                                    BorderSide(color: Color(0xFFFFAB4A))),
+                            labelText: 'Order Reference',
+                          ),
+                        ),
+                      ),
+                      Padding(
                         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                         child: TextField(
                           controller: _contentController,
-                          maxLines: null, // Allow multiple lines of text
+                          maxLines: 2,
                           decoration: const InputDecoration(
-                            border:
-                                OutlineInputBorder(), // Add a border around the text area
+                            border: OutlineInputBorder(),
                             labelText: 'Content',
                           ),
                         ),
@@ -500,17 +743,156 @@ class _ReturnPageState extends State<ReturnPage> {
                         padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                         child: TextField(
                           controller: _specialInstructionsController,
-                          maxLines: null, // Allow multiple lines of text
+                          maxLines: 2,
                           decoration: const InputDecoration(
-                            border:
-                                OutlineInputBorder(), // Add a border around the text area
+                            border: OutlineInputBorder(),
                             labelText: 'Special Instructions',
                           ),
                         ),
                       ),
                     ],
                   ),
-                )
+                ),
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.pin_drop,
+                              color: Colors.black,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              'Return Details',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                        child: TextField(
+                          controller: _dateController,
+                          readOnly: true,
+                          onTap: () {
+                            _selectDateRange(context);
+                          },
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFFFFAB4A)),
+                            ),
+                            labelText: 'Creation Date',
+                            suffixIcon: const Icon(Icons.calendar_view_day),
+                            hintText: _selectedStartDate == null ||
+                                    _selectedEndDate == null
+                                ? DateFormat('yyyy-MM-dd')
+                                    .format(DateTime.now())
+                                : '${DateFormat('yyyy-MM-dd').format(_selectedStartDate!)} - ${DateFormat('yyyy-MM-dd').format(_selectedEndDate!)}',
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                            fillColor: Color.fromARGB(255, 250, 250, 250),
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFFFFAB4A)),
+                            ),
+                            labelText: 'Return location',
+                          ),
+                          child: SizedBox(
+                            height: 20,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: _selectedReturnLocation,
+                                onChanged: (newValue) {
+                                  if (mounted) {
+                                    setState(() {
+                                      _selectedReturnLocation = newValue!;
+                                    });
+                                  }
+                                },
+                                items: returnLocations
+                                    .map<DropdownMenuItem<String>>(
+                                  (Map<String, dynamic> value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value['ID'].toString(),
+                                      child: Text(value['Location Name']),
+                                    );
+                                  },
+                                ).toList(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                            fillColor: Color.fromARGB(255, 250, 250, 250),
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFFFFAB4A)),
+                            ),
+                            labelText: 'Vehicle type',
+                          ),
+                          child: SizedBox(
+                            height: 20,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: _selectedVehicleType,
+                                onChanged: (newValue) {
+                                  if (mounted) {
+                                    setState(() {
+                                      _selectedVehicleType = newValue!;
+                                    });
+                                  }
+                                },
+                                items:
+                                    vehicleTypes.map<DropdownMenuItem<String>>(
+                                  (Map<String, dynamic> value) {
+                                    return DropdownMenuItem<String>(
+                                      value:
+                                          value['Vehicle Type ID'].toString(),
+                                      child: Text(value['Vehicle Type']),
+                                    );
+                                  },
+                                ).toList(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                        child: TextField(
+                          controller: _notesController,
+                          maxLines: 2,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Notes',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    createShipment();
+                  },
+                  child: const Text('Create Shipment'),
+                ),
               ],
             ),
           ),

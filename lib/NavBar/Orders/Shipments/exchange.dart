@@ -1,9 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import '../../../../Configurations/app_config.dart';
-import 'dart:convert'; // for JSON decoding and encoding
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ExchangePage extends StatefulWidget {
@@ -12,20 +14,42 @@ class ExchangePage extends StatefulWidget {
 }
 
 class _ExchangePageState extends State<ExchangePage> {
-  TextEditingController _firstNameController = TextEditingController();
-  TextEditingController _lastNameController = TextEditingController();
-  TextEditingController _phoneNumberController = TextEditingController();
-  TextEditingController _streetNameController = TextEditingController();
-  TextEditingController _buildingController = TextEditingController();
-  TextEditingController _floorController = TextEditingController();
-  TextEditingController _aptController = TextEditingController();
-  TextEditingController _cashAmountController = TextEditingController();
-  TextEditingController _deliveryContentController = TextEditingController();
-  TextEditingController _deliverySpecialInstructionsController =
+  List<Map<String, dynamic>> _subAccounts = [];
+  String? _selectedSubAccount;
+
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
+  final TextEditingController _streetNameController = TextEditingController();
+  final TextEditingController _buildingController = TextEditingController();
+  final TextEditingController _floorController = TextEditingController();
+  final TextEditingController _aptController = TextEditingController();
+  final TextEditingController _cashAmountController = TextEditingController();
+  final TextEditingController _deliveryOrderReferenceController =
       TextEditingController();
-  TextEditingController _returnContentController = TextEditingController();
-  TextEditingController _returnSpecialInstructionsController =
+  final TextEditingController _deliveryContentController =
       TextEditingController();
+  final TextEditingController _deliverySpecialInstructionsController =
+      TextEditingController();
+  final TextEditingController _returnContentController =
+      TextEditingController();
+  final TextEditingController _returnOrderReferencetController =
+      TextEditingController();
+  final TextEditingController _returnSpecialInstructionsController =
+      TextEditingController();
+  final TextEditingController _notesController = TextEditingController();
+
+  final TextEditingController _dateController = TextEditingController();
+
+  DateTime? _selectedStartDate;
+  DateTime? _selectedEndDate;
+  List<Map<String, dynamic>> pickupLocations = [];
+  List<Map<String, dynamic>> returnLocations = [];
+  List<Map<String, dynamic>> vehicleTypes = [];
+
+  String? _selectedPickupLocation;
+  String? _selectedReturnLocation;
+  String? _selectedVehicleType;
 
   List<Map<String, dynamic>> _cities = [];
 
@@ -39,9 +63,30 @@ class _ExchangePageState extends State<ExchangePage> {
   int _returnNumberOfItems = 1;
   int _returnWeight = 1;
 
-  bool _collectCash = true;
+  int _collectionTypeID = 1;
   List<dynamic> _selectedServices = [];
   List<Map<String, dynamic>> _services = [];
+
+  Future<void> getSubAccounts() async {
+    final url =
+        Uri.parse('${AppConfig.baseUrl}/sub-accounts-by-main-account-ID/1');
+    final response = await http.get(url, headers: AppConfig.headers);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
+      if (mounted) {
+        setState(() {
+          _subAccounts = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {
+              'ID': item['ID'],
+              'Sub Account Name': item['Sub Account Name'],
+            };
+          }).toList();
+        });
+      }
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
 
   Future<void> getCities() async {
     final url = Uri.parse('${AppConfig.baseUrl}/cities/1');
@@ -86,11 +131,235 @@ class _ExchangePageState extends State<ExchangePage> {
     }
   }
 
+  Future<void> getPickupLocations() async {
+    final url = Uri.parse(
+        '${AppConfig.baseUrl}/pickup-return-locations-by-subAccountID');
+    final body = {"locationType": "Pickup"};
+    final jsonBody = json.encode(body);
+    final response =
+        await http.post(url, headers: AppConfig.headers, body: jsonBody);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
+      if (mounted) {
+        setState(() {
+          pickupLocations = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {'ID': item["ID"], 'Location Name': item['Location Name']};
+          }).toList();
+        });
+      }
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<void> getReturnLocations() async {
+    final url = Uri.parse(
+        '${AppConfig.baseUrl}/pickup-return-locations-by-subAccountID');
+    final body = {"locationType": "Return"};
+    final jsonBody = json.encode(body);
+    final response =
+        await http.post(url, headers: AppConfig.headers, body: jsonBody);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
+      if (mounted) {
+        setState(() {
+          returnLocations = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {'ID': item["ID"], 'Location Name': item['Location Name']};
+          }).toList();
+        });
+      }
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<void> getVehicleTypes() async {
+    final url = Uri.parse('${AppConfig.baseUrl}/vehicle-types/1');
+    final response = await http.get(url, headers: AppConfig.headers);
+    if (response.statusCode == 200) {
+      final List<dynamic> jsonData = json.decode(response.body);
+      if (mounted) {
+        setState(() {
+          vehicleTypes = jsonData.map<Map<String, dynamic>>((dynamic item) {
+            return {
+              'Vehicle Type ID': item['Vehicle Type ID'],
+              'Vehicle Type': item['Vehicle Type'],
+            };
+          }).toList();
+        });
+      }
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<void> _selectDateRange(BuildContext context) async {
+    DateTime? initialStartDate = _selectedStartDate ?? DateTime.now();
+    DateTime? initialEndDate = _selectedEndDate ?? DateTime.now();
+
+    DateTimeRange? selectedRange = await showDateRangePicker(
+      context: context,
+      firstDate: DateTime(1950),
+      lastDate: DateTime(2100),
+      initialDateRange: DateTimeRange(
+        start: initialStartDate,
+        end: initialEndDate,
+      ),
+    );
+
+    if (selectedRange != null) {
+      if (mounted) {
+        setState(() {
+          _selectedStartDate = selectedRange.start;
+          _selectedEndDate = selectedRange.end;
+
+          String startDateText = _selectedStartDate != null
+              ? DateFormat('yyyy-MM-dd').format(_selectedStartDate!)
+              : '';
+
+          String endDateText = _selectedEndDate != null
+              ? DateFormat('yyyy-MM-dd').format(_selectedEndDate!)
+              : '';
+
+          if (startDateText.isNotEmpty && endDateText.isNotEmpty) {
+            _dateController.text = "$startDateText - $endDateText";
+          } else if (startDateText.isNotEmpty) {
+            _dateController.text = startDateText;
+          } else if (endDateText.isNotEmpty) {
+            _dateController.text = endDateText;
+          }
+        });
+      }
+    }
+  }
+
+  Future<void> getSubAccountServiceTypeIDs(String subAccountID) async {
+    final url = Uri.parse(
+        '${AppConfig.baseUrl}/services-by-subAccountID/$subAccountID');
+    final response = await http.get(url, headers: AppConfig.headers);
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      if (mounted) {
+        setState(() {
+          _selectedServices = jsonData["serviceTypeIDs"];
+        });
+      }
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
+  Future<void> createShipment() async {
+    final url = Uri.parse('${AppConfig.baseUrl}/create-single-shipment');
+
+    final List<String> selectedServices =
+        _selectedServices.map((value) => value.toString()).toList();
+
+    final requestBody = {
+      "subAccountID": _selectedSubAccount,
+      "serviceID": 3,
+
+      //Pickup
+      "returnLocationID": _selectedReturnLocation,
+      "pickupTypeID": 1,
+      "vehicleTypeID": _selectedVehicleType,
+      "timeFrom": _selectedStartDate.toString(),
+      "toTime": _selectedEndDate.toString(),
+      "pickupNotes": _notesController.text,
+
+      //Transaction
+      "Ref": _deliveryOrderReferenceController.text,
+      "specialInstructions": _deliverySpecialInstructionsController.text,
+      "packageTypeID": _deliveryPackageTypeID,
+      "noOfPcs": _deliveryNumberOfItems,
+      "contents": _deliveryContentController.text,
+      "weight": _deliveryWeight,
+      "actualWeight": _deliveryWeight,
+      "Cash": _cashAmountController.text,
+
+      //In Case of Exchange
+      "collectionTypeID": _collectionTypeID,
+      "returnPackageTypeID": _returnPackageTypeID,
+      "returnNoOfPcs": _returnNumberOfItems,
+      "returnContents": _returnContentController.text,
+      "returnWeight": _returnWeight,
+      "returnSpecialInstructions": _returnSpecialInstructionsController.text,
+      "returnRef": _returnOrderReferencetController.text,
+
+      //ContactPerson - ContactNumber - Address
+      "firstName": _firstNameController.text,
+      "lastName": _lastNameController.text,
+      "contactNumber": _phoneNumberController.text,
+      "numberTypeID": 1,
+      "cityID": _selectedCity,
+      "streetName": _streetNameController.text,
+      "buildingNumber": _buildingController.text,
+      "floorNumber": _floorController.text,
+      "apartmentNumber": _aptController.text,
+      "longitude": 0,
+      "latitude": 0,
+
+      "serviceTypeIDs": selectedServices,
+    };
+    final jsonBody = json.encode(requestBody);
+    final response =
+        await http.post(url, headers: AppConfig.headers, body: jsonBody);
+
+    if (response.statusCode == 200) {
+      final responseData = json.decode(response.body);
+      if (responseData == 'Account is not verified') {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Account is not verified'),
+              content: const Text('Please verify your account first'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      } else if (responseData == 'Ref already exists') {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Ref already exists'),
+              content: const Text('Please enter a different reference'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      }
+
+      Navigator.pop(context);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     getCities();
     getServices();
+    getPickupLocations();
+    getVehicleTypes();
+    getReturnLocations();
+    getSubAccounts();
   }
 
   @override
@@ -109,6 +378,49 @@ class _ExchangePageState extends State<ExchangePage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+                    child: InputDecorator(
+                      decoration: const InputDecoration(
+                        fillColor: Color.fromARGB(255, 250, 250, 250),
+                        filled: true,
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFFFFAB4A)),
+                        ),
+                        labelText: 'Sub Account Name',
+                      ),
+                      child: SizedBox(
+                        height: 20,
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<String>(
+                            value: _selectedSubAccount,
+                            onChanged: (newValue) {
+                              if (mounted) {
+                                setState(() {
+                                  _selectedSubAccount = newValue!;
+                                });
+                                getSubAccountServiceTypeIDs(newValue!);
+                              }
+                            },
+                            items: _subAccounts.map<DropdownMenuItem<String>>(
+                              (Map<String, dynamic> value) {
+                                return DropdownMenuItem<String>(
+                                  value: value['ID'].toString(),
+                                  child: Text(value['Sub Account Name']),
+                                );
+                              },
+                            ).toList(),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
                   child: Column(
                     children: [
                       const Padding(
@@ -116,14 +428,10 @@ class _ExchangePageState extends State<ExchangePage> {
                         child: Row(
                           children: [
                             Icon(
-                              Icons
-                                  .person, // Add the icon here, this is the icon of the notification
-                              color:
-                                  Colors.black, // Set the icon color as needed
+                              Icons.person,
+                              color: Colors.black,
                             ),
-                            SizedBox(
-                                width:
-                                    8), // Add some spacing between the icon and text
+                            SizedBox(width: 8),
                             Text(
                               'Customer Details',
                               style: TextStyle(fontWeight: FontWeight.bold),
@@ -321,29 +629,39 @@ class _ExchangePageState extends State<ExchangePage> {
                               'Cash on delivery',
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
+                            SizedBox(width: 8),
                           ],
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
-                        child: Row(
-                          children: [
-                            const Text('Collect cash'),
-                            Switch(
-                              value: _collectCash,
-                              onChanged: (value) {
-                                setState(() {
-                                  _collectCash = value;
-                                });
-                              },
-                            ),
-                            const Spacer(),
-                            Visibility(
-                              visible: _collectCash,
-                              child: Expanded(
+                          padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
+                          child: Row(
+                            children: [
+                              ToggleSwitch(
+                                initialLabelIndex: _collectionTypeID - 1,
+                                totalSwitches: 2,
+                                cornerRadius: 10.0,
+                                minHeight: 20.0,
+                                minWidth: 90.0,
+                                labels: const ['Collect', 'Refund'],
+                                onToggle: (index) {
+                                  setState(() {
+                                    _collectionTypeID = index! + 1;
+                                  });
+                                },
+                                borderColor: const [
+                                  Color.fromARGB(255, 227, 227, 227),
+                                ],
+                                activeBgColor: const [Colors.white],
+                                activeFgColor: Colors.black,
+                                inactiveBgColor:
+                                    const Color.fromARGB(255, 227, 227, 227),
+                                radiusStyle: true,
+                              ),
+                              Expanded(
                                 child: Padding(
                                   padding:
-                                      const EdgeInsets.fromLTRB(0, 0, 16, 8),
+                                      const EdgeInsets.fromLTRB(16, 0, 16, 8),
                                   child: SizedBox(
                                     width: double.infinity,
                                     child: TextField(
@@ -355,7 +673,8 @@ class _ExchangePageState extends State<ExchangePage> {
                                         filled: true,
                                         border: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                              color: Color(0xFFFFAB4A)),
+                                            color: Color(0xFFFFAB4A),
+                                          ),
                                         ),
                                         labelText: 'COD',
                                       ),
@@ -363,10 +682,8 @@ class _ExchangePageState extends State<ExchangePage> {
                                   ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
+                            ],
+                          )),
                     ],
                   ),
                 ),
@@ -401,7 +718,7 @@ class _ExchangePageState extends State<ExchangePage> {
                             totalSwitches: 3,
                             cornerRadius: 10.0,
                             minHeight: 20.0,
-                            minWidth: 100.0, // Set a minimum width for labels
+                            minWidth: 100.0,
                             labels: const ['Parcel', 'Document', 'Bulk'],
                             onToggle: (index) {
                               setState(() {
@@ -411,7 +728,7 @@ class _ExchangePageState extends State<ExchangePage> {
                             borderColor: const [
                               Color.fromARGB(255, 227, 227, 227)
                             ],
-                            activeBgColor: [Colors.white],
+                            activeBgColor: const [Colors.white],
                             activeFgColor: Colors.black,
                             inactiveBgColor:
                                 const Color.fromARGB(255, 227, 227, 227),
@@ -501,6 +818,16 @@ class _ExchangePageState extends State<ExchangePage> {
                               ),
                             ),
                           ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        child: TextField(
+                          controller: _deliveryOrderReferenceController,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Order Reference',
+                          ),
                         ),
                       ),
                       Padding(
@@ -697,11 +1024,20 @@ class _ExchangePageState extends State<ExchangePage> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                         child: TextField(
-                          controller: _returnContentController,
-                          maxLines: null, // Allow multiple lines of text
+                          controller: _returnOrderReferencetController,
                           decoration: const InputDecoration(
-                            border:
-                                OutlineInputBorder(), // Add a border around the text area
+                            border: OutlineInputBorder(),
+                            labelText: 'Order Reference',
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                        child: TextField(
+                          controller: _returnContentController,
+                          maxLines: 2,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
                             labelText: 'Content',
                           ),
                         ),
@@ -710,22 +1046,233 @@ class _ExchangePageState extends State<ExchangePage> {
                         padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                         child: TextField(
                           controller: _returnSpecialInstructionsController,
-                          maxLines: null, // Allow multiple lines of text
+                          maxLines: 2,
                           decoration: const InputDecoration(
-                            border:
-                                OutlineInputBorder(), // Add a border around the text area
+                            border: OutlineInputBorder(),
                             labelText: 'Special Instructions',
                           ),
                         ),
                       ),
                     ],
                   ),
-                )
+                ),
+                Card(
+                  elevation: 4,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Column(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.pin_drop,
+                              color: Colors.black,
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              'Pickup & Return Details',
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                        child: TextField(
+                          controller: _dateController,
+                          readOnly: true,
+                          onTap: () {
+                            _selectDateRange(context);
+                          },
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFFFFAB4A)),
+                            ),
+                            labelText: 'Creation Date',
+                            suffixIcon: const Icon(Icons.calendar_view_day),
+                            hintText: _selectedStartDate == null ||
+                                    _selectedEndDate == null
+                                ? DateFormat('yyyy-MM-dd')
+                                    .format(DateTime.now())
+                                : '${DateFormat('yyyy-MM-dd').format(_selectedStartDate!)} - ${DateFormat('yyyy-MM-dd').format(_selectedEndDate!)}',
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                            fillColor: Color.fromARGB(255, 250, 250, 250),
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFFFFAB4A)),
+                            ),
+                            labelText: 'Pickup location',
+                          ),
+                          child: SizedBox(
+                            height: 20,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: _selectedPickupLocation,
+                                onChanged: (newValue) {
+                                  if (mounted) {
+                                    setState(() {
+                                      _selectedPickupLocation = newValue!;
+                                    });
+                                  }
+                                },
+                                items: pickupLocations
+                                    .map<DropdownMenuItem<String>>(
+                                  (Map<String, dynamic> value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value['ID'].toString(),
+                                      child: Text(value['Location Name']),
+                                    );
+                                  },
+                                ).toList(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                            fillColor: Color.fromARGB(255, 250, 250, 250),
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFFFFAB4A)),
+                            ),
+                            labelText: 'Return location',
+                          ),
+                          child: SizedBox(
+                            height: 20,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: _selectedReturnLocation,
+                                onChanged: (newValue) {
+                                  if (mounted) {
+                                    setState(() {
+                                      _selectedReturnLocation = newValue!;
+                                    });
+                                  }
+                                },
+                                items: returnLocations
+                                    .map<DropdownMenuItem<String>>(
+                                  (Map<String, dynamic> value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value['ID'].toString(),
+                                      child: Text(value['Location Name']),
+                                    );
+                                  },
+                                ).toList(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
+                        child: InputDecorator(
+                          decoration: const InputDecoration(
+                            fillColor: Color.fromARGB(255, 250, 250, 250),
+                            filled: true,
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide(color: Color(0xFFFFAB4A)),
+                            ),
+                            labelText: 'Vehicle type',
+                          ),
+                          child: SizedBox(
+                            height: 20,
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: _selectedVehicleType,
+                                onChanged: (newValue) {
+                                  if (mounted) {
+                                    setState(() {
+                                      _selectedVehicleType = newValue!;
+                                    });
+                                  }
+                                },
+                                items:
+                                    vehicleTypes.map<DropdownMenuItem<String>>(
+                                  (Map<String, dynamic> value) {
+                                    return DropdownMenuItem<String>(
+                                      value:
+                                          value['Vehicle Type ID'].toString(),
+                                      child: Text(value['Vehicle Type']),
+                                    );
+                                  },
+                                ).toList(),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                        child: TextField(
+                          controller: _notesController,
+                          maxLines: 2,
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Notes',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    createShipment();
+                  },
+                  child: const Text('Create Shipment'),
+                ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class CustomTooltip extends StatelessWidget {
+  final String message;
+
+  CustomTooltip({required this.message});
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<int>(
+      icon: Icon(
+        Icons.help_outline,
+        color: Colors.black,
+      ),
+      itemBuilder: (BuildContext context) {
+        return <PopupMenuEntry<int>>[
+          PopupMenuItem<int>(
+            value: 1,
+            child: Container(
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Text(
+                message,
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+          ),
+        ];
+      },
+      offset: Offset(0, -40),
     );
   }
 }

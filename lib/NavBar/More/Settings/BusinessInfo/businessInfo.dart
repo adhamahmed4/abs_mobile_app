@@ -298,8 +298,8 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
 
   Future<void> addBussinessInfo() async {
     final url = Uri.parse('${AppConfig.baseUrl}/business-info');
-    final List<String>? selectedServices =
-        _selectedServices?.map((value) => value.toString()).toList();
+    final List<String> selectedServices =
+        _selectedServices.map((value) => value.toString()).toList();
 
     final requestBody = {
       'enCompanyName': _englishNameController.text,

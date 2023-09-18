@@ -10,10 +10,6 @@ class AddShipmentPage extends StatefulWidget {
 }
 
 class _AddShipmentPageState extends State<AddShipmentPage> {
-  final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _phoneNumberController = TextEditingController();
-  final TextEditingController _addressController = TextEditingController();
-
   int _currentIndex = 0;
 
   @override
@@ -35,7 +31,7 @@ class _AddShipmentPageState extends State<AddShipmentPage> {
           Container(
             width: double.infinity,
             decoration: const BoxDecoration(
-              color: Colors.white, // Set your desired background color here
+              color: Colors.white,
             ),
             child: Center(
               child: Padding(
@@ -51,8 +47,8 @@ class _AddShipmentPageState extends State<AddShipmentPage> {
                       _currentIndex = index!;
                     });
                   },
-                  borderColor: [const Color.fromARGB(255, 227, 227, 227)],
-                  activeBgColor: [Colors.white],
+                  borderColor: const [Color.fromARGB(255, 227, 227, 227)],
+                  activeBgColor: const [Colors.white],
                   activeFgColor: Colors.black,
                   inactiveBgColor: const Color.fromARGB(255, 227, 227, 227),
                   radiusStyle: true,
@@ -60,12 +56,11 @@ class _AddShipmentPageState extends State<AddShipmentPage> {
               ),
             ),
           ),
-          // Divider(),
           Expanded(
             child: _currentIndex == 0
-                ? DeliveryPage() // Content for Shipments
+                ? DeliveryPage()
                 : _currentIndex == 1
-                    ? ReturnPage() // Content for Pickups
+                    ? ReturnPage()
                     : ExchangePage(),
           ),
         ],
