@@ -1,10 +1,10 @@
+// ignore_for_file: empty_catches, use_build_context_synchronously, library_private_types_in_public_api
+
 import 'package:abs_mobile_app/NavBar/navBar.dart';
 import 'package:abs_mobile_app/Register/table_widget.dart';
 import 'package:abs_mobile_app/Register/user_data.dart';
 import 'package:abs_mobile_app/Register/zoneDetails.dart';
 import 'package:flutter/material.dart';
-// import 'table_widget.dart';
-import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../Configurations/app_config.dart';
@@ -28,7 +28,8 @@ class AnimatedPlanCard extends StatelessWidget {
   final bool isSelected;
   final VoidCallback onSelect;
 
-  AnimatedPlanCard({
+  const AnimatedPlanCard({
+    super.key,
     required this.plan,
     required this.isSelected,
     required this.onSelect,
@@ -45,21 +46,21 @@ class AnimatedPlanCard extends StatelessWidget {
         child: Container(
           width: MediaQuery.of(context).size.width * 0.3,
           decoration: BoxDecoration(
-            color: isSelected ? Color(0xFF2B2E83) : Colors.white,
+            color: isSelected ? const Color(0xFF2B2E83) : Colors.white,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: isSelected ? Color(0xFF2B2E83) : Colors.transparent,
+              color: isSelected ? const Color(0xFF2B2E83) : Colors.transparent,
               width: 2,
             ),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey[300]!,
                 blurRadius: 6,
-                offset: Offset(0, 3),
+                offset: const Offset(0, 3),
               ),
             ],
           ),
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -79,7 +80,7 @@ class AnimatedPlanCard extends StatelessWidget {
                   color: isSelected ? Colors.white : Colors.black,
                 ),
               ),
-              SizedBox(height: 2),
+              const SizedBox(height: 2),
               Text(
                 plan.price,
                 style:
@@ -96,7 +97,7 @@ class AnimatedPlanCard extends StatelessWidget {
 class NextPage extends StatefulWidget {
   final UserData userData;
 
-  NextPage({required this.userData});
+  const NextPage({super.key, required this.userData});
 
   @override
   _NextPageState createState() => _NextPageState();
@@ -106,7 +107,7 @@ class _NextPageState extends State<NextPage> {
   int selectedCardIndex = -1;
   int selectedNewCardIndex = -1;
   List<Plan> guestPlans = [];
-  List<Plan> plans = []; // Define plans here
+  List<Plan> plans = [];
 
   int? clientTypeID;
 
@@ -159,7 +160,7 @@ class _NextPageState extends State<NextPage> {
 
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => NavBar()),
+          MaterialPageRoute(builder: (context) => const NavBar()),
         );
       } else {
         // Failed login
@@ -168,13 +169,13 @@ class _NextPageState extends State<NextPage> {
           builder: (context) {
             return AlertDialog(
               title: const Text('Error'),
-              content: Text('Something went wrong, try again later.'),
+              content: const Text('Something went wrong, try again later.'),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: Text('OK'),
+                  child: const Text('OK'),
                 ),
               ],
             );
@@ -193,59 +194,52 @@ class _NextPageState extends State<NextPage> {
 
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body) as List<dynamic>;
-        if (jsonData != null) {
-          plans.clear();
-          guestPlans.clear();
+        plans.clear();
+        guestPlans.clear();
 
-          for (var apiPlan in jsonData) {
-            final pricePlanId = apiPlan['Price Plan ID'];
-            final title = apiPlan['Price Plan Name'];
-            final price =
-                ' ${apiPlan['Number Of Shipments'] ?? 0} Shipments / Month';
-            final response = await http.get(Uri.parse(
-                '${AppConfig.baseUrl}/price-plans-matrix-by-ID/$pricePlanId'));
+        for (var apiPlan in jsonData) {
+          final pricePlanId = apiPlan['Price Plan ID'];
+          final title = apiPlan['Price Plan Name'];
+          final price =
+              ' ${apiPlan['Number Of Shipments'] ?? 0} Shipments / Month';
+          final response = await http.get(Uri.parse(
+              '${AppConfig.baseUrl}/price-plans-matrix-by-ID/$pricePlanId'));
 
-            final parsedTableData = <Map<String, dynamic>>[];
+          final parsedTableData = <Map<String, dynamic>>[];
 
-            if (response.statusCode == 200) {
-              final jsonData = json.decode(response.body) as List<dynamic>;
-              if (jsonData != null) {
-                for (var apiRow in jsonData) {
-                  final row = <String, dynamic>{};
-                  for (var key in apiRow.keys) {
-                    row[key] = apiRow[key];
-                  }
-                  parsedTableData.add(row);
+          if (response.statusCode == 200) {
+            final jsonData = json.decode(response.body) as List<dynamic>;
+            if (jsonData != null) {
+              for (var apiRow in jsonData) {
+                final row = <String, dynamic>{};
+                for (var key in apiRow.keys) {
+                  row[key] = apiRow[key];
                 }
+                parsedTableData.add(row);
               }
             }
-            final plan = Plan(
-              title: title ?? '',
-              pricePlanId: pricePlanId ?? '',
-              price: price,
-              tableData: parsedTableData,
-            );
-
-            plans.add(plan);
-
-            if (title == 'Basic') {
-              guestPlans.add(plan);
-            }
           }
-          if (mounted) {
-            setState(() {
-              // Update the UI after fetching and processing the data
-              this.guestPlans = guestPlans;
-              this.plans = plans;
-            });
+          final plan = Plan(
+            title: title ?? '',
+            pricePlanId: pricePlanId ?? '',
+            price: price,
+            tableData: parsedTableData,
+          );
+
+          plans.add(plan);
+
+          if (title == 'Basic') {
+            guestPlans.add(plan);
           }
         }
-      } else {
-        print('Failed to fetch plans from the API.');
-      }
-    } catch (error) {
-      print('An error occurred: $error');
-    }
+        if (mounted) {
+          setState(() {
+            guestPlans = guestPlans;
+            plans = plans;
+          });
+        }
+      } else {}
+    } catch (error) {}
   }
 
   @override
@@ -258,31 +252,31 @@ class _NextPageState extends State<NextPage> {
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
-          backgroundColor: Color.fromARGB(255, 244, 246, 248),
+          backgroundColor: const Color.fromARGB(255, 244, 246, 248),
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: Column(
         children: [
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 16),
-                    Text(
+                    const SizedBox(height: 16),
+                    const Text(
                       'Choose a Subscription Plan',
                       style:
                           TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 16),
-                    Text(
+                    const SizedBox(height: 16),
+                    const Text(
                       'Business Plan', // Add this text
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -321,7 +315,7 @@ class _NextPageState extends State<NextPage> {
                       ],
                     ),
                     if (selectedCardIndex != -1)
-                      Container(
+                      SizedBox(
                         height: 9 * 56.0 +
                             56.0, // Total height of 9 rows + header row
                         child: SingleChildScrollView(
@@ -329,13 +323,14 @@ class _NextPageState extends State<NextPage> {
                               TableWidget(plans[selectedCardIndex].tableData),
                         ),
                       ),
-                    SizedBox(height: 32), // Add some space between sections
-                    Text(
+                    const SizedBox(
+                        height: 32), // Add some space between sections
+                    const Text(
                       'Guest Plan', // Add this text
                       style:
                           TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -375,7 +370,7 @@ class _NextPageState extends State<NextPage> {
                       ],
                     ),
                     if (selectedNewCardIndex != -1)
-                      Container(
+                      SizedBox(
                         height: 9 * 56.0 +
                             56.0, // Total height of 9 rows + header row
                         child: SingleChildScrollView(
@@ -393,20 +388,20 @@ class _NextPageState extends State<NextPage> {
               Container(
                 width: double.infinity,
                 color: Colors.white,
-                padding: EdgeInsets.fromLTRB(16, 8, 16, 0),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
                 child: ElevatedButton(
                   onPressed: () {
                     Navigator.push(
                       context,
                       PageRouteBuilder(
-                        transitionDuration: Duration(
+                        transitionDuration: const Duration(
                             milliseconds: 300), // Adjust the animation duration
                         pageBuilder: (_, __, ___) => ZoneDetailsPage(),
                         transitionsBuilder:
                             (_, Animation<double> animation, __, Widget child) {
                           return SlideTransition(
                             position: Tween<Offset>(
-                              begin: Offset(1.0, 0.0),
+                              begin: const Offset(1.0, 0.0),
                               end: Offset.zero,
                             ).animate(animation),
                             child: child,
@@ -415,20 +410,20 @@ class _NextPageState extends State<NextPage> {
                       ),
                     );
                   },
-                  child: Text('View Zones Details'),
+                  child: const Text('View Zones Details'),
                 ),
               ),
               Container(
                 width: double.infinity,
                 color: Colors.white,
-                padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                 child: ElevatedButton(
                   onPressed: selectedPricePlanId != null
                       ? () {
                           register();
                         }
                       : null,
-                  child: Text('Register'),
+                  child: const Text('Register'),
                 ),
               ),
             ],
