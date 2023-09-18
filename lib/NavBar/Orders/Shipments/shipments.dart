@@ -3,7 +3,7 @@ import 'package:abs_mobile_app/Track/track.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../Configurations/app_config.dart';
-import 'dart:convert'; // for JSON decoding and encoding
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ShipmentsPage extends StatefulWidget {
@@ -48,7 +48,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
   }
 
   String formatDateTime(String dateTimeString) {
-    if (dateTimeString == null || dateTimeString == "") {
+    if (dateTimeString == "") {
       return "No Date";
     }
     final dateTime = DateTime.parse(dateTimeString).toLocal();
@@ -193,7 +193,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                                   const EdgeInsets.fromLTRB(
                                                       10, 2, 10, 2),
                                               decoration: BoxDecoration(
-                                                color: Color.fromARGB(
+                                                color: const Color.fromARGB(
                                                     255, 203, 255, 251),
                                                 borderRadius:
                                                     BorderRadius.circular(20),
@@ -323,8 +323,8 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
               ),
             ),
           Positioned(
-            bottom: 16, // Adjust this value to position the button as desired
-            right: 16, // Adjust this value to position the button as desired
+            bottom: 16,
+            right: 16,
             child: FloatingActionButton(
               onPressed: () {
                 Navigator.push(
