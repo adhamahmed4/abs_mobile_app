@@ -1,12 +1,13 @@
-import 'dart:io';
+// ignore_for_file: library_private_types_in_public_api
 import 'package:abs_mobile_app/NavBar/More/Settings/BusinessLocations/addBusinessLocation.dart';
-import 'package:abs_mobile_app/NavBar/More/Settings/BusinessLocations/maps.dart';
 import 'package:flutter/material.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
 
 class BusinessLocationsPage extends StatefulWidget {
+  const BusinessLocationsPage({super.key});
+
   @override
   _BusinessLocationsPageState createState() => _BusinessLocationsPageState();
 }
@@ -57,7 +58,7 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
       case 'Company':
         return Colors.deepPurple;
       default:
-        return Colors.grey; // You can set a default color for other cases
+        return Colors.grey;
     }
   }
 
@@ -72,15 +73,15 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: Stack(
         children: [
           if (!isLoading)
             SingleChildScrollView(
-              child: Container(
+              child: SizedBox(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
-                child: Column(
+                child: ListView(
                   children: [
                     Card(
                       margin: const EdgeInsets.fromLTRB(0, 16.0, 0, 0),
@@ -110,9 +111,8 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                                   Navigator.push(
                                     context,
                                     PageRouteBuilder(
-                                      transitionDuration: Duration(
-                                          milliseconds:
-                                              300), // Adjust the animation duration
+                                      transitionDuration:
+                                          const Duration(milliseconds: 300),
                                       pageBuilder: (_, __, ___) =>
                                           AddNewLocationPage(
                                         locationID: 0,
@@ -123,7 +123,7 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                                           Widget child) {
                                         return SlideTransition(
                                           position: Tween<Offset>(
-                                            begin: Offset(1.0, 0.0),
+                                            begin: const Offset(1.0, 0.0),
                                             end: Offset.zero,
                                           ).animate(animation),
                                           child: child,
@@ -131,7 +131,6 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                                       },
                                     ),
                                   ).then((_) {
-                                    // This code block will execute when returning from AddNewLocationPage.
                                     getBusinessLocations();
                                   });
                                 },
@@ -167,8 +166,9 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                                               Navigator.push(
                                                 context,
                                                 PageRouteBuilder(
-                                                  transitionDuration: Duration(
-                                                      milliseconds: 300),
+                                                  transitionDuration:
+                                                      const Duration(
+                                                          milliseconds: 300),
                                                   pageBuilder: (_, __, ___) =>
                                                       AddNewLocationPage(
                                                     locationID: location["ID"],
@@ -180,7 +180,8 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                                                       Widget child) {
                                                     return SlideTransition(
                                                       position: Tween<Offset>(
-                                                        begin: Offset(1.0, 0.0),
+                                                        begin: const Offset(
+                                                            1.0, 0.0),
                                                         end: Offset.zero,
                                                       ).animate(animation),
                                                       child: child,
@@ -222,18 +223,15 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                                                       child: Text(
                                                         location[
                                                             "Location Type"],
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 10.0,
                                                         ),
                                                       ),
                                                     ),
-                                                    const SizedBox(
-                                                        width:
-                                                            8.0), // Add some space between badges
+                                                    const SizedBox(width: 8.0),
                                                     Expanded(
-                                                      child:
-                                                          Container(), // Empty Expanded widget to push content to the right
+                                                      child: Container(),
                                                     ),
                                                     Container(
                                                       padding: const EdgeInsets
@@ -253,7 +251,7 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                                                         location["isActive"]
                                                             ? 'Active'
                                                             : 'Inactive',
-                                                        style: TextStyle(
+                                                        style: const TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 10.0,
                                                         ),
@@ -264,7 +262,7 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                                               ),
                                               subtitle: Text(
                                                 location["Address"],
-                                                style: TextStyle(
+                                                style: const TextStyle(
                                                   color: Colors.black,
                                                 ),
                                               ),
@@ -283,7 +281,7 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
               ),
             ),
           if (isLoading)
-            Center(
+            const Center(
               child: CircularProgressIndicator(),
             ),
         ],

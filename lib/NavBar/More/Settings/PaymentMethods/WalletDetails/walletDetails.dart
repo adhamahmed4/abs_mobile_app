@@ -51,7 +51,6 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
   }
 
   void _validateWalletNumber(String walletNumber) {
-    log(walletNumber);
     if (walletNumber.isEmpty) {
       if (mounted) {
         setState(() {

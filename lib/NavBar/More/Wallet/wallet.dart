@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter/services.dart';
 import 'package:abs_mobile_app/Configurations/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -12,14 +11,12 @@ class WalletPage extends StatefulWidget {
 }
 
 class _WalletPageState extends State<WalletPage> {
-  TextEditingController _dateController = TextEditingController();
-  DateFormat _dateFormat = DateFormat('yyyy-MM-dd');
+  final TextEditingController _dateController = TextEditingController();
   DateTime? _selectedStartDate;
   DateTime? _selectedEndDate;
   @override
   void initState() {
     super.initState();
-    // Fetch data from API when the widget is initialized
     getExpectedCash();
     getPaidCash(_selectedStartDate, _selectedEndDate);
     getABSFees(_selectedStartDate, _selectedEndDate);
@@ -72,7 +69,6 @@ class _WalletPageState extends State<WalletPage> {
             _dateController.text = endDateText;
           }
 
-          // Call the function to update collectedCash
           updateCollectedCash();
         });
       }
@@ -99,7 +95,6 @@ class _WalletPageState extends State<WalletPage> {
 
           if (mounted) {
             setState(() {
-              // Update the 'collectedCash' integer value
               this.collectedCash = collectedCash;
             });
           }
@@ -130,7 +125,6 @@ class _WalletPageState extends State<WalletPage> {
 
           if (mounted) {
             setState(() {
-              // Update the 'collectedCash' integer value
               this.ABSFees = ABSFees;
             });
           }
@@ -157,7 +151,6 @@ class _WalletPageState extends State<WalletPage> {
 
           if (mounted) {
             setState(() {
-              // Update the 'collectedCash' integer value
               this.expectedCash = expectedCash;
             });
           }
@@ -186,7 +179,6 @@ class _WalletPageState extends State<WalletPage> {
           setState(() {
             paidShipments = responseBody;
           });
-          print(paidShipments);
         }
       } else {
         if (mounted) {
@@ -202,12 +194,10 @@ class _WalletPageState extends State<WalletPage> {
 
   Future<void> updateCollectedCash() async {
     if (_selectedStartDate != null && _selectedEndDate != null) {
-      await getPaidCash(
-          _selectedStartDate, _selectedEndDate); // Pass the date range
+      await getPaidCash(_selectedStartDate, _selectedEndDate);
       await getABSFees(_selectedStartDate, _selectedEndDate);
 
       await getPaidShipments(_selectedStartDate, _selectedEndDate);
-      // await getExpectedCash();
     }
   }
 
@@ -224,17 +214,17 @@ class _WalletPageState extends State<WalletPage> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12.0),
       ),
-      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
+      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
       child: Container(
         decoration: BoxDecoration(
-          color: Color.fromARGB(255, 235, 235, 235),
+          color: const Color.fromARGB(255, 235, 235, 235),
           borderRadius: BorderRadius.circular(12.0),
           boxShadow: [
             BoxShadow(
               color: Colors.grey.withOpacity(0.3),
               spreadRadius: 2,
               blurRadius: 4,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -242,52 +232,50 @@ class _WalletPageState extends State<WalletPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
-              padding: EdgeInsets.fromLTRB(8, 8, 0, 2),
-              decoration: BoxDecoration(
-                color: Color.fromARGB(
-                    255, 235, 235, 235), // Background color for the title 'AWB'
+              padding: const EdgeInsets.fromLTRB(8, 8, 0, 2),
+              decoration: const BoxDecoration(
+                color: Color.fromARGB(255, 235, 235, 235),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(12.0),
                   topRight: Radius.circular(12.0),
                 ),
               ),
-              width: double.infinity, // Make the container span the full width
+              width: double.infinity,
               child: Text(
                 'AWB: $awb',
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
-                  color: const Color.fromARGB(
-                      255, 0, 0, 0), // Text color for the title 'AWB'
+                  color: Color.fromARGB(255, 0, 0, 0),
                 ),
               ),
             ),
-            Divider(),
+            const Divider(),
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 4, 16, 8),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Cash: $cash EGP', style: TextStyle(fontSize: 12)),
+                  Text('Cash: $cash EGP', style: const TextStyle(fontSize: 12)),
                   Text('ABS Fees: $absfees EGP',
-                      style: TextStyle(fontSize: 12)),
+                      style: const TextStyle(fontSize: 12)),
                 ],
               ),
             ),
-            Divider(),
+            const Divider(),
             Center(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
                 child: Text('Delivery Date: ${formatDateTime(deliveryDate)}',
-                    style: TextStyle(fontSize: 12)),
+                    style: const TextStyle(fontSize: 12)),
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Center(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
                 child: Text('Payment Date: ${formatDateTime(paymentDate)}',
-                    style: TextStyle(fontSize: 12)),
+                    style: const TextStyle(fontSize: 12)),
               ),
             ),
           ],
@@ -308,10 +296,10 @@ class _WalletPageState extends State<WalletPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         shadowColor: Colors.transparent,
-        iconTheme: IconThemeData(color: Colors.black),
+        iconTheme: const IconThemeData(color: Colors.black),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.search),
+            icon: const Icon(Icons.search),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -341,9 +329,9 @@ class _WalletPageState extends State<WalletPage> {
                             _selectDateRange(context);
                           },
                           decoration: InputDecoration(
-                            icon: Icon(Icons.calendar_today),
+                            icon: const Icon(Icons.calendar_today),
                             labelText: 'Creation Date',
-                            suffixIcon: Icon(Icons.calendar_view_day),
+                            suffixIcon: const Icon(Icons.calendar_view_day),
                             hintText: _selectedStartDate == null ||
                                     _selectedEndDate == null
                                 ? DateFormat('yyyy-MM-dd')
@@ -353,9 +341,8 @@ class _WalletPageState extends State<WalletPage> {
                         ),
                       ),
                       IconButton(
-                        icon: Icon(Icons.clear),
+                        icon: const Icon(Icons.clear),
                         onPressed: () {
-                          // Add the logic to clear the selected dates here
                           if (mounted) {
                             setState(() {
                               _selectedStartDate = null;
@@ -373,18 +360,18 @@ class _WalletPageState extends State<WalletPage> {
                   ),
                 ),
               ),
-              SizedBox(height: 16),
-              buildCard(
-                  'Expected Cash', '$expectedCash EGP', Color(0xFF2B2E83)),
-              SizedBox(height: 16),
-              buildCard(
-                  'Collected Cash', '$collectedCash EGP', Color(0xFF2B2E83)),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
+              buildCard('Expected Cash', '$expectedCash EGP',
+                  const Color(0xFF2B2E83)),
+              const SizedBox(height: 16),
+              buildCard('Collected Cash', '$collectedCash EGP',
+                  const Color(0xFF2B2E83)),
+              const SizedBox(height: 16),
               buildCard('ABS Fees + Cash Collection Fees', '$ABSFees EGP',
-                  Color(0xFF2B2E83)),
-              SizedBox(height: 16),
+                  const Color(0xFF2B2E83)),
+              const SizedBox(height: 16),
               buildCard('Net Value', '${collectedCash - ABSFees} EGP',
-                  Color(0xFF2B2E83)),
+                  const Color(0xFF2B2E83)),
               Container(
                 padding: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
@@ -401,16 +388,16 @@ class _WalletPageState extends State<WalletPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
+                      const Padding(
+                        padding: EdgeInsets.all(16.0),
                         child: Row(
                           children: [
                             Icon(Icons.payment, color: Colors.black),
                             SizedBox(width: 8),
                             Text(
-                              'Paid Shipments', // Title text
+                              'Paid Shipments',
                               style: TextStyle(
-                                fontSize: 18, // Adjust the font size as needed
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -436,12 +423,12 @@ class _WalletPageState extends State<WalletPage> {
                             onPressed: () {
                               setState(() {
                                 isClicked = true;
-                                limit += 5; // Increase the limit
+                                limit += 5;
                                 getPaidShipments(
                                     _selectedStartDate, _selectedEndDate);
                               });
                             },
-                            child: Text('Load More'),
+                            child: const Text('Load More'),
                           ),
                         ),
                       if (paidShipments.isEmpty)
@@ -472,10 +459,10 @@ class _WalletPageState extends State<WalletPage> {
     return Card(
       elevation: 4,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0), // Set the borderRadius here
+        borderRadius: BorderRadius.circular(12.0),
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(12.0), // Add the borderRadius here
+        borderRadius: BorderRadius.circular(12.0),
         child: Column(
           children: [
             Container(
@@ -486,7 +473,7 @@ class _WalletPageState extends State<WalletPage> {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
                   title,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
@@ -494,15 +481,15 @@ class _WalletPageState extends State<WalletPage> {
                 ),
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               amount,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 24,
                 color: Color.fromARGB(255, 96, 96, 96),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             )
           ],

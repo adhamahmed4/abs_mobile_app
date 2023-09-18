@@ -1,9 +1,12 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:abs_mobile_app/Configurations/app_config.dart';
 import 'package:abs_mobile_app/NavBar/navBar.dart';
 import 'package:flutter/material.dart';
 import 'package:abs_mobile_app/Register/register.dart';
 import 'dart:convert';
-import 'package:http/http.dart' as http; // Import the http package
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -11,55 +14,53 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  TextEditingController _usernameController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
   bool _passwordVisible = false;
 
   Future<void> _login() async {
+    final username = _usernameController.text;
+    final password = _passwordController.text;
+
     final url = Uri.parse('${AppConfig.baseUrl}/signin-client');
     final requestBody = {
-      "userCred": _usernameController.text,
-      "password": _passwordController.text
+      "userCred": username,
+      "password": password,
     };
 
-// Convert the map to a JSON string
     final jsonBody = json.encode(requestBody);
 
-// Set the headers for the request
-    final headers = {
-      'Content-Type': 'application/json',
-    };
     final response = await http.post(
       url,
-      headers: headers,
+      headers: AppConfig.headers,
       body: jsonBody,
     );
 
     if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
-      final accessToken = responseBody["accessToken"];
+      final accessToken = responseBody["accessToken"].toString();
       await AppConfig.storeToken(accessToken);
       await AppConfig.initialize();
+
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => NavBar()),
+          MaterialPageRoute(builder: (context) => const NavBar()),
         );
       }
     } else {
-      // Failed login
       showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
             title: const Text('Login Failed'),
-            content: Text('Invalid username or password.'),
+            content: const Text('Invalid username or password.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -75,13 +76,13 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context) {
           return AlertDialog(
             title: const Text('Reset Password Failed'),
-            content: Text('Please enter your username.'),
+            content: const Text('Please enter your username.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -102,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
     );
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text(
             'Reset password email sent.',
           ),
@@ -114,13 +115,13 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context) {
           return AlertDialog(
             title: const Text('Reset Password Failed'),
-            content: Text('Invalid username.'),
+            content: const Text('Invalid username.'),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text('OK'),
+                child: const Text('OK'),
               ),
             ],
           );
@@ -132,11 +133,11 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEEF1F5),
+      backgroundColor: const Color(0xFFEEF1F5),
       body: Stack(
         children: [
           Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
                 image: AssetImage('assets/images/login_bg.png'),
                 fit: BoxFit.cover,
@@ -147,37 +148,37 @@ class _LoginPageState extends State<LoginPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
+                SizedBox(
                   height: 230,
                   child: Padding(
-                    padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+                    padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
                     child: Image.asset('assets/images/logo.png'),
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.fromLTRB(24, 0, 24, 0),
+                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
+                      const Text(
                         'Welcome back',
                         style: TextStyle(
                           color: Color(0xFF2B2E83),
                           fontSize: 30,
                         ),
                       ),
-                      SizedBox(height: 8),
-                      Text(
+                      const SizedBox(height: 8),
+                      const Text(
                         'Login to access your account.',
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 20,
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       TextField(
                         controller: _usernameController,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           fillColor: Color.fromARGB(255, 250, 250, 250),
                           filled: true,
                           border: OutlineInputBorder(
@@ -185,14 +186,14 @@ class _LoginPageState extends State<LoginPage> {
                           labelText: 'Username',
                         ),
                       ),
-                      SizedBox(height: 12),
+                      const SizedBox(height: 12),
                       TextField(
                         controller: _passwordController,
                         obscureText: !_passwordVisible,
                         decoration: InputDecoration(
-                          fillColor: Color.fromARGB(255, 250, 250, 250),
+                          fillColor: const Color.fromARGB(255, 250, 250, 250),
                           filled: true,
-                          border: OutlineInputBorder(),
+                          border: const OutlineInputBorder(),
                           labelText: 'Password',
                           suffixIcon: GestureDetector(
                             onTap: () {
@@ -210,7 +211,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 24),
+                      const SizedBox(height: 24),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -218,14 +219,14 @@ class _LoginPageState extends State<LoginPage> {
                             onTap: () {
                               resetPassword();
                             },
-                            child: Text(
+                            child: const Text(
                               'Forgot Password?',
                               style: TextStyle(color: Color(0xFF2B2E83)),
                             ),
                           ),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              fixedSize: Size(120, 50),
+                              fixedSize: const Size(120, 50),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(24),
                               ),
@@ -233,7 +234,7 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: () {
                               _login();
                             },
-                            child: Text(
+                            child: const Text(
                               'Login',
                               style: TextStyle(
                                 fontSize: 20,
@@ -242,29 +243,25 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       Center(
                         child: Container(
                           height: 40,
                           width: 280,
                           decoration: BoxDecoration(
-                            color: Colors
-                                .white, // Set the background color to white
-                            border: Border.all(
-                              color: const Color.fromARGB(
-                                  255, 255, 255, 255), // Set the border color
-                            ),
-                            borderRadius: BorderRadius.circular(
-                                6), // Set the border radius
-                          ),
+                              color: Colors.white,
+                              border: Border.all(
+                                color: const Color.fromARGB(255, 255, 255, 255),
+                              ),
+                              borderRadius: BorderRadius.circular(6)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text("Don't have an account?",
+                              const Text("Don't have an account?",
                                   style: TextStyle(
                                     color: Color(0xFF2B2E83),
                                   )),
-                              SizedBox(width: 4),
+                              const SizedBox(width: 4),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(
@@ -274,7 +271,7 @@ class _LoginPageState extends State<LoginPage> {
                                             RegistrationPage()),
                                   );
                                 },
-                                child: Text(
+                                child: const Text(
                                   'Create',
                                   style: TextStyle(
                                     color: Color(0xFFFF9800),
@@ -282,7 +279,7 @@ class _LoginPageState extends State<LoginPage> {
                                   ),
                                 ),
                               ),
-                              Icon(
+                              const Icon(
                                 Icons.arrow_forward,
                                 color: Colors.orange,
                                 size: 20,
@@ -294,7 +291,7 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 100), // Adding some space at the bottom
+                const SizedBox(height: 100),
               ],
             ),
           ),

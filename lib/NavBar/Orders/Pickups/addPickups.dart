@@ -132,7 +132,6 @@ class _AddPickupPageState extends State<AddPickupPage> {
       if (response.statusCode == 200) {
         final jsonData = json.decode(response.body);
         Navigator.pop(context);
-        print(jsonData);
       } else {
         throw Exception('Failed to Create Pickup');
       }

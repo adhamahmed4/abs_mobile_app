@@ -670,7 +670,6 @@ class _DeliveryPageState extends State<DeliveryPage> {
                               setState(() {
                                 _packageTypeID = index! + 1;
                               });
-                              print('switched to: $_packageTypeID');
                             },
                             borderColor: const [
                               Color.fromARGB(255, 227, 227, 227)

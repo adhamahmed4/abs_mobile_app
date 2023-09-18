@@ -1,9 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:abs_mobile_app/Register/user_data.dart';
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import './nextPage.dart';
-import 'dart:developer';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:abs_mobile_app/Configurations/app_config.dart';
@@ -63,18 +64,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
     });
 
     _phoneNumberController.addListener(() {
-      // Ensure the total length is 13 characters (including the prefix)
       if (_phoneNumberController.text.length > 11) {
         _phoneNumberController.text =
             _phoneNumberController.text.substring(0, 11);
       }
 
-      // Move the cursor to the end
       _phoneNumberController.selection = TextSelection.fromPosition(
         TextPosition(offset: _phoneNumberController.text.length),
       );
 
-      // Call the phone number validation method
       _validatePhoneNumber(_phoneNumberController.text);
       _updateButtonEnabledStatus();
     });
@@ -97,7 +95,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       }
     }
 
-    _updateButtonEnabledStatus(); // Call this here to update the button status
+    _updateButtonEnabledStatus();
   }
 
   void _validateUserName(String userName) {
@@ -128,7 +126,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
       }
     }
 
-    _updateButtonEnabledStatus(); // Call this here to update the button status
+    _updateButtonEnabledStatus();
   }
 
   void _validateEmail(String email) {
@@ -146,13 +144,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
       }
     }
 
-    _updateButtonEnabledStatus(); // Call this here to update the button status
+    _updateButtonEnabledStatus();
   }
 
   Future<bool> _validateEmailExistence(String email) async {
     final requestBody = {"email": email};
-    log(email);
-    // Convert the map to a JSON string
     final jsonBody = json.encode(requestBody);
     final response = await http.post(
       Uri.parse("${AppConfig.baseUrl}/validate/email"),
@@ -170,8 +166,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   Future<bool> _validateUsernameExistence(String username) async {
     final requestBody = {"username": username};
-    log(username);
-    // Convert the map to a JSON string
     final jsonBody = json.encode(requestBody);
     final response = await http.post(
       Uri.parse("${AppConfig.baseUrl}/validate/username"),
@@ -189,8 +183,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
   Future<bool> _validateMobileExistence(String mobile) async {
     final requestBody = {"mobile": mobile};
-    log(mobile);
-    // Convert the map to a JSON string
+
     final jsonBody = json.encode(requestBody);
     final response = await http.post(
       Uri.parse("${AppConfig.baseUrl}/validate/mobile"),
@@ -248,17 +241,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
     _updateButtonEnabledStatus();
   }
 
-  void _updateCheckboxStatus(bool? newValue) {
-    if (newValue != null) {
-      if (mounted) {
-        setState(() {
-          _isCheckboxChecked = newValue;
-          _updateButtonEnabledStatus(); // Update the button status based on the new checkbox state
-        });
-      }
-    }
-  }
-
   void _showTermsAndConditionsDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -274,8 +256,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 Container(
                   width: 340,
                   padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFF2B2E83),
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF2B2E83),
                     borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(10.0),
                       topRight: Radius.circular(10.0),
@@ -328,20 +310,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         "If you have any questions or concerns about these terms and conditions, please contact us at [contact@email.com].",
                         style: TextStyle(fontSize: 16),
                       ),
-                      // Add more sections here...
                     ],
                   ),
                 ),
                 Container(
-                  alignment:
-                      Alignment.bottomLeft, // Align button to the bottom left
+                  alignment: Alignment.bottomLeft,
                   padding: const EdgeInsets.fromLTRB(16, 8, 0, 16),
                   child: TextButton(
                     onPressed: () {
-                      Navigator.pop(context); // Close the dialog
+                      Navigator.pop(context);
                     },
                     style: TextButton.styleFrom(
-                      textStyle: TextStyle(fontSize: 16),
+                      textStyle: const TextStyle(fontSize: 16),
                     ),
                     child: const Text(
                       "Close",
@@ -358,12 +338,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
   }
 
   void _updateButtonEnabledStatus() async {
-    log("Updating button status...");
-    log("_fullNameErrorText: $_fullNameErrorText");
-    log("_userNameErrorText: $_userNameErrorText");
-    log("_emailErrorText: $_emailErrorText");
-    log("_confirmPasswordErrorText: $_confirmPasswordErrorText");
-    log("_phoneNumberErrorText: $_phoneNumberErrorText");
     if (mounted) {
       setState(() {
         _isButtonEnabled = _fullNameErrorText.isEmpty &&
@@ -382,7 +356,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFEEF1F5),
+      backgroundColor: const Color(0xFFEEF1F5),
       appBar: AppBar(
           title: const Text(
             'Create an account',
@@ -391,7 +365,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -399,7 +373,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: EdgeInsets.fromLTRB(24, 20, 24, 0),
+                padding: const EdgeInsets.fromLTRB(24, 20, 24, 0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -448,16 +422,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             _emailErrorText.isEmpty ? null : _emailErrorText,
                       ),
                       onChanged: (email) {
-                        _validateEmail(
-                            email); // Call the email validation method
-                        _updateButtonEnabledStatus(); // Update button status
+                        _validateEmail(email);
+                        _updateButtonEnabledStatus();
                       },
                     ),
                     const SizedBox(height: 12),
                     TextField(
                       controller: _phoneNumberController,
                       keyboardType: TextInputType.phone,
-                      //maxLength: 13, // +20 + 10 digits
                       decoration: InputDecoration(
                         fillColor: const Color.fromARGB(255, 250, 250, 250),
                         filled: true,
@@ -481,8 +453,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         onTap: () {
                           if (mounted) {
                             setState(() {
-                              _showPasswordValidation =
-                                  true; // Show password validation on tap
+                              _showPasswordValidation = true;
                             });
                           }
                         },
@@ -511,7 +482,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       ),
                     ),
                     const SizedBox(height: 5),
-                    if (_showPasswordValidation) // Show validation only if _showPasswordValidation is true
+                    if (_showPasswordValidation)
                       FlutterPwValidator(
                         key: validatorKey,
                         controller: _passwordController,
@@ -572,10 +543,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       children: [
                         TextButton(
                           onPressed: () {
-                            _showTermsAndConditionsDialog(
-                                context); // Call the function to show the dialog
+                            _showTermsAndConditionsDialog(context);
                           },
-                          child: Text(
+                          child: const Text(
                             "Read Terms and Conditions",
                             style: TextStyle(
                               color: Colors.orange,
@@ -584,14 +554,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           ),
                         ),
                         CheckboxListTile(
-                          title: Text("I agree to the terms and conditions"),
+                          title:
+                              const Text("I agree to the terms and conditions"),
                           value: _isCheckboxChecked,
                           onChanged: (bool? newValue) {
                             if (newValue != null) {
                               if (mounted) {
                                 setState(() {
                                   _isCheckboxChecked = newValue;
-                                  _updateButtonEnabledStatus(); // Update the button status based on the new checkbox state
+                                  _updateButtonEnabledStatus();
                                 });
                               }
                             }
@@ -615,16 +586,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
                             ),
                             child: IconButton(
                               onPressed: () {
-                                // Implement Back functionality
-                                Navigator.pop(
-                                    context); // This will navigate back to the previous screen
+                                Navigator.pop(context);
                               },
                               icon: const Icon(Icons.arrow_back),
                             ),
                           ),
-                          const SizedBox(
-                              width:
-                                  30), // Add spacing between the back button and "Next" button
+                          const SizedBox(width: 30),
                           Expanded(
                             child: ElevatedButton(
                               style: ElevatedButton.styleFrom(
@@ -666,7 +633,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                             context,
                                             PageRouteBuilder(
                                               transitionDuration:
-                                                  Duration(milliseconds: 300),
+                                                  const Duration(
+                                                      milliseconds: 300),
                                               pageBuilder: (_, __, ___) =>
                                                   NextPage(
                                                 userData: userData,
@@ -677,7 +645,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                                   Widget child) {
                                                 return SlideTransition(
                                                   position: Tween<Offset>(
-                                                    begin: Offset(1.0, 0.0),
+                                                    begin:
+                                                        const Offset(1.0, 0.0),
                                                     end: Offset.zero,
                                                   ).animate(animation),
                                                   child: child,
@@ -687,21 +656,25 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                           );
                                         } else {
                                           String errorMessage = '';
-                                          if (!isEmailValid)
+                                          if (!isEmailValid) {
                                             errorMessage =
                                                 'Email is already taken.';
-                                          if (!isUsernameValid)
+                                          }
+                                          if (!isUsernameValid) {
                                             errorMessage =
                                                 'Username is already taken.';
-                                          if (!isMobileValid)
+                                          }
+                                          if (!isMobileValid) {
                                             errorMessage =
                                                 'Mobile number is already taken.';
+                                          }
 
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(
                                             SnackBar(
                                               content: Text(errorMessage),
-                                              duration: Duration(seconds: 3),
+                                              duration:
+                                                  const Duration(seconds: 3),
                                             ),
                                           );
                                         }
