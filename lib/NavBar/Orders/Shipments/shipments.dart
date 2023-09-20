@@ -181,7 +181,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                         Row(
                                           children: [
                                             Text(
-                                              '${shipment["AWB"]}',
+                                              '${shipment?["AWB"]}',
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.grey,
@@ -199,7 +199,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                                     BorderRadius.circular(20),
                                               ),
                                               child: Text(
-                                                shipment["Status"],
+                                                shipment["Status"] ?? '',
                                                 style: const TextStyle(
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.bold,
@@ -212,7 +212,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                         Row(
                                           children: [
                                             Text(
-                                              shipment["Consignee Name"],
+                                              shipment["Consignee Name"] ?? '',
                                               style: const TextStyle(
                                                 fontSize: 15,
                                                 color: Colors.black,
@@ -229,7 +229,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                                     BorderRadius.circular(20),
                                               ),
                                               child: Text(
-                                                '${shipment["Cash"].abs()} EGP',
+                                                '${shipment["Cash"] != null ? shipment["Cash"].abs() : '0'} EGP',
                                                 style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 14),

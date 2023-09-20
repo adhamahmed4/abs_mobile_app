@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppConfig {
@@ -32,6 +34,7 @@ class AppConfig {
   static Map<String, String> get headers {
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
+      'Accept-Language': 'en',
       'Authorization': 'Bearer $jwtToken'
     };
 

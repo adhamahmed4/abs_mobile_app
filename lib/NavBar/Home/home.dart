@@ -7,6 +7,7 @@ import 'package:abs_mobile_app/Configurations/app_config.dart';
 import 'dart:convert';
 import 'package:abs_mobile_app/NavBar/More/Settings/BusinessInfo/businessInfo.dart';
 import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/paymentMethods.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -414,7 +415,7 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                             children: [
                               Text(
-                                'Hello, $userName', // Replace with the actual user name
+                                '${AppLocalizations.of(context)!.hello} ${userName!}',
                                 style: const TextStyle(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,

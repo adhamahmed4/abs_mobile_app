@@ -6,7 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:abs_mobile_app/Register/register.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -14,6 +15,11 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _passwordVisible = false;
@@ -38,6 +44,27 @@ class _LoginPageState extends State<LoginPage> {
 
     if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
+      if (responseBody == 'User not found') {
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(AppLocalizations.of(context)!.loginFailed),
+              content:
+                  Text(AppLocalizations.of(context)!.invalidUsernameOrPassword),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(AppLocalizations.of(context)!.ok),
+                ),
+              ],
+            );
+          },
+        );
+        return;
+      }
       final accessToken = responseBody["accessToken"].toString();
       await AppConfig.storeToken(accessToken);
       await AppConfig.initialize();
@@ -53,14 +80,15 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Login Failed'),
-            content: const Text('Invalid username or password.'),
+            title: Text(AppLocalizations.of(context)!.loginFailed),
+            content:
+                Text(AppLocalizations.of(context)!.invalidUsernameOrPassword),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('OK'),
+                child: Text(AppLocalizations.of(context)!.ok),
               ),
             ],
           );
@@ -75,14 +103,15 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Reset Password Failed'),
-            content: const Text('Please enter your username.'),
+            title: Text(AppLocalizations.of(context)!.resetPasswordFailed),
+            content:
+                Text(AppLocalizations.of(context)!.pleaseEnterYourUsername),
             actions: <Widget>[
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: const Text('OK'),
+                child: Text(AppLocalizations.of(context)!.ok),
               ),
             ],
           );
@@ -103,10 +132,9 @@ class _LoginPageState extends State<LoginPage> {
     );
     if (response.statusCode == 200) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'Reset password email sent.',
-          ),
+              AppLocalizations.of(context)!.resetPasswordLinkSentToYourEmail),
         ),
       );
     } else {
@@ -114,15 +142,15 @@ class _LoginPageState extends State<LoginPage> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Reset Password Failed'),
-            content: const Text('Invalid username.'),
+            title: Text(AppLocalizations.of(context)!.resetPasswordFailed),
+            content:
+                Text(AppLocalizations.of(context)!.invalidUsernameOrPassword),
             actions: <Widget>[
               TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('OK'),
-              ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text(AppLocalizations.of(context)!.ok)),
             ],
           );
         },
@@ -160,17 +188,17 @@ class _LoginPageState extends State<LoginPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Welcome back',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!.welcomeBack,
+                        style: const TextStyle(
                           color: Color(0xFF2B2E83),
                           fontSize: 30,
                         ),
                       ),
                       const SizedBox(height: 8),
-                      const Text(
-                        'Login to access your account.',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!.loginToAccessYourAccount,
+                        style: const TextStyle(
                           color: Colors.grey,
                           fontSize: 20,
                         ),
@@ -178,12 +206,12 @@ class _LoginPageState extends State<LoginPage> {
                       const SizedBox(height: 20),
                       TextField(
                         controller: _usernameController,
-                        decoration: const InputDecoration(
-                          fillColor: Color.fromARGB(255, 250, 250, 250),
+                        decoration: InputDecoration(
+                          fillColor: const Color.fromARGB(255, 250, 250, 250),
                           filled: true,
-                          border: OutlineInputBorder(
+                          border: const OutlineInputBorder(
                               borderSide: BorderSide(color: Color(0xFFFFAB4A))),
-                          labelText: 'Username',
+                          labelText: AppLocalizations.of(context)!.username,
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -194,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
                           fillColor: const Color.fromARGB(255, 250, 250, 250),
                           filled: true,
                           border: const OutlineInputBorder(),
-                          labelText: 'Password',
+                          labelText: AppLocalizations.of(context)!.password,
                           suffixIcon: GestureDetector(
                             onTap: () {
                               if (mounted) {
@@ -219,25 +247,29 @@ class _LoginPageState extends State<LoginPage> {
                             onTap: () {
                               resetPassword();
                             },
-                            child: const Text(
-                              'Forgot Password?',
-                              style: TextStyle(color: Color(0xFF2B2E83)),
+                            child: Text(
+                              AppLocalizations.of(context)!.forgotPassword,
+                              style: const TextStyle(color: Color(0xFF2B2E83)),
                             ),
                           ),
-                          ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              fixedSize: const Size(120, 50),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24),
+                          Center(
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(24),
+                                ),
                               ),
-                            ),
-                            onPressed: () {
-                              _login();
-                            },
-                            child: const Text(
-                              'Login',
-                              style: TextStyle(
-                                fontSize: 20,
+                              onPressed: () {
+                                _login();
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                  AppLocalizations.of(context)!.login,
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
@@ -245,46 +277,51 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                       const SizedBox(height: 20),
                       Center(
-                        child: Container(
-                          height: 40,
-                          width: 280,
-                          decoration: BoxDecoration(
+                        child: IntrinsicWidth(
+                          child: Container(
+                            decoration: BoxDecoration(
                               color: Colors.white,
                               border: Border.all(
                                 color: const Color.fromARGB(255, 255, 255, 255),
                               ),
-                              borderRadius: BorderRadius.circular(6)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text("Don't have an account?",
-                                  style: TextStyle(
-                                    color: Color(0xFF2B2E83),
-                                  )),
-                              const SizedBox(width: 4),
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            RegistrationPage()),
-                                  );
-                                },
-                                child: const Text(
-                                  'Create',
-                                  style: TextStyle(
-                                    color: Color(0xFFFF9800),
-                                    fontWeight: FontWeight.bold,
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                      AppLocalizations.of(context)!
+                                          .doNotHaveAnAccount,
+                                      style: const TextStyle(
+                                          color: Color(0xFF2B2E83))),
+                                  const SizedBox(width: 4),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                RegistrationPage()),
+                                      );
+                                    },
+                                    child: Text(
+                                      AppLocalizations.of(context)!.create,
+                                      style: const TextStyle(
+                                        color: Color(0xFFFF9800),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
                                   ),
-                                ),
+                                  const Icon(
+                                    Icons.arrow_forward,
+                                    color: Colors.orange,
+                                    size: 20,
+                                  ),
+                                ],
                               ),
-                              const Icon(
-                                Icons.arrow_forward,
-                                color: Colors.orange,
-                                size: 20,
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       )

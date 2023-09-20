@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../Configurations/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MorePage extends StatefulWidget {
   @override
@@ -79,9 +80,10 @@ class _MorePageState extends State<MorePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'More',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        title: Text(
+          AppLocalizations.of(context)!.navBarMore,
+          style:
+              const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -159,7 +161,8 @@ class _MorePageState extends State<MorePage> {
                               ListTile(
                                 tileColor: Colors.white,
                                 leading: const Icon(Icons.settings),
-                                title: const Text('Settings'),
+                                title: Text(
+                                    AppLocalizations.of(context)!.settings),
                                 trailing: const Icon(Icons.arrow_forward),
                                 onTap: () {
                                   Navigator.push(
@@ -189,7 +192,8 @@ class _MorePageState extends State<MorePage> {
                               ListTile(
                                 tileColor: Colors.white,
                                 leading: const Icon(Icons.wallet),
-                                title: const Text('Wallet'),
+                                title:
+                                    Text(AppLocalizations.of(context)!.wallet),
                                 trailing: const Icon(Icons.arrow_forward),
                                 onTap: () {
                                   Navigator.push(
@@ -203,7 +207,8 @@ class _MorePageState extends State<MorePage> {
                               ListTile(
                                 tileColor: Colors.white,
                                 leading: const Icon(Icons.support),
-                                title: const Text('Support Tickets'),
+                                title: Text(AppLocalizations.of(context)!
+                                    .supportTickets),
                                 trailing: const Icon(Icons.arrow_forward),
                                 onTap: () {
                                   Navigator.push(
@@ -248,7 +253,8 @@ class _MorePageState extends State<MorePage> {
                               ListTile(
                                 tileColor: Colors.white,
                                 leading: const Icon(Icons.text_snippet),
-                                title: const Text('Terms & Conditions'),
+                                title: Text(AppLocalizations.of(context)!
+                                    .termsAndConditions),
                                 trailing: const Icon(Icons.arrow_forward),
                                 onTap: () {
                                   Navigator.push(
@@ -293,9 +299,9 @@ class _MorePageState extends State<MorePage> {
                               ListTile(
                                 tileColor: Colors.white,
                                 leading: const Icon(Icons.logout),
-                                title: const Text(
-                                  'Logout',
-                                  style: TextStyle(
+                                title: Text(
+                                  AppLocalizations.of(context)!.logout,
+                                  style: const TextStyle(
                                     color: Colors.red,
                                   ),
                                 ),

@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_pw_validator/flutter_pw_validator.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../../../Configurations/app_config.dart';
 import 'package:image_picker/image_picker.dart';
@@ -13,6 +14,8 @@ class ChangePasswordPage extends StatefulWidget {
 }
 
 class _ChangePasswordPageState extends State<ChangePasswordPage> {
+  final GlobalKey<FlutterPwValidatorState> validatorKey =
+      GlobalKey<FlutterPwValidatorState>();
   bool _isButtonEnabled = false;
   final _formKey = GlobalKey<FormState>();
 
@@ -23,6 +26,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   bool _oldPasswordVisible = false;
   bool _newPasswordVisible = false;
   bool _confirmNewPasswordVisible = false;
+  bool _showPasswordValidation = false;
+  bool _passwordIsValid = false;
 
   void _updateButtonEnabledStatus() {
     if (mounted) {
@@ -30,7 +35,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         _isButtonEnabled = _oldPasswordController.text.isNotEmpty &&
             _newPasswordController.text.isNotEmpty &&
             _confirmNewPasswordController.text.isNotEmpty &&
-            _newPasswordController.text == _confirmNewPasswordController.text;
+            _newPasswordController.text == _confirmNewPasswordController.text &&
+            _passwordIsValid;
       });
     }
   }
@@ -157,10 +163,21 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         child: TextField(
                           controller: _newPasswordController,
                           obscureText: !_newPasswordVisible,
+                          onTap: () {
+                            if (mounted) {
+                              setState(() {
+                                if (!_passwordIsValid) {
+                                  _showPasswordValidation = true;
+                                } else {
+                                  _showPasswordValidation = false;
+                                }
+                              });
+                            }
+                          },
                           decoration: InputDecoration(
                             fillColor: Color.fromARGB(255, 250, 250, 250),
                             filled: true,
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Color(0xFFFFAB4A))),
                             labelText: 'New Password',
@@ -182,6 +199,36 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                           onChanged: (value) => _updateButtonEnabledStatus(),
                         ),
                       ),
+                      // const SizedBox(height: 5),
+                      if (_showPasswordValidation)
+                        FlutterPwValidator(
+                          key: validatorKey,
+                          controller: _newPasswordController,
+                          minLength: 8,
+                          uppercaseCharCount: 1,
+                          lowercaseCharCount: 1,
+                          numericCharCount: 1,
+                          width: 400,
+                          height: 130,
+                          onSuccess: () {
+                            if (mounted) {
+                              setState(() {
+                                _passwordIsValid = true;
+                                _showPasswordValidation = false;
+                              });
+                            }
+                            _updateButtonEnabledStatus();
+                          },
+                          onFail: () {
+                            if (mounted) {
+                              setState(() {
+                                _passwordIsValid = false;
+                                _showPasswordValidation = true;
+                              });
+                            }
+                            _updateButtonEnabledStatus();
+                          },
+                        ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                         child: TextField(

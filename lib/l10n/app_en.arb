@@ -1,0 +1,142 @@
+{
+    "language": "English",
+    "@language" : {
+        "description": "The current language"
+    },
+    "username": "Username",
+    "@username": {
+        "description": "The username of the user"
+    },
+    "password": "Password",
+    "@password": {
+        "description": "The password of the user"
+    },
+    "loginFailed": "Login failed",
+    "@loginFailed": {
+        "description": "The message displayed when the login failed"
+    },
+    "invalidUsernameOrPassword": "Invalid username or password",
+    "@invalidUsernameOrPassword": {
+        "description": "The message displayed when the username or password is invalid"
+    },
+    "ok": "OK",
+    "@ok": {
+        "description": "The OK button"
+    },
+    "resetPasswordFailed": "Reset password failed",
+    "@resetPasswordFailed": {
+        "description": "The message displayed when the reset password failed"
+    },
+    "pleaseEnterYourUsername": "Please enter your username",
+    "@pleaseEnterYourUsername": {
+        "description": "The message displayed when the username is not entered"
+    },
+    "resetPasswordLinkSentToYourEmail": "Reset password link sent to your email",
+    "@resetPasswordLinkSentToYourEmail": {
+        "description": "The message displayed when the reset password link is sent to the user's email"
+    },
+    "invalidUsername": "Invalid username",
+    "@invalidUsername": {
+        "description": "The message displayed when the username is invalid"
+    },
+    "welcomeBack": "Welcome back",
+    "@welcomeBack": {
+        "description": "The message displayed when the user is logged in"
+    },
+    "loginToAccessYourAccount": "Login to access your account",
+    "@loginToAccessYourAccount": {
+        "description": "The message displayed when the user is not logged in"
+    },
+    "forgotPassword": "Forgot password?",
+    "@forgotPassword": {
+        "description": "The message displayed when the user forgot the password"
+    },
+    "login": "Login",
+   "@login": {
+        "description": "The login button"
+    },
+    "doNotHaveAnAccount": "Don't have an account?",
+    "@doNotHaveAnAccount": {
+        "description": "The message displayed when the user does not have an account"
+    },
+    "create": "Create",
+   "@create": {
+        "description": "The create button"
+    },
+    "hello": "Hello",
+    "@hello": {
+        "description": "The hello message"
+    },
+    "navBarHome": "Home",
+    "@navBarHome": {
+        "description": "The home button in the navigation bar"
+    },
+    "navBarOrders": "Orders",
+    "@navBarOrders": {
+        "description": "The orders button in the navigation bar"
+    },
+    "navBarTrack": "Track",
+    "@navBarTrack": {
+        "description": "The track button in the navigation bar"
+    },
+    "navBarMore": "More",
+    "@navBarMore": {
+        "description": "The more button in the navigation bar"
+    },
+    "settings": "Settings",
+    "@settings": {
+        "description": "The settings button"
+    },
+    "wallet": "Wallet",
+    "@wallet": {
+        "description": "The wallet button"
+    },
+    "supportTickets": "Support tickets",
+    "@supportTickets": {
+        "description": "The support tickets button"
+    },
+    "termsAndConditions": "Terms and conditions",
+    "@termsAndConditions": {
+        "description": "The terms and conditions button"
+    },
+    "logout": "Logout",
+    "@logout": {
+        "description": "The logout button"
+    },
+    "personalInfo": "Personal info",
+    "@personalInfo": {
+        "description": "The personal info button"
+    },
+    "businessInfo": "Business info",
+    "@businessInfo": {
+        "description": "The business info button"
+    },
+    "subAccounts": "Sub accounts",
+    "@subAccounts": {
+        "description": "The sub accounts button"
+    },
+    "pricingPlan": "Pricing plan",
+    "@pricingPlan": {
+        "description": "The pricing plan button"
+    },
+    "paymentMethods": "Payment methods",
+    "@paymentMethods": {
+        "description": "The payment methods button"
+    },
+    "businessLocations": "Business locations",
+    "@businessLocations": {
+        "description": "The business locations button"
+    },
+    "teamMembers": "Team members",
+    "@teamMembers": {
+        "description": "The team members button"
+    },
+    "language": "Language",
+    "@language": {
+        "description": "The language button"
+    },
+    "deleteAccount": "Delete account",
+    "@deleteAccount": {
+        "description": "The delete account button"
+    }
+}
