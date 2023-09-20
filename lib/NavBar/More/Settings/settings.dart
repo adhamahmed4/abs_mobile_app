@@ -1,5 +1,6 @@
 import 'package:abs_mobile_app/NavBar/More/Settings/BusinessInfo/businessInfo.dart';
 import 'package:abs_mobile_app/NavBar/More/Settings/BusinessLocations/businessLocations.dart';
+import 'package:abs_mobile_app/NavBar/More/Settings/Language/language.dart';
 import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/BankTransfer/bankTransfer.dart';
 import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/MobileCash/mobileCash.dart';
 import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/NearestBranch/nearestBranch.dart';
@@ -13,6 +14,7 @@ import 'package:flutter/material.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -133,14 +135,15 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Settings',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.settings,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,7 +161,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         ListTile(
                           tileColor: Colors.white,
                           leading: Icon(Icons.account_circle_outlined),
-                          title: Text('Personal Info'),
+                          title:
+                              Text(AppLocalizations.of(context)!.personalInfo),
                           trailing: Icon(Icons.arrow_forward),
                           onTap: () {
                             Navigator.push(
@@ -188,7 +192,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         ListTile(
                           tileColor: Colors.white,
                           leading: Icon(Icons.business_outlined),
-                          title: Text('Business Info'),
+                          title:
+                              Text(AppLocalizations.of(context)!.businessInfo),
                           trailing: Icon(Icons.arrow_forward),
                           onTap: () {
                             Navigator.push(
@@ -218,7 +223,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         ListTile(
                           tileColor: Colors.white,
                           leading: Icon(Icons.account_tree),
-                          title: Text('Sub Accounts'),
+                          title:
+                              Text(AppLocalizations.of(context)!.subAccounts),
                           trailing: Icon(Icons.arrow_forward),
                           onTap: () {
                             Navigator.push(
@@ -248,7 +254,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         ListTile(
                           tileColor: Colors.white,
                           leading: Icon(Icons.request_quote_outlined),
-                          title: Text('Pricing Plan'),
+                          title:
+                              Text(AppLocalizations.of(context)!.pricingPlan),
                           trailing: Icon(Icons.arrow_forward),
                           onTap: () {
                             Navigator.push(
@@ -278,7 +285,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         ListTile(
                           tileColor: Colors.white,
                           leading: Icon(Icons.payment_outlined),
-                          title: Text('Payment Methods'),
+                          title: Text(
+                              AppLocalizations.of(context)!.paymentMethods),
                           trailing: Icon(Icons.arrow_forward),
                           onTap: () {
                             hasPaymentMethod();
@@ -288,7 +296,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         ListTile(
                           tileColor: Colors.white,
                           leading: Icon(Icons.my_location_outlined),
-                          title: Text('Business Locations'),
+                          title: Text(
+                              AppLocalizations.of(context)!.businessLocations),
                           trailing: Icon(Icons.arrow_forward),
                           onTap: () {
                             Navigator.push(
@@ -319,7 +328,8 @@ class _SettingsPageState extends State<SettingsPage> {
                         ListTile(
                           tileColor: Colors.white,
                           leading: Icon(Icons.supervised_user_circle_outlined),
-                          title: Text('Team members'),
+                          title:
+                              Text(AppLocalizations.of(context)!.teamMembers),
                           trailing: Icon(Icons.arrow_forward),
                           onTap: () {
                             Navigator.push(
@@ -349,10 +359,30 @@ class _SettingsPageState extends State<SettingsPage> {
                         ListTile(
                           tileColor: Colors.white,
                           leading: Icon(Icons.language_outlined),
-                          title: Text('Language'),
+                          title: Text(AppLocalizations.of(context)!.language),
                           trailing: Icon(Icons.arrow_forward),
                           onTap: () {
-                            // Handle profile tap
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                transitionDuration: Duration(
+                                    milliseconds:
+                                        300), // Adjust the animation duration
+                                pageBuilder: (_, __, ___) => LanguagePage(),
+                                transitionsBuilder: (_,
+                                    Animation<double> animation,
+                                    __,
+                                    Widget child) {
+                                  return SlideTransition(
+                                    position: Tween<Offset>(
+                                      begin: Offset(1.0, 0.0),
+                                      end: Offset.zero,
+                                    ).animate(animation),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
                           },
                         ),
                       ],
@@ -375,7 +405,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           tileColor: Colors.white,
                           leading: Icon(Icons.person_remove),
                           title: Text(
-                            'Delete account',
+                            AppLocalizations.of(context)!.deleteAccount,
                             style: TextStyle(
                               color: Colors.red, // Set the font color to red
                             ),

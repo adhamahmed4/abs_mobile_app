@@ -453,7 +453,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         onTap: () {
                           if (mounted) {
                             setState(() {
-                              _showPasswordValidation = true;
+                              if (!_passwordIsValid) {
+                                _showPasswordValidation = true;
+                              } else {
+                                _showPasswordValidation = false;
+                              }
                             });
                           }
                         },
@@ -496,6 +500,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           if (mounted) {
                             setState(() {
                               _passwordIsValid = true;
+                              _showPasswordValidation = false;
                             });
                           }
                           _updateButtonEnabledStatus();
@@ -504,6 +509,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           if (mounted) {
                             setState(() {
                               _passwordIsValid = false;
+                              _showPasswordValidation = true;
                             });
                           }
                           _updateButtonEnabledStatus();

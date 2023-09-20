@@ -2,8 +2,10 @@ import 'package:abs_mobile_app/NavBar/More/More.dart';
 import 'package:abs_mobile_app/NavBar/Home/Home.dart';
 import 'package:abs_mobile_app/NavBar/Orders/orders.dart';
 import 'package:abs_mobile_app/Track/track.dart';
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NavBar extends StatefulWidget {
   const NavBar({super.key});
@@ -18,7 +20,7 @@ class _NavBarState extends State<NavBar> {
       PageController(); // Added PageController
 
   final List<Widget> _pages = [
-    HomePage(),
+    const HomePage(),
     OrdersPage(),
     TrackPage(),
     MorePage(),
@@ -71,29 +73,31 @@ class _NavBarState extends State<NavBar> {
               onTabChange: (index) {
                 switchPage(index); // Call your switchPage function
               },
-              tabs: const [
+              tabs: [
                 GButton(
                   icon: Icons.home,
-                  text: 'Home',
+                  text: AppLocalizations.of(context)!.navBarHome,
                 ),
                 GButton(
                   icon: Icons.local_shipping,
-                  text: 'Orders',
+                  text: AppLocalizations.of(context)!.navBarOrders,
                 ),
                 GButton(
                   icon: Icons.room,
-                  text: 'Track',
+                  text: AppLocalizations.of(context)!.navBarTrack,
                 ),
                 GButton(
                   icon: Icons.menu,
-                  text: 'More',
+                  text: AppLocalizations.of(context)!.navBarMore,
                 ),
               ],
             ),
           ),
           Positioned(
             top: 0,
-            left: MediaQuery.of(context).size.width / 4 * _selectedIndex,
+            left: MyApp.getLocale(context).toString() == 'en'
+                ? MediaQuery.of(context).size.width / 4 * _selectedIndex
+                : MediaQuery.of(context).size.width / 4 * (3 - _selectedIndex),
             child: Container(
               alignment: Alignment.topCenter,
               width: MediaQuery.of(context).size.width / 4,
