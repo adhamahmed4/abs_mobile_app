@@ -1,16 +1,22 @@
 // ignore_for_file: must_be_immutable
 import 'package:abs_mobile_app/Configurations/app_config.dart';
 import 'package:abs_mobile_app/NavBar/navBar.dart';
+import 'package:abs_mobile_app/api/firebase_api.dart';
 import 'package:abs_mobile_app/l10n/l10n.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Login/login.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:abs_mobile_app/firebase_options.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  // await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await FirebaseApi().initNotifications();
   runApp(
     const MyApp(),
   );
@@ -58,10 +64,19 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  // void sendTestNotification() async {
+  //   FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+  //   await messaging.subscribeToTopic('test_topic');
+
+  //   print('Subscribed to test_topic. You have sent a test notification.');
+  // }
+
   @override
   void initState() {
     super.initState();
     _loadSavedLanguage();
+    // sendTestNotification();
   }
 
   @override
