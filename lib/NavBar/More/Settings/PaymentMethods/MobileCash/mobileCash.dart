@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MobileCashPage extends StatefulWidget {
   @override
@@ -46,13 +47,15 @@ class _MobileCashPageState extends State<MobileCashPage> {
     if (mobileNumber.isEmpty) {
       if (mounted) {
         setState(() {
-          _mobileNumberErrorText = 'Mobile number is required';
+          _mobileNumberErrorText =
+              AppLocalizations.of(context)!.mobileNumberIsRequired;
         });
       }
     } else if (mobileNumber.length != 11) {
       if (mounted) {
         setState(() {
-          _mobileNumberErrorText = 'Mobile number must be 11 digits';
+          _mobileNumberErrorText =
+              AppLocalizations.of(context)!.mobileNumberMustBeDigits;
         });
       }
     } else {
@@ -126,14 +129,15 @@ class _MobileCashPageState extends State<MobileCashPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Mobile Cash',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.mobileCash,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: Stack(
         children: [
           if (!isLoading)
@@ -160,7 +164,8 @@ class _MobileCashPageState extends State<MobileCashPage> {
                                 border: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A))),
-                                labelText: "Mobile Number",
+                                labelText:
+                                    AppLocalizations.of(context)!.mobileNumber,
                                 errorText: _mobileNumberErrorText.isNotEmpty
                                     ? _mobileNumberErrorText
                                     : null,
@@ -200,9 +205,10 @@ class _MobileCashPageState extends State<MobileCashPage> {
                                         }
                                       }
                                     : null, // Disable the button if fields are not valid
-                                child: const Padding(
-                                  padding: EdgeInsets.all(12.0),
-                                  child: Text('Submit'),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Text(
+                                      AppLocalizations.of(context)!.submit),
                                 ),
                               )
                             : null,

@@ -154,7 +154,7 @@ class _HomePageState extends State<HomePage> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    'Email sent to $email',
+                    '${AppLocalizations.of(context)!.emailSentTo} $email',
                   ),
                 ),
               );
@@ -162,7 +162,7 @@ class _HomePageState extends State<HomePage> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    'Failed to send email to $email',
+                    '${AppLocalizations.of(context)!.failedToSendEmailTo} $email',
                   ),
                 ),
               );
@@ -193,7 +193,7 @@ class _HomePageState extends State<HomePage> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(
-                    'Email verification disabled for $minutes min $seconds sec.',
+                    '${AppLocalizations.of(context)!.emailVerificationDisabledFor} $minutes ${AppLocalizations.of(context)!.min} $seconds ${AppLocalizations.of(context)!.sec}',
                   ),
                 ),
               );
@@ -245,7 +245,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildStatusCircle(int validatedCount, int totalCount) {
     double progress = totalCount > 0 ? validatedCount / totalCount : 0.0;
     String progressText = '$validatedCount';
-    String progressText2 = 'of $totalCount';
+    String progressText2 = '${AppLocalizations.of(context)!.off} $totalCount';
 
     return SizedBox(
       width: 100,
@@ -451,13 +451,13 @@ class _HomePageState extends State<HomePage> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       const SizedBox(width: 8),
-                                      const Text(
-                                        'Complete your'
+                                      Text(
+                                        '${AppLocalizations.of(context)!.completeYour}'
                                         '\n'
-                                        'account for'
+                                        '${AppLocalizations.of(context)!.accountFor}'
                                         '\n'
-                                        'a full experience',
-                                        style: TextStyle(
+                                        '${AppLocalizations.of(context)!.aFullExperience}',
+                                        style: const TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
                                           color: Color.fromARGB(249, 0, 0, 0),
@@ -508,9 +508,10 @@ class _HomePageState extends State<HomePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  'Shipments Overview',
-                                  style: TextStyle(
+                                Text(
+                                  AppLocalizations.of(context)!
+                                      .shipmentsOverview,
+                                  style: const TextStyle(
                                     fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                     color: Color.fromARGB(249, 0, 0, 0),
@@ -534,9 +535,10 @@ class _HomePageState extends State<HomePage> {
                                               color: const Color(0xFF2B2E83),
                                             ),
                                             const SizedBox(height: 8),
-                                            const Text(
-                                              'New Shipments',
-                                              style: TextStyle(
+                                            Text(
+                                              AppLocalizations.of(context)!
+                                                  .newShipments,
+                                              style: const TextStyle(
                                                 fontSize: 15,
                                                 color: Color.fromARGB(
                                                     248, 125, 125, 125),
@@ -571,9 +573,10 @@ class _HomePageState extends State<HomePage> {
                                               color: Colors.orange,
                                             ),
                                             const SizedBox(height: 8),
-                                            const Text(
-                                              'Processing Shipments',
-                                              style: TextStyle(
+                                            Text(
+                                              AppLocalizations.of(context)!
+                                                  .processingShipments,
+                                              style: const TextStyle(
                                                 fontSize: 15,
                                                 color: Color.fromARGB(
                                                     248, 125, 125, 125),
@@ -622,9 +625,10 @@ class _HomePageState extends State<HomePage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    'Processing Shipments',
-                                    style: TextStyle(
+                                  Text(
+                                    AppLocalizations.of(context)!
+                                        .processingShipments,
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                       color: Color.fromARGB(249, 0, 0, 0),
@@ -633,9 +637,10 @@ class _HomePageState extends State<HomePage> {
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  const Text(
-                                    'Status for all Shipments under processing',
-                                    style: TextStyle(
+                                  Text(
+                                    AppLocalizations.of(context)!
+                                        .statusForAllShipmentsUnderProcessing,
+                                    style: const TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey,
                                     ),
@@ -645,9 +650,9 @@ class _HomePageState extends State<HomePage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text(
-                                        "In Transit",
-                                        style: TextStyle(
+                                      Text(
+                                        AppLocalizations.of(context)!.inTransit,
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           color:
                                               Color.fromARGB(255, 75, 75, 75),
@@ -667,9 +672,10 @@ class _HomePageState extends State<HomePage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text(
-                                        "Out for Delivery",
-                                        style: TextStyle(
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .outForDelivery,
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           color:
                                               Color.fromARGB(255, 75, 75, 75),
@@ -689,9 +695,10 @@ class _HomePageState extends State<HomePage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text(
-                                        "Out for Return",
-                                        style: TextStyle(
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .outForReturn,
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           color:
                                               Color.fromARGB(255, 75, 75, 75),
@@ -711,9 +718,9 @@ class _HomePageState extends State<HomePage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text(
-                                        "On Hold",
-                                        style: TextStyle(
+                                      Text(
+                                        AppLocalizations.of(context)!.onHold,
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           color:
                                               Color.fromARGB(255, 75, 75, 75),
@@ -754,9 +761,10 @@ class _HomePageState extends State<HomePage> {
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Text(
-                                    'Processed Shipments',
-                                    style: TextStyle(
+                                  Text(
+                                    AppLocalizations.of(context)!
+                                        .processingShipments,
+                                    style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
                                       color: Color.fromARGB(249, 0, 0, 0),
@@ -765,9 +773,10 @@ class _HomePageState extends State<HomePage> {
                                   const SizedBox(
                                     height: 5,
                                   ),
-                                  const Text(
-                                    'Status for all processed Shipments',
-                                    style: TextStyle(
+                                  Text(
+                                    AppLocalizations.of(context)!
+                                        .statusForAllShipmentsUnderProcessing,
+                                    style: const TextStyle(
                                       fontSize: 14,
                                       color: Colors.grey,
                                     ),
@@ -777,9 +786,9 @@ class _HomePageState extends State<HomePage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text(
-                                        "Delivered",
-                                        style: TextStyle(
+                                      Text(
+                                        AppLocalizations.of(context)!.delivered,
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           color:
                                               Color.fromARGB(255, 75, 75, 75),
@@ -799,9 +808,10 @@ class _HomePageState extends State<HomePage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text(
-                                        "Undelivered",
-                                        style: TextStyle(
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .undelivered,
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           color:
                                               Color.fromARGB(255, 75, 75, 75),
@@ -821,9 +831,10 @@ class _HomePageState extends State<HomePage> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text(
-                                        "Returned To Shipper",
-                                        style: TextStyle(
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .returnedToShipper,
+                                        style: const TextStyle(
                                           fontSize: 14,
                                           color:
                                               Color.fromARGB(255, 75, 75, 75),
@@ -869,12 +880,13 @@ class _HomePageState extends State<HomePage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      const Padding(
+                                      Padding(
                                         padding:
                                             EdgeInsets.fromLTRB(0, 0, 0, 16),
                                         child: Text(
-                                          'Your Balance',
-                                          style: TextStyle(
+                                          AppLocalizations.of(context)!
+                                              .yourBalance,
+                                          style: const TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
                                             color: Color.fromARGB(249, 0, 0, 0),
@@ -891,11 +903,11 @@ class _HomePageState extends State<HomePage> {
                                               color: Color(0xFF2B2E83),
                                             ),
                                           ),
-                                          const Padding(
+                                          Padding(
                                             padding: EdgeInsets.all(8.0),
                                             child: Text(
-                                              'EGP',
-                                              style: TextStyle(
+                                              AppLocalizations.of(context)!.egp,
+                                              style: const TextStyle(
                                                 fontSize: 20,
                                                 color: Colors.grey,
                                               ),

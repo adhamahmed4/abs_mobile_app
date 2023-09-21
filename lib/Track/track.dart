@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TrackPage extends StatefulWidget {
   String? awb;
@@ -82,14 +83,15 @@ class _TrackPageState extends State<TrackPage> {
                 context: context,
                 builder: (BuildContext context) {
                   return AlertDialog(
-                    title: const Text('Error'),
-                    content: const Text('AWB is incorrect'),
+                    title: Text(AppLocalizations.of(context)!.error),
+                    content: Text(AppLocalizations.of(context)!
+                        .theAwbYouEnteredWasNotFound),
                     actions: [
                       TextButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text('OK'),
+                        child: Text(AppLocalizations.of(context)!.ok),
                       ),
                     ],
                   );
@@ -185,7 +187,8 @@ class _TrackPageState extends State<TrackPage> {
             trackingNumberEntered = true;
             _serviceController.text = jsonData['Service'];
             _productController.text = jsonData['Product'];
-            _codController.text = '${jsonData['Cash'].abs()} EGP';
+            _codController.text =
+                '${jsonData['Cash'].abs()} ${AppLocalizations.of(context)!.egp}}';
             _specialInstructionsController.text =
                 jsonData['Special Instructions'];
             _nameController.text = jsonData['Consignee'];
@@ -207,9 +210,10 @@ class _TrackPageState extends State<TrackPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Track',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.track,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
@@ -240,7 +244,8 @@ class _TrackPageState extends State<TrackPage> {
                           child: TextField(
                             controller: _searchController,
                             decoration: InputDecoration(
-                              hintText: 'Enter your shipment number',
+                              hintText: AppLocalizations.of(context)!
+                                  .enterYourShipmentNumber,
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20.0),
                               ),
@@ -292,9 +297,9 @@ class _TrackPageState extends State<TrackPage> {
               ),
               Visibility(
                 visible: !trackingNumberEntered && !isLoading,
-                child: const Text(
-                  'No Data',
-                  style: TextStyle(
+                child: Text(
+                  AppLocalizations.of(context)!.noData,
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                     color: Colors.grey, // Customize the color
@@ -314,22 +319,23 @@ class _TrackPageState extends State<TrackPage> {
                       ),
                       child: Column(
                         children: [
-                          const Padding(
-                            padding: EdgeInsets.all(16.0),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
                             child: Row(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons
                                       .account_tree_rounded, // Add the icon here, this is the icon of the notification
                                   color: Colors
                                       .black, // Set the icon color as needed
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                     width:
                                         8), // Add some spacing between the icon and text
                                 Text(
-                                  'Status Tracking',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  AppLocalizations.of(context)!.statusTracking,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -347,7 +353,8 @@ class _TrackPageState extends State<TrackPage> {
                                     isCurrent: isCurrent == 'New' ||
                                         isCurrent == ' جديد',
                                     isPast: isNew,
-                                    text: "New Shipment",
+                                    text: AppLocalizations.of(context)!
+                                        .newShipment,
                                   ),
                                   MyTimeLineTile(
                                     isFirst: false,
@@ -355,7 +362,8 @@ class _TrackPageState extends State<TrackPage> {
                                     isCurrent: isCurrent == 'In Transit' ||
                                         isCurrent == 'فى العمليات',
                                     isPast: isInTransit,
-                                    text: "In Transit",
+                                    text:
+                                        AppLocalizations.of(context)!.inTransit,
                                   ),
                                   MyTimeLineTile(
                                     isFirst: false,
@@ -364,7 +372,8 @@ class _TrackPageState extends State<TrackPage> {
                                         isCurrent == 'Out For Delivery' ||
                                             isCurrent == 'خرج للتوزيع',
                                     isPast: isOutForDelivery,
-                                    text: "Out For Delivery",
+                                    text: AppLocalizations.of(context)!
+                                        .outForDelivery,
                                   ),
                                   MyTimeLineTile(
                                     isFirst: false,
@@ -375,8 +384,10 @@ class _TrackPageState extends State<TrackPage> {
                                         isCurrent == 'لم يتم التوصيل',
                                     isPast: isDelivered || isUndelivered,
                                     text: isUndelivered
-                                        ? "Undelivered"
-                                        : "Delivered",
+                                        ? AppLocalizations.of(context)!
+                                            .undelivered
+                                        : AppLocalizations.of(context)!
+                                            .delivered,
                                   ),
                                 ],
                               ),
@@ -401,22 +412,23 @@ class _TrackPageState extends State<TrackPage> {
                       ),
                       child: Column(
                         children: [
-                          const Padding(
-                            padding: EdgeInsets.all(16.0),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
                             child: Row(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons
                                       .local_shipping, // Add the icon here, this is the icon of the notification
                                   color: Colors
                                       .black, // Set the icon color as needed
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                     width:
                                         8), // Add some spacing between the icon and text
                                 Text(
-                                  'Shipment Details',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  AppLocalizations.of(context)!.shipmentDetails,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -430,15 +442,16 @@ class _TrackPageState extends State<TrackPage> {
                                   child: TextField(
                                     controller: _serviceController,
                                     readOnly: true,
-                                    decoration: const InputDecoration(
-                                      fillColor:
-                                          Color.fromARGB(255, 250, 250, 250),
+                                    decoration: InputDecoration(
+                                      fillColor: const Color.fromARGB(
+                                          255, 250, 250, 250),
                                       filled: true,
-                                      border: OutlineInputBorder(
+                                      border: const OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xFFFFAB4A)),
                                       ),
-                                      labelText: 'Service',
+                                      labelText:
+                                          AppLocalizations.of(context)!.service,
                                     ),
                                   ),
                                 ),
@@ -450,15 +463,16 @@ class _TrackPageState extends State<TrackPage> {
                                   child: TextField(
                                     controller: _productController,
                                     readOnly: true,
-                                    decoration: const InputDecoration(
-                                      fillColor:
-                                          Color.fromARGB(255, 250, 250, 250),
+                                    decoration: InputDecoration(
+                                      fillColor: const Color.fromARGB(
+                                          255, 250, 250, 250),
                                       filled: true,
-                                      border: OutlineInputBorder(
+                                      border: const OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xFFFFAB4A)),
                                       ),
-                                      labelText: 'Product',
+                                      labelText:
+                                          AppLocalizations.of(context)!.product,
                                     ),
                                   ),
                                 ),
@@ -470,14 +484,16 @@ class _TrackPageState extends State<TrackPage> {
                             child: TextField(
                               controller: _codController,
                               readOnly: true,
-                              decoration: const InputDecoration(
-                                fillColor: Color.fromARGB(255, 250, 250, 250),
+                              decoration: InputDecoration(
+                                fillColor:
+                                    const Color.fromARGB(255, 250, 250, 250),
                                 filled: true,
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xFFFFAB4A)),
                                 ),
-                                labelText: 'Cash on delivery',
+                                labelText: AppLocalizations.of(context)!
+                                    .cashOnDelivery,
                               ),
                             ),
                           ),
@@ -486,14 +502,16 @@ class _TrackPageState extends State<TrackPage> {
                             child: TextField(
                               controller: _specialInstructionsController,
                               readOnly: true,
-                              decoration: const InputDecoration(
-                                fillColor: Color.fromARGB(255, 250, 250, 250),
+                              decoration: InputDecoration(
+                                fillColor:
+                                    const Color.fromARGB(255, 250, 250, 250),
                                 filled: true,
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xFFFFAB4A)),
                                 ),
-                                labelText: 'Special Instructions',
+                                labelText: AppLocalizations.of(context)!
+                                    .specialInstructions,
                               ),
                             ),
                           ),
@@ -516,22 +534,23 @@ class _TrackPageState extends State<TrackPage> {
                       ),
                       child: Column(
                         children: [
-                          const Padding(
-                            padding: EdgeInsets.all(16.0),
+                          Padding(
+                            padding: const EdgeInsets.all(16.0),
                             child: Row(
                               children: [
-                                Icon(
+                                const Icon(
                                   Icons
                                       .person, // Add the icon here, this is the icon of the notification
                                   color: Colors
                                       .black, // Set the icon color as needed
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                     width:
                                         8), // Add some spacing between the icon and text
                                 Text(
-                                  'Customer Details',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                  AppLocalizations.of(context)!.customerDetails,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold),
                                 ),
                               ],
                             ),
@@ -541,14 +560,15 @@ class _TrackPageState extends State<TrackPage> {
                             child: TextField(
                               controller: _nameController,
                               readOnly: true,
-                              decoration: const InputDecoration(
-                                fillColor: Color.fromARGB(255, 250, 250, 250),
+                              decoration: InputDecoration(
+                                fillColor:
+                                    const Color.fromARGB(255, 250, 250, 250),
                                 filled: true,
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xFFFFAB4A)),
                                 ),
-                                labelText: 'Name',
+                                labelText: AppLocalizations.of(context)!.name,
                               ),
                             ),
                           ),
@@ -557,14 +577,16 @@ class _TrackPageState extends State<TrackPage> {
                             child: TextField(
                               controller: _phoneNumberController,
                               readOnly: true,
-                              decoration: const InputDecoration(
-                                fillColor: Color.fromARGB(255, 250, 250, 250),
+                              decoration: InputDecoration(
+                                fillColor:
+                                    const Color.fromARGB(255, 250, 250, 250),
                                 filled: true,
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xFFFFAB4A)),
                                 ),
-                                labelText: 'Phone Number',
+                                labelText:
+                                    AppLocalizations.of(context)!.phoneNumber,
                               ),
                             ),
                           ),
@@ -573,14 +595,16 @@ class _TrackPageState extends State<TrackPage> {
                             child: TextField(
                               controller: _addressController,
                               readOnly: true,
-                              decoration: const InputDecoration(
-                                fillColor: Color.fromARGB(255, 250, 250, 250),
+                              decoration: InputDecoration(
+                                fillColor:
+                                    const Color.fromARGB(255, 250, 250, 250),
                                 filled: true,
-                                border: OutlineInputBorder(
+                                border: const OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xFFFFAB4A)),
                                 ),
-                                labelText: 'Address',
+                                labelText:
+                                    AppLocalizations.of(context)!.address,
                               ),
                             ),
                           ),

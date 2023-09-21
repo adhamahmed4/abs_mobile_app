@@ -7,6 +7,7 @@ import 'package:toggle_switch/toggle_switch.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ReturnPage extends StatefulWidget {
   @override
@@ -247,14 +248,15 @@ class _ReturnPageState extends State<ReturnPage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Account is not verified'),
-              content: const Text('Please verify your account first'),
+              title: Text(AppLocalizations.of(context)!.accountIsNotVerified),
+              content: Text(
+                  AppLocalizations.of(context)!.pleaseVerifyYourAccountFirst),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('OK'),
+                  child: Text(AppLocalizations.of(context)!.ok),
                 ),
               ],
             );
@@ -266,14 +268,15 @@ class _ReturnPageState extends State<ReturnPage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Ref already exists'),
-              content: const Text('Please enter a different reference'),
+              title: Text(AppLocalizations.of(context)!.refAlreadyExists),
+              content: Text(
+                  AppLocalizations.of(context)!.pleaseEnterADifferentReference),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('OK'),
+                  child: Text(AppLocalizations.of(context)!.ok),
                 ),
               ],
             );
@@ -319,13 +322,13 @@ class _ReturnPageState extends State<ReturnPage> {
                   child: Padding(
                     padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                     child: InputDecorator(
-                      decoration: const InputDecoration(
-                        fillColor: Color.fromARGB(255, 250, 250, 250),
+                      decoration: InputDecoration(
+                        fillColor: const Color.fromARGB(255, 250, 250, 250),
                         filled: true,
-                        border: OutlineInputBorder(
+                        border: const OutlineInputBorder(
                           borderSide: BorderSide(color: Color(0xFFFFAB4A)),
                         ),
-                        labelText: 'Sub Account Name',
+                        labelText: AppLocalizations.of(context)!.subAccountName,
                       ),
                       child: SizedBox(
                         height: 20,
@@ -369,17 +372,17 @@ class _ReturnPageState extends State<ReturnPage> {
                   ),
                   child: Column(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(16.0),
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.person,
                               color: Colors.black,
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Text(
-                              'Customer Details',
+                              AppLocalizations.of(context)!.customerDetails,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
@@ -392,14 +395,16 @@ class _ReturnPageState extends State<ReturnPage> {
                               padding: const EdgeInsets.fromLTRB(16, 16, 4, 4),
                               child: TextField(
                                 controller: _firstNameController,
-                                decoration: const InputDecoration(
-                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                decoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A)),
                                   ),
-                                  labelText: 'First name',
+                                  labelText:
+                                      AppLocalizations.of(context)!.firstName,
                                 ),
                               ),
                             ),
@@ -409,14 +414,16 @@ class _ReturnPageState extends State<ReturnPage> {
                               padding: const EdgeInsets.fromLTRB(4, 16, 16, 4),
                               child: TextField(
                                 controller: _lastNameController,
-                                decoration: const InputDecoration(
-                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                decoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A)),
                                   ),
-                                  labelText: 'Last name',
+                                  labelText:
+                                      AppLocalizations.of(context)!.lastName,
                                 ),
                               ),
                             ),
@@ -427,36 +434,37 @@ class _ReturnPageState extends State<ReturnPage> {
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
                         child: TextField(
                           controller: _phoneNumberController,
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
+                          decoration: InputDecoration(
+                            fillColor: const Color.fromARGB(255, 250, 250, 250),
                             filled: true,
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                               borderSide: BorderSide(color: Color(0xFFFFAB4A)),
                             ),
-                            labelText: 'Phone Number',
+                            labelText:
+                                AppLocalizations.of(context)!.phoneNumber,
                           ),
                         ),
                       ),
-                      const Padding(
-                        padding: EdgeInsets.fromLTRB(16, 16, 16, 4),
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            'Address',
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            AppLocalizations.of(context)!.address,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
                         child: InputDecorator(
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
+                          decoration: InputDecoration(
+                            fillColor: const Color.fromARGB(255, 250, 250, 250),
                             filled: true,
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                               borderSide: BorderSide(color: Color(0xFFFFAB4A)),
                             ),
-                            labelText: 'City',
+                            labelText: AppLocalizations.of(context)!.city,
                           ),
                           child: SizedBox(
                             height: 20,
@@ -487,13 +495,13 @@ class _ReturnPageState extends State<ReturnPage> {
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
                         child: TextField(
                           controller: _streetNameController,
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
+                          decoration: InputDecoration(
+                            fillColor: const Color.fromARGB(255, 250, 250, 250),
                             filled: true,
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: 'Street name',
+                            labelText: AppLocalizations.of(context)!.streetName,
                           ),
                         ),
                       ),
@@ -504,14 +512,16 @@ class _ReturnPageState extends State<ReturnPage> {
                               padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
                               child: TextField(
                                 controller: _buildingController,
-                                decoration: const InputDecoration(
-                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                decoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A)),
                                   ),
-                                  labelText: 'Building',
+                                  labelText: AppLocalizations.of(context)!
+                                      .buildingNumber,
                                 ),
                               ),
                             ),
@@ -521,14 +531,16 @@ class _ReturnPageState extends State<ReturnPage> {
                               padding: const EdgeInsets.fromLTRB(0, 16, 8, 16),
                               child: TextField(
                                 controller: _floorController,
-                                decoration: const InputDecoration(
-                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                decoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A)),
                                   ),
-                                  labelText: 'Floor',
+                                  labelText:
+                                      AppLocalizations.of(context)!.floorNumber,
                                 ),
                               ),
                             ),
@@ -538,14 +550,16 @@ class _ReturnPageState extends State<ReturnPage> {
                               padding: const EdgeInsets.fromLTRB(0, 16, 16, 16),
                               child: TextField(
                                 controller: _aptController,
-                                decoration: const InputDecoration(
-                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                decoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A)),
                                   ),
-                                  labelText: 'Apt.',
+                                  labelText: AppLocalizations.of(context)!
+                                      .apartmentNumber,
                                 ),
                               ),
                             ),
@@ -562,15 +576,16 @@ class _ReturnPageState extends State<ReturnPage> {
                   ),
                   child: Column(
                     children: [
-                      const Padding(
-                        padding: EdgeInsets.all(16.0),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
                         child: Row(
                           children: [
-                            Icon(Icons.price_change, color: Colors.black),
-                            SizedBox(width: 8),
+                            const Icon(Icons.price_change, color: Colors.black),
+                            const SizedBox(width: 8),
                             Text(
-                              'Cash on delivery',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              AppLocalizations.of(context)!.cashOnDelivery,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -579,7 +594,7 @@ class _ReturnPageState extends State<ReturnPage> {
                         padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
                         child: Row(
                           children: [
-                            const Text('Refund cash'),
+                            Text(AppLocalizations.of(context)!.refundCash),
                             Switch(
                               value: _refundCash,
                               onChanged: (value) {
@@ -599,15 +614,16 @@ class _ReturnPageState extends State<ReturnPage> {
                                     child: TextField(
                                       controller: _cashAmountController,
                                       keyboardType: TextInputType.number,
-                                      decoration: const InputDecoration(
-                                        fillColor:
-                                            Color.fromARGB(255, 250, 250, 250),
+                                      decoration: InputDecoration(
+                                        fillColor: const Color.fromARGB(
+                                            255, 250, 250, 250),
                                         filled: true,
-                                        border: OutlineInputBorder(
+                                        border: const OutlineInputBorder(
                                           borderSide: BorderSide(
                                               color: Color(0xFFFFAB4A)),
                                         ),
-                                        labelText: 'COD',
+                                        labelText:
+                                            AppLocalizations.of(context)!.cod,
                                       ),
                                     ),
                                   ),
@@ -627,18 +643,20 @@ class _ReturnPageState extends State<ReturnPage> {
                   ),
                   child: Column(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(16.0),
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.local_shipping,
                               color: Colors.black,
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Text(
-                              'Return Shipment Details',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              AppLocalizations.of(context)!
+                                  .returnShipmentDetails,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -652,7 +670,11 @@ class _ReturnPageState extends State<ReturnPage> {
                             cornerRadius: 10.0,
                             minHeight: 20.0,
                             minWidth: 100.0,
-                            labels: const ['Parcel', 'Document', 'Bulk'],
+                            labels: [
+                              AppLocalizations.of(context)!.parcel,
+                              AppLocalizations.of(context)!.document,
+                              AppLocalizations.of(context)!.bulk
+                            ],
                             onToggle: (index) {
                               setState(() {
                                 _packageTypeID = index! + 1;
@@ -673,7 +695,7 @@ class _ReturnPageState extends State<ReturnPage> {
                         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                         child: Row(
                           children: [
-                            const Text('Number of items'),
+                            Text(AppLocalizations.of(context)!.numberOfItems),
                             const Spacer(),
                             Card(
                               shape: RoundedRectangleBorder(
@@ -715,7 +737,7 @@ class _ReturnPageState extends State<ReturnPage> {
                         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                         child: Row(
                           children: [
-                            const Text('Weight'),
+                            Text(AppLocalizations.of(context)!.weight),
                             const Spacer(),
                             Card(
                               shape: RoundedRectangleBorder(
@@ -757,13 +779,14 @@ class _ReturnPageState extends State<ReturnPage> {
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
                         child: TextField(
                           controller: _orderReferenceController,
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
+                          decoration: InputDecoration(
+                            fillColor: const Color.fromARGB(255, 250, 250, 250),
                             filled: true,
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: 'Order Reference',
+                            labelText:
+                                AppLocalizations.of(context)!.orderReference,
                           ),
                         ),
                       ),
@@ -772,9 +795,9 @@ class _ReturnPageState extends State<ReturnPage> {
                         child: TextField(
                           controller: _contentController,
                           maxLines: 2,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Content',
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            labelText: AppLocalizations.of(context)!.content,
                           ),
                         ),
                       ),
@@ -783,9 +806,10 @@ class _ReturnPageState extends State<ReturnPage> {
                         child: TextField(
                           controller: _specialInstructionsController,
                           maxLines: 2,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Special Instructions',
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            labelText: AppLocalizations.of(context)!
+                                .specialInstructions,
                           ),
                         ),
                       ),
@@ -799,18 +823,19 @@ class _ReturnPageState extends State<ReturnPage> {
                   ),
                   child: Column(
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(16.0),
                         child: Row(
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.pin_drop,
                               color: Colors.black,
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Text(
-                              'Return Details',
-                              style: TextStyle(fontWeight: FontWeight.bold),
+                              AppLocalizations.of(context)!.returnDetails,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ],
                         ),
@@ -827,7 +852,8 @@ class _ReturnPageState extends State<ReturnPage> {
                             border: const OutlineInputBorder(
                               borderSide: BorderSide(color: Color(0xFFFFAB4A)),
                             ),
-                            labelText: 'Creation Date',
+                            labelText:
+                                AppLocalizations.of(context)!.creationDate,
                             suffixIcon: const Icon(Icons.calendar_view_day),
                             hintText: _selectedStartDate == null ||
                                     _selectedEndDate == null
@@ -840,13 +866,14 @@ class _ReturnPageState extends State<ReturnPage> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
                         child: InputDecorator(
-                          decoration: const InputDecoration(
-                            fillColor: Color.fromARGB(255, 250, 250, 250),
+                          decoration: InputDecoration(
+                            fillColor: const Color.fromARGB(255, 250, 250, 250),
                             filled: true,
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                               borderSide: BorderSide(color: Color(0xFFFFAB4A)),
                             ),
-                            labelText: 'Return location',
+                            labelText:
+                                AppLocalizations.of(context)!.returnLocation,
                           ),
                           child: SizedBox(
                             height: 20,
@@ -877,13 +904,14 @@ class _ReturnPageState extends State<ReturnPage> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
                         child: InputDecorator(
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             fillColor: Color.fromARGB(255, 250, 250, 250),
                             filled: true,
-                            border: OutlineInputBorder(
+                            border: const OutlineInputBorder(
                               borderSide: BorderSide(color: Color(0xFFFFAB4A)),
                             ),
-                            labelText: 'Vehicle type',
+                            labelText:
+                                AppLocalizations.of(context)!.vehicleType,
                           ),
                           child: SizedBox(
                             height: 20,
@@ -928,9 +956,9 @@ class _ReturnPageState extends State<ReturnPage> {
                         child: TextField(
                           controller: _notesController,
                           maxLines: 2,
-                          decoration: const InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Notes',
+                          decoration: InputDecoration(
+                            border: const OutlineInputBorder(),
+                            labelText: AppLocalizations.of(context)!.notes,
                           ),
                         ),
                       ),
@@ -941,7 +969,7 @@ class _ReturnPageState extends State<ReturnPage> {
                   onPressed: () {
                     createShipment();
                   },
-                  child: const Text('Create Shipment'),
+                  child: Text(AppLocalizations.of(context)!.createShipment),
                 ),
               ],
             ),

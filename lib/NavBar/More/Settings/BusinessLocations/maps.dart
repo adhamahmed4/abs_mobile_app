@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MapsPage extends StatefulWidget {
   double? lat;
@@ -78,8 +79,8 @@ class _MapsPageState extends State<MapsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Business Locations',
+          title: Text(
+            AppLocalizations.of(context)!.businessLocations,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
@@ -151,7 +152,7 @@ class _MapsPageState extends State<MapsPage> {
                         strokeWidth: 2.0, // Adjust the strokeWidth as needed
                       ),
                     )
-                  : Text('Confirm Location'),
+                  : Text(AppLocalizations.of(context)!.confirmLocation),
             ),
           ),
           Center(

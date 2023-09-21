@@ -5,6 +5,7 @@ import 'package:abs_mobile_app/Configurations/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:abs_mobile_app/NavBar/More/Wallet/searchPage.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WalletPage extends StatefulWidget {
   @override
@@ -250,7 +251,7 @@ class _WalletPageState extends State<WalletPage> {
               ),
               width: double.infinity,
               child: Text(
-                'AWB: $awb',
+                '${AppLocalizations.of(context)!.awb} ${awb}',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -264,8 +265,11 @@ class _WalletPageState extends State<WalletPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Cash: $cash EGP', style: const TextStyle(fontSize: 12)),
-                  Text('ABS Fees: $absfees EGP',
+                  Text(
+                      '${AppLocalizations.of(context)!.cash} ${cash!} ${AppLocalizations.of(context)!.egp}',
+                      style: const TextStyle(fontSize: 12)),
+                  Text(
+                      '${AppLocalizations.of(context)!.absFees} ${absfees!} ${AppLocalizations.of(context)!.egp}',
                       style: const TextStyle(fontSize: 12)),
                 ],
               ),
@@ -274,7 +278,8 @@ class _WalletPageState extends State<WalletPage> {
             Center(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                child: Text('Delivery Date: ${formatDateTime(deliveryDate)}',
+                child: Text(
+                    '${AppLocalizations.of(context)!.deliveryDate} ${formatDateTime(deliveryDate)}',
                     style: const TextStyle(fontSize: 12)),
               ),
             ),
@@ -282,7 +287,8 @@ class _WalletPageState extends State<WalletPage> {
             Center(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                child: Text('Payment Date: ${formatDateTime(paymentDate)}',
+                child: Text(
+                    '${AppLocalizations.of(context)!.paymentDate} ${formatDateTime(paymentDate)}',
                     style: const TextStyle(fontSize: 12)),
               ),
             ),
@@ -297,9 +303,10 @@ class _WalletPageState extends State<WalletPage> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 246, 248),
       appBar: AppBar(
-        title: const Text(
-          'Wallet',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        title: Text(
+          AppLocalizations.of(context)!.wallet,
+          style:
+              const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -338,7 +345,8 @@ class _WalletPageState extends State<WalletPage> {
                           },
                           decoration: InputDecoration(
                             icon: const Icon(Icons.calendar_today),
-                            labelText: 'Creation Date',
+                            labelText:
+                                AppLocalizations.of(context)!.creationDate,
                             suffixIcon: const Icon(Icons.calendar_view_day),
                             hintText: _selectedStartDate == null ||
                                     _selectedEndDate == null
@@ -369,16 +377,24 @@ class _WalletPageState extends State<WalletPage> {
                 ),
               ),
               const SizedBox(height: 16),
-              buildCard('Expected Cash', '$expectedCash EGP',
+              buildCard(
+                  AppLocalizations.of(context)!.expectedCash,
+                  '$expectedCash ${AppLocalizations.of(context)!.egp}',
                   const Color(0xFF2B2E83)),
               const SizedBox(height: 16),
-              buildCard('Collected Cash', '$collectedCash EGP',
+              buildCard(
+                  AppLocalizations.of(context)!.collectedCash,
+                  '$collectedCash ${AppLocalizations.of(context)!.egp}',
                   const Color(0xFF2B2E83)),
               const SizedBox(height: 16),
-              buildCard('ABS Fees + Cash Collection Fees', '$ABSFees EGP',
+              buildCard(
+                  AppLocalizations.of(context)!.absFeesCashCollectionFees,
+                  '$ABSFees ${AppLocalizations.of(context)!.egp}',
                   const Color(0xFF2B2E83)),
               const SizedBox(height: 16),
-              buildCard('Net Value', '${collectedCash - ABSFees} EGP',
+              buildCard(
+                  AppLocalizations.of(context)!.netValue,
+                  '${collectedCash - ABSFees} ${AppLocalizations.of(context)!.egp}',
                   const Color(0xFF2B2E83)),
               Container(
                 padding: const EdgeInsets.all(16.0),
@@ -396,15 +412,15 @@ class _WalletPageState extends State<WalletPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Padding(
+                      Padding(
                         padding: EdgeInsets.all(16.0),
                         child: Row(
                           children: [
-                            Icon(Icons.payment, color: Colors.black),
-                            SizedBox(width: 8),
+                            const Icon(Icons.payment, color: Colors.black),
+                            const SizedBox(width: 8),
                             Text(
-                              'Paid Shipments',
-                              style: TextStyle(
+                              AppLocalizations.of(context)!.paidShipments,
+                              style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -447,15 +463,15 @@ class _WalletPageState extends State<WalletPage> {
                                     _selectedStartDate, _selectedEndDate);
                               });
                             },
-                            child: const Text('Load More'),
+                            child: Text(AppLocalizations.of(context)!.loadMore),
                           ),
                         ),
                       if (paidShipments.isEmpty)
-                        const Center(
+                        Center(
                             child: Padding(
                           padding: EdgeInsets.all(16.0),
                           child: Text(
-                            'No Paid Shipments',
+                            AppLocalizations.of(context)!.noPaidShipments,
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

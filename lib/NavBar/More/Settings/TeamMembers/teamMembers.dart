@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TeamMembersPage extends StatefulWidget {
   @override
@@ -76,24 +77,25 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Team Members',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.teamMembers,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: Column(
         children: [
           Expanded(
             child: Stack(
               children: [
                 if (!isLoading && _teamMembers.isEmpty)
-                  const Center(
+                  Center(
                     child: Text(
-                      'No Team Members',
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.noTeamMembers,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.grey, // Customize the color
@@ -148,7 +150,7 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
                             children: [
                               Row(
                                 children: [
-                                  Text('Status: '),
+                                  Text(AppLocalizations.of(context)!.status),
                                   Text(
                                     '${locale.toString() == 'en' ? teamMember['Status'] ? 'Active' : 'Inactive' : teamMember['الحالة'] ? 'نشط' : 'غير نشط'}',
                                     style: TextStyle(
@@ -161,7 +163,7 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
                                               : Colors.red,
                                     ),
                                   ),
-                                  Spacer(), // Add this Spacer to push the icon to the right
+                                  const Spacer(), // Add this Spacer to push the icon to the right
                                   InkWell(
                                     onTap: () {
                                       if (locale.toString() == 'en'
@@ -195,9 +197,9 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
                                 ],
                               ),
                               Text(
-                                  'Role: ${locale.toString() == 'en' ? teamMember['Roles'] : teamMember['صلاحيات']}'),
+                                  '${AppLocalizations.of(context)!.role}${locale.toString() == 'en' ? teamMember['Roles'] : teamMember['صلاحيات']}'),
                               Text(
-                                  'Sub-Account Name: ${locale.toString() == 'en' ? teamMember['Sub-Account Name'] : teamMember['اسم الحساب الفرعي']}'),
+                                  '${AppLocalizations.of(context)!.subAccountName}${locale.toString() == 'en' ? teamMember['Sub-Account Name'] : teamMember['اسم الحساب الفرعي']}'),
                             ],
                           ),
                         ),
@@ -232,7 +234,7 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
                     ),
                   ).then((value) => getTeamMembers());
                 },
-                child: Icon(Icons.add),
+                child: const Icon(Icons.add),
               ),
             ),
           ),

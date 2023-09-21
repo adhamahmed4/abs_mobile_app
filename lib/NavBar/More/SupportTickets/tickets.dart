@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TicketsPage extends StatefulWidget {
   @override
@@ -64,23 +65,24 @@ class _TicketsPageState extends State<TicketsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Tickets',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.supportTickets,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: Column(
         children: [
           Expanded(
             child: Stack(
               children: [
                 if (!isLoading && _tickets.isEmpty)
-                  const Center(
+                  Center(
                     child: Text(
-                      'No Tickets',
+                      AppLocalizations.of(context)!.noTickets,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -99,23 +101,23 @@ class _TicketsPageState extends State<TicketsPage> {
                         margin: const EdgeInsets.all(10),
                         child: ListTile(
                           title: Text(
-                              'AWB: ${locale.toString() == 'en' ? ticket['AWB'] : ticket['رقم الشحنة']}'),
+                              '${AppLocalizations.of(context)!.awbDots}${locale.toString() == 'en' ? ticket['AWB'] : ticket['رقم الشحنة']}'),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                  'Ticket Issuer: ${locale.toString() == 'en' ? ticket['Ticket Issuer'] : ticket['مصدر التذكرة']}'),
+                                  '${AppLocalizations.of(context)!.ticketIssuer}${locale.toString() == 'en' ? ticket['Ticket Issuer'] : ticket['مصدر التذكرة']}'),
                               Text(
-                                  'Ticket Type: ${locale.toString() == 'en' ? ticket['Ticket Type'] : ticket['نوع التذكرة']}'),
+                                  '${AppLocalizations.of(context)!.ticketType}${locale.toString() == 'en' ? ticket['Ticket Type'] : ticket['نوع التذكرة']}'),
                               Text(
-                                  'Ticket Status: ${locale.toString() == 'en' ? ticket['Ticket Status'] : ticket['حالة التذكرة']}'),
+                                  '${AppLocalizations.of(context)!.ticketStatus}${locale.toString() == 'en' ? ticket['Ticket Status'] : ticket['حالة التذكرة']}'),
                               Text(
-                                  'Description: ${locale.toString() == 'en' ? ticket['Description'] : ticket['وصف']}'),
+                                  '${AppLocalizations.of(context)!.description}${locale.toString() == 'en' ? ticket['Description'] : ticket['وصف']}'),
                               Text(
-                                  'Last Action Date: ${formatDateTime(locale.toString() == 'en' ? ticket['Last Action Date'] : ticket['تاريخ آخر إجراء'])}'),
+                                  '${AppLocalizations.of(context)!.lastActionDate}${formatDateTime(locale.toString() == 'en' ? ticket['Last Action Date'] : ticket['تاريخ آخر إجراء'])}'),
                               Row(
                                 children: [
-                                  Text('Status: '),
+                                  Text(AppLocalizations.of(context)!.status),
                                   Text(
                                     '${locale.toString() == 'en' ? ticket['Closed'] ? 'Closed' : 'Active' : ticket['تم غلق التذكرة'] ? 'مغلق' : 'نشط'}',
                                     style: TextStyle(

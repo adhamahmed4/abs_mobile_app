@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SubAccountsPage extends StatefulWidget {
   @override
@@ -63,24 +64,25 @@ class _SubAccountsPageState extends State<SubAccountsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Sub Accounts',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.subAccounts,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: Column(
         children: [
           Expanded(
             child: Stack(
               children: [
                 if (!isLoading && _subAccounts.isEmpty)
-                  const Center(
+                  Center(
                     child: Text(
-                      'No Subaccounts',
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.noSubaccounts,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.grey, // Customize the color
@@ -117,17 +119,18 @@ class _SubAccountsPageState extends State<SubAccountsPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    'Sub Account Number: ${locale.toString() == 'en' ? subAccount['Sub Account Number'] : subAccount['رقم الحساب الفرعي']}'),
+
+                                    '${AppLocalizations.of(context)!.subAccountNumber${locale.toString() == 'en' ? subAccount['Sub Account Number'] : subAccount['رقم الحساب الفرعي']}'),
                                 Text(
-                                    'Price Plan Name: ${locale.toString() == 'en' ? subAccount['Price Plan Name'] : subAccount['اسم خطة الأسعار']}'),
+                                    '${AppLocalizations.of(context)!.pricePlanName}${locale.toString() == 'en' ? subAccount['Price Plan Name'] : subAccount['اسم خطة الأسعار']}'),
                                 Text(
-                                    'Payment Method Type: ${locale.toString() == 'en' ? subAccount['Payment Method Type'] : subAccount['نوع طريقة الدفع']}'),
+                                    '${AppLocalizations.of(context)!.paymentMethodType}${locale.toString() == 'en' ? subAccount['Payment Method Type'] : subAccount['نوع طريقة الدفع']}'),
                                 Text(
-                                    'Product Name: ${locale.toString() == 'en' ? subAccount['Product Name'] : subAccount['اسم المنتج']}'),
+                                    '${AppLocalizations.of(context)!.productName}${locale.toString() == 'en' ? subAccount['Product Name'] : subAccount['اسم المنتج']}'),
                                 Text(
-                                    'Prefix: ${locale.toString() == 'en' ? subAccount['Prefix'] : subAccount['تبدأ الشحنة ب']}'),
+                                    '${AppLocalizations.of(context)!.prefix}${locale.toString() == 'en' ? subAccount['Prefix'] : subAccount['تبدأ الشحنة ب']}'),
                                 Text(
-                                    'Creation Date: ${formatDateTime(locale.toString() == 'en' ? subAccount['Creation Date'] : subAccount['تاريخ التسجيل'])}'),
+                                    '${AppLocalizations.of(context)!.creationDate}${formatDateTime(locale.toString() == 'en' ? subAccount['Creation Date'] : subAccount['تاريخ التسجيل'])}'),
                               ],
                             ),
                           ),

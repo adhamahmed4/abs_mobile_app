@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PaymentMethodsPage extends StatefulWidget {
   @override
@@ -17,42 +18,43 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Payment Methods',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.paymentMethods,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             Text(
-              'Choose a Payment Method',
-              style: TextStyle(
+              AppLocalizations.of(context)!.chooseAPaymentMethod,
+              style: const TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             PaymentMethodCard(
               icon: Icons.account_balance,
-              title: 'Bank Transfer',
+              title: AppLocalizations.of(context)!.bankTransfer,
               onTap: () {
                 Navigator.push(
                   context,
                   PageRouteBuilder(
-                    transitionDuration: Duration(
+                    transitionDuration: const Duration(
                         milliseconds: 300), // Adjust the animation duration
                     pageBuilder: (_, __, ___) => BankTransferPage(),
                     transitionsBuilder:
                         (_, Animation<double> animation, __, Widget child) {
                       return SlideTransition(
                         position: Tween<Offset>(
-                          begin: Offset(1.0, 0.0),
+                          begin: const Offset(1.0, 0.0),
                           end: Offset.zero,
                         ).animate(animation),
                         child: child,
@@ -64,19 +66,19 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
             ),
             PaymentMethodCard(
               icon: Icons.phone_android,
-              title: 'Mobile Cash',
+              title: AppLocalizations.of(context)!.mobileCash,
               onTap: () {
                 Navigator.push(
                   context,
                   PageRouteBuilder(
-                    transitionDuration: Duration(
+                    transitionDuration: const Duration(
                         milliseconds: 300), // Adjust the animation duration
                     pageBuilder: (_, __, ___) => MobileCashPage(),
                     transitionsBuilder:
                         (_, Animation<double> animation, __, Widget child) {
                       return SlideTransition(
                         position: Tween<Offset>(
-                          begin: Offset(1.0, 0.0),
+                          begin: const Offset(1.0, 0.0),
                           end: Offset.zero,
                         ).animate(animation),
                         child: child,
@@ -88,19 +90,19 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
             ),
             PaymentMethodCard(
               icon: Icons.account_balance_wallet,
-              title: 'Wallet',
+              title: AppLocalizations.of(context)!.wallet,
               onTap: () {
                 Navigator.push(
                   context,
                   PageRouteBuilder(
-                    transitionDuration: Duration(
+                    transitionDuration: const Duration(
                         milliseconds: 300), // Adjust the animation duration
                     pageBuilder: (_, __, ___) => WalletDetailsPage(),
                     transitionsBuilder:
                         (_, Animation<double> animation, __, Widget child) {
                       return SlideTransition(
                         position: Tween<Offset>(
-                          begin: Offset(1.0, 0.0),
+                          begin: const Offset(1.0, 0.0),
                           end: Offset.zero,
                         ).animate(animation),
                         child: child,
@@ -112,12 +114,12 @@ class _PaymentMethodsPageState extends State<PaymentMethodsPage> {
             ),
             PaymentMethodCard(
               icon: Icons.location_on,
-              title: 'Nearest Branch',
+              title: AppLocalizations.of(context)!.nearestBranch,
               onTap: () {
                 Navigator.push(
                   context,
                   PageRouteBuilder(
-                    transitionDuration: Duration(
+                    transitionDuration: const Duration(
                         milliseconds: 300), // Adjust the animation duration
                     pageBuilder: (_, __, ___) => NearestBranchPage(),
                     transitionsBuilder:
@@ -158,9 +160,9 @@ class PaymentMethodCard extends StatelessWidget {
       onTap: () => onTap(),
       child: Card(
         elevation: 4,
-        margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: Padding(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           child: Row(
             children: [
               Icon(
@@ -168,10 +170,10 @@ class PaymentMethodCard extends StatelessWidget {
                 size: 36,
                 color: Theme.of(context).primaryColor,
               ),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Text(
                 title,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 20,
                 ),
               ),

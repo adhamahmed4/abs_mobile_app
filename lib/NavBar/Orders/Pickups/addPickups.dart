@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:abs_mobile_app/Configurations/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddPickupPage extends StatefulWidget {
   @override
@@ -164,9 +165,10 @@ class _AddPickupPageState extends State<AddPickupPage> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 244, 246, 248),
       appBar: AppBar(
-        title: const Text(
-          'Create new pickup',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+        title: Text(
+          AppLocalizations.of(context)!.createNewPickup,
+          style:
+              const TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -188,16 +190,18 @@ class _AddPickupPageState extends State<AddPickupPage> {
                   padding: const EdgeInsets.all(16),
                   child: Column(
                     children: [
-                      const Text(
-                        'The courier will come soon to pick your orders',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!
+                            .theCourierWillComeSoonToPickYourOrders,
+                        style: const TextStyle(
                           fontSize: 14.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const Text(
-                        'Select location and date for pickup',
-                        style: TextStyle(
+                      Text(
+                        AppLocalizations.of(context)!
+                            .selectLocationAndDateForPickup,
+                        style: const TextStyle(
                           fontSize: 10.0,
                         ),
                       ),
@@ -219,19 +223,19 @@ class _AddPickupPageState extends State<AddPickupPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.location_on_outlined,
                             size: 20, // Adjust the size as needed
                             color: Colors.black, // Adjust the color as needed
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           Text(
-                            'Pickup location',
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.pickupLocation,
+                            style: const TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
                             ),
@@ -307,35 +311,35 @@ class _AddPickupPageState extends State<AddPickupPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.calendar_today_outlined,
                             size: 20, // Adjust the size as needed
                             color: Colors.black, // Adjust the color as needed
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           Text(
-                            'Pickup date range',
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.pickupDateRange,
+                            style: const TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
                         ],
                       ),
-                      const Row(
+                      Row(
                         children: [
                           Text(
-                            'Scroll to view more',
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.scrollToViewMore,
+                            style: const TextStyle(
                               fontSize: 12.0,
                               color: Colors.grey, // Adjust the color as needed
                             ),
                           ),
-                          Icon(
+                          const Icon(
                             Icons.arrow_right_alt,
                             size: 20, // Adjust the size as needed
                             color: Colors.grey, // Adjust the color as needed
@@ -429,19 +433,19 @@ class _AddPickupPageState extends State<AddPickupPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.directions_car_outlined,
                             size: 20, // Adjust the size as needed
                             color: Colors.black, // Adjust the color as needed
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           Text(
-                            'Vehicle Type',
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.vehicleType,
+                            style: const TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
                             ),
@@ -511,19 +515,19 @@ class _AddPickupPageState extends State<AddPickupPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.shopping_bag_outlined,
                             size: 20, // Adjust the size as needed
                             color: Colors.black, // Adjust the color as needed
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           Text(
-                            'Number of items',
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.numberOfItems,
+                            style: const TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
                             ),
@@ -534,7 +538,7 @@ class _AddPickupPageState extends State<AddPickupPage> {
                         padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                         child: Row(
                           children: [
-                            const Text('Number of items'),
+                            Text(AppLocalizations.of(context)!.numberOfItems),
                             const Spacer(),
                             Card(
                               shape: RoundedRectangleBorder(
@@ -586,19 +590,19 @@ class _AddPickupPageState extends State<AddPickupPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Row(
+                      Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.notes_outlined,
                             size: 20, // Adjust the size as needed
                             color: Colors.black, // Adjust the color as needed
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 8,
                           ),
                           Text(
-                            'Notes',
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.notes,
+                            style: const TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.bold,
                             ),
@@ -611,10 +615,11 @@ class _AddPickupPageState extends State<AddPickupPage> {
                       TextField(
                         controller: _notesController,
                         maxLines: 4, // Allow multiple lines of text
-                        decoration: const InputDecoration(
-                          hintText: 'Enter your notes here', // Add a hint text
+                        decoration: InputDecoration(
+                          hintText: AppLocalizations.of(context)!
+                              .enterYourNotesHere, // Add a hint text
                           border:
-                              OutlineInputBorder(), // Add a border around the text area
+                              const OutlineInputBorder(), // Add a border around the text area
                         ),
                       ),
                     ],
@@ -626,7 +631,7 @@ class _AddPickupPageState extends State<AddPickupPage> {
                 onPressed: () {
                   addPickup();
                 },
-                child: const Text('Create Pickup'),
+                child: Text(AppLocalizations.of(context)!.createPickup),
               ),
             ],
           ),

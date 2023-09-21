@@ -2,6 +2,7 @@ import 'package:abs_mobile_app/NavBar/Orders/Pickups/pickups.dart';
 import 'package:abs_mobile_app/NavBar/Orders/Shipments/shipments.dart';
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class OrdersPage extends StatefulWidget {
   @override
@@ -15,9 +16,9 @@ class _OrdersPageState extends State<OrdersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Orders',
-          style: TextStyle(color: Colors.black),
+        title: Text(
+          AppLocalizations.of(context)!.navBarOrders,
+          style: const TextStyle(color: Colors.black),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -38,7 +39,10 @@ class _OrdersPageState extends State<OrdersPage> {
                   minWidth: 120.0,
                   cornerRadius: 10.0,
                   minHeight: 27.0,
-                  labels: const ['Shipments', 'Pickups'],
+                  labels: [
+                    AppLocalizations.of(context)!.shipments,
+                    AppLocalizations.of(context)!.pickups
+                  ],
                   onToggle: (index) {
                     setState(() {
                       _currentIndex = index!;

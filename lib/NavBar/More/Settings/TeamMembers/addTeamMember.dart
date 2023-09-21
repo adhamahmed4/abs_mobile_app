@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddTeamMemberPage extends StatefulWidget {
   @override
@@ -156,14 +157,15 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: const Text('Error'),
-              content: Text("Username already exists"),
+              title: Text(AppLocalizations.of(context)!.error),
+              content:
+                  Text(AppLocalizations.of(context)!.usernameAlreadyExists),
               actions: [
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('OK'),
+                  child: Text(AppLocalizations.of(context)!.ok),
                 ),
               ],
             );
@@ -175,14 +177,15 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Add Team Member',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.addTeamMember,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: Column(
         children: [
           if (!isLoading)
@@ -201,15 +204,16 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
                               Padding(
                                 padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                                 child: InputDecorator(
-                                  decoration: const InputDecoration(
-                                    fillColor:
-                                        Color.fromARGB(255, 250, 250, 250),
+                                  decoration: InputDecoration(
+                                    fillColor: const Color.fromARGB(
+                                        255, 250, 250, 250),
                                     filled: true,
-                                    border: OutlineInputBorder(
+                                    border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFFFAB4A)),
                                     ),
-                                    labelText: 'Sub Account Name',
+                                    labelText: AppLocalizations.of(context)!
+                                        .subAccountName,
                                   ),
                                   child: SizedBox(
                                     height: 20,
@@ -262,13 +266,14 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
                                   controller: _fullNameController,
                                   readOnly: _dataExists,
                                   decoration: InputDecoration(
-                                    fillColor:
-                                        Color.fromARGB(255, 250, 250, 250),
+                                    fillColor: const Color.fromARGB(
+                                        255, 250, 250, 250),
                                     filled: true,
                                     border: const OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xFFFFAB4A))),
-                                    labelText: "Full Name",
+                                    labelText:
+                                        AppLocalizations.of(context)!.fullName,
                                   ),
                                   onChanged: (fullName) {
                                     _updateButtonEnabledStatus();
@@ -287,7 +292,8 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
                                     border: const OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xFFFFAB4A))),
-                                    labelText: 'Username',
+                                    labelText:
+                                        AppLocalizations.of(context)!.username,
                                   ),
                                   onChanged: (username) {
                                     _updateButtonEnabledStatus();
@@ -300,13 +306,14 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
                                   controller: _passwordController,
                                   obscureText: !_passwordVisible,
                                   decoration: InputDecoration(
-                                    fillColor:
-                                        Color.fromARGB(255, 250, 250, 250),
+                                    fillColor: const Color.fromARGB(
+                                        255, 250, 250, 250),
                                     filled: true,
                                     border: const OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xFFFFAB4A))),
-                                    labelText: 'Password',
+                                    labelText:
+                                        AppLocalizations.of(context)!.password,
                                     suffixIcon: GestureDetector(
                                       onTap: () {
                                         if (mounted) {
@@ -334,13 +341,14 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
                                   controller: _confirmPasswordController,
                                   obscureText: !_confirmPasswordVisible,
                                   decoration: InputDecoration(
-                                    fillColor:
-                                        Color.fromARGB(255, 250, 250, 250),
+                                    fillColor: const Color.fromARGB(
+                                        255, 250, 250, 250),
                                     filled: true,
                                     border: const OutlineInputBorder(
                                         borderSide: BorderSide(
                                             color: Color(0xFFFFAB4A))),
-                                    labelText: 'Confirm Password',
+                                    labelText: AppLocalizations.of(context)!
+                                        .confirmPassword,
                                     suffixIcon: GestureDetector(
                                       onTap: () {
                                         if (mounted) {
@@ -362,8 +370,8 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
                                   },
                                 ),
                               ),
-                              Text("Roles",
-                                  style: TextStyle(
+                              Text(AppLocalizations.of(context)!.roles,
+                                  style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.bold)),
                               Column(
@@ -430,10 +438,10 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
                                   }
                                 }
                               : null,
-                          child: const Padding(
-                            padding: EdgeInsets.all(12.0),
-                            child: Text('Add team member'),
-                          ),
+                          child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Text(
+                                  AppLocalizations.of(context)!.addTeamMember)),
                         ),
                       ),
                     ],

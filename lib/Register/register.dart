@@ -8,6 +8,7 @@ import './nextPage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:abs_mobile_app/Configurations/app_config.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RegistrationPage extends StatefulWidget {
   @override
@@ -84,7 +85,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
     if (nameParts.length != 2 || nameParts.any((part) => part.isEmpty)) {
       if (mounted) {
         setState(() {
-          _fullNameErrorText = 'Enter your first and last name';
+          _fullNameErrorText =
+              AppLocalizations.of(context)!.enterYourFirstAndLastName;
         });
       }
     } else {
@@ -102,20 +104,21 @@ class _RegistrationPageState extends State<RegistrationPage> {
     if (userName.isEmpty) {
       if (mounted) {
         setState(() {
-          _userNameErrorText = 'Enter a user name';
+          _userNameErrorText = AppLocalizations.of(context)!.enterAUserName;
         });
       }
     } else if (userName.length <= 7) {
       if (mounted) {
         setState(() {
-          _userNameErrorText = 'User name should be at least 8 characters long';
+          _userNameErrorText = AppLocalizations.of(context)!
+              .userNameShouldBeAtLeastCharactersLong;
         });
       }
     } else if (!RegExp(r'^[a-zA-Z0-9\s]+$').hasMatch(userName)) {
       if (mounted) {
         setState(() {
-          _userNameErrorText =
-              'User name should contain only letters, numbers, and spaces';
+          _userNameErrorText = AppLocalizations.of(context)!
+              .userNameShouldContainOnlyLettersNumbersAndSpaces;
         });
       }
     } else {
@@ -133,7 +136,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
     if (!EmailValidator.validate(email)) {
       if (mounted) {
         setState(() {
-          _emailErrorText = 'Enter a valid email';
+          _emailErrorText = AppLocalizations.of(context)!.enterAValidEmail;
         });
       }
     } else {
@@ -205,7 +208,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
     if (confirmPassword != password) {
       if (mounted) {
         setState(() {
-          _confirmPasswordErrorText = 'Passwords do not match';
+          _confirmPasswordErrorText =
+              AppLocalizations.of(context)!.passwordDoesNotMatch;
         });
       }
     } else {
@@ -222,13 +226,15 @@ class _RegistrationPageState extends State<RegistrationPage> {
     if (phoneNumber.isEmpty) {
       if (mounted) {
         setState(() {
-          _phoneNumberErrorText = 'Phone number is required';
+          _phoneNumberErrorText =
+              AppLocalizations.of(context)!.phoneNumberIsRequired;
         });
       }
     } else if (phoneNumber.length != 11) {
       if (mounted) {
         setState(() {
-          _phoneNumberErrorText = 'Phone number must be 11 digits';
+          _phoneNumberErrorText =
+              AppLocalizations.of(context)!.phoneNumberMustBeDigits;
         });
       }
     } else {
@@ -263,8 +269,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       topRight: Radius.circular(10.0),
                     ),
                   ),
-                  child: const Text(
-                    "Terms and Conditions",
+                  child: Text(
+                    AppLocalizations.of(context)!.termsAndConditions,
                     style: TextStyle(color: Color.fromARGB(255, 255, 255, 255)),
                   ),
                 ),
@@ -323,8 +329,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     style: TextButton.styleFrom(
                       textStyle: const TextStyle(fontSize: 16),
                     ),
-                    child: const Text(
-                      "Close",
+                    child: Text(
+                      AppLocalizations.of(context)!.close,
                       style: TextStyle(color: Color.fromARGB(255, 0, 0, 0)),
                     ),
                   ),
@@ -358,9 +364,10 @@ class _RegistrationPageState extends State<RegistrationPage> {
     return Scaffold(
       backgroundColor: const Color(0xFFEEF1F5),
       appBar: AppBar(
-          title: const Text(
-            'Create an account',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.createAnAccount,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
@@ -377,8 +384,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Start shipping with ABS',
+                    Text(
+                      AppLocalizations.of(context)!.startShippingWithAbs,
                       style: TextStyle(
                         color: Colors.black,
                         fontSize: 23,
@@ -391,7 +398,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         fillColor: const Color.fromARGB(255, 250, 250, 250),
                         filled: true,
                         border: const OutlineInputBorder(),
-                        labelText: 'Full Name',
+                        labelText: AppLocalizations.of(context)!.fullName,
                         errorText: _fullNameErrorText.isEmpty
                             ? null
                             : _fullNameErrorText,
@@ -404,7 +411,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         fillColor: const Color.fromARGB(255, 250, 250, 250),
                         filled: true,
                         border: const OutlineInputBorder(),
-                        labelText: 'User Name / Account Name',
+                        labelText:
+                            AppLocalizations.of(context)!.userNameAccountName,
                         errorText: _userNameErrorText.isEmpty
                             ? null
                             : _userNameErrorText,
@@ -417,7 +425,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         fillColor: const Color.fromARGB(255, 250, 250, 250),
                         filled: true,
                         border: const OutlineInputBorder(),
-                        labelText: 'Email Address',
+                        labelText: AppLocalizations.of(context)!.emailAddress,
                         errorText:
                             _emailErrorText.isEmpty ? null : _emailErrorText,
                       ),
@@ -434,7 +442,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         fillColor: const Color.fromARGB(255, 250, 250, 250),
                         filled: true,
                         border: const OutlineInputBorder(),
-                        labelText: 'Phone Number',
+                        labelText: AppLocalizations.of(context)!.phoneNumber,
                         errorText: _phoneNumberErrorText.isNotEmpty
                             ? _phoneNumberErrorText
                             : null,
@@ -464,7 +472,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.white,
-                          hintText: "Password",
+                          hintText: AppLocalizations.of(context)!.password,
                           suffixIcon: GestureDetector(
                             onTap: () {
                               if (mounted) {
@@ -522,7 +530,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                       decoration: InputDecoration(
                         fillColor: const Color.fromARGB(255, 250, 250, 250),
                         filled: true,
-                        labelText: 'Confirm Password',
+                        labelText:
+                            AppLocalizations.of(context)!.confirmPassword,
                         border: const OutlineInputBorder(),
                         suffixIcon: GestureDetector(
                           onTap: () {
@@ -551,8 +560,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           onPressed: () {
                             _showTermsAndConditionsDialog(context);
                           },
-                          child: const Text(
-                            "Read Terms and Conditions",
+                          child: Text(
+                            AppLocalizations.of(context)!
+                                .readTermsAndConditions,
                             style: TextStyle(
                               color: Colors.orange,
                               decoration: TextDecoration.underline,
@@ -560,8 +570,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
                           ),
                         ),
                         CheckboxListTile(
-                          title:
-                              const Text("I agree to the terms and conditions"),
+                          title: Text(AppLocalizations.of(context)!
+                              .iAgreeToTheTermsAndConditions),
                           value: _isCheckboxChecked,
                           onChanged: (bool? newValue) {
                             if (newValue != null) {
@@ -664,15 +674,18 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                           String errorMessage = '';
                                           if (!isEmailValid) {
                                             errorMessage =
-                                                'Email is already taken.';
+                                                AppLocalizations.of(context)!
+                                                    .emailIsAlreadyTaken;
                                           }
                                           if (!isUsernameValid) {
                                             errorMessage =
-                                                'Username is already taken.';
+                                                AppLocalizations.of(context)!
+                                                    .usernameIsAlreadyTaken;
                                           }
                                           if (!isMobileValid) {
                                             errorMessage =
-                                                'Mobile number is already taken.';
+                                                AppLocalizations.of(context)!
+                                                    .mobileNumberIsAlreadyTaken;
                                           }
 
                                           ScaffoldMessenger.of(context)
@@ -687,9 +700,9 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                       }
                                     }
                                   : null,
-                              child: const Text(
-                                'Next',
-                                style: TextStyle(
+                              child: Text(
+                                AppLocalizations.of(context)!.next,
+                                style: const TextStyle(
                                   fontSize: 20,
                                   color: Color.fromARGB(249, 95, 95, 95),
                                 ),

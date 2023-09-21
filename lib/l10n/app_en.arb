@@ -138,5 +138,1171 @@
     "deleteAccount": "Delete account",
     "@deleteAccount": {
         "description": "The delete account button"
+    },
+    "awb": "AWB",
+    "@awb": {
+        "description": "The AWB button"
+    },
+    "paidShipments": "Paid shipments",
+    "@paidShipments": {
+        "description": "The paid shipments button"
+    },
+    "cash": "Cash:",
+    "@cash": {
+        "description": "The cash button"
+    },
+    "egp": "EGP",
+    "@EGP": {
+        "description": "The EGP button"
+    },
+    "absFees" : "ABS Fees:",
+    "@ABSFees": {
+        "description": "The ABS Fees button"
+    },
+    "deliveryDate": "Delivery date:",
+    "@deliveryDate": {
+        "description": "The delivery date button"
+    },
+    "paymentDate": "Payment date:",
+    "@paymentDate": {
+        "description": "The payment date button"
+    },
+    "loadMore": "Load more",
+    "@loadMore": {
+        "description": "The load more button"
+    },
+    "noPaidShipments": "No paid shipments",
+    "@noPaidShipments": {
+        "description": "The message displayed when there are no paid shipments"
+    },
+    "creationDate" : "Creation date",
+    "@creationDate": {
+        "description": "The creation date button"
+    },
+    "expectedCash" : "Expected cash",
+    "@expectedCash": {
+        "description": "The expected cash button"
+    },
+    "collectedCash" : "Collected cash",
+    "@collectedCash": {
+        "description": "The collected cash button"
+    },
+    "absFeesCashCollectionFees" : "ABS fees + Cash collection fees",
+    "@ABSFeesCashCollectionFees": {
+        "description": "The ABS fees + Cash collection fees button"
+    },
+    "netValue" : "Net value",
+    "@netValue": {
+        "description": "The net value button"
+    },
+    "awbNotFound" : "AWB not found",
+    "@awbNotFound": {
+        "description": "The message displayed when the AWB is not found"
+    },
+    "theAwbYouEnteredWasNotFound" : "The AWB you entered was not found.",
+    "@theAwbYouEnteredWasNotFound": {
+        "description": "The message displayed when the AWB is not found"
+    },
+    "search" : "Search",
+    "@search": {
+        "description": "The search button"
+    },
+    "searchByawb" : "Search by AWB ...",
+    "@searchByawb": {
+        "description": "The search by AWB button"
+    },
+    "noSearchResults" : "No search results",
+    "@noSearchResults": {
+        "description": "The message displayed when there are no search results"
+    },
+    "success" : "Success",
+    "@success": {
+        "description": "The success message"
+    },
+    "imageUploadedSuccessfully" : "Image uploaded successfully",
+    "@imageUploadedSuccessfully": {
+        "description": "The message displayed when the image is uploaded successfully"
+    },
+    "error" : "Error",
+    "@error": {
+        "description": "The error message"
+    },
+    "failedToUploadImage" : "Failed to upload image",
+    "@failedToUploadImage": {
+        "description": "The message displayed when the image is failed to upload"
+    },
+    "name" : "Name",
+    "@name": {
+        "description": "The name button"
+    },
+    "phone" : "Phone",
+    "@phone": {
+        "description": "The phone button"
+    },
+    "emailAddress" : "Email address",
+    "@email":
+    {
+        "description": "The email address button"
+    },
+    "uploadProfilePicture" : "Upload profile picture",
+    "@uploadProfilePicture": {
+        "description": "The upload profile picture button"
+    },
+    "changePassword" : "Change password",
+    "@changePassword": {
+        "description": "The change password button"
+    },
+    "newPasswordCannotBeTheSameAsOldPassword" : "New password cannot be the same as old password!",
+    "@newPasswordCannotBeTheSameAsOldPassword": {
+        "description": "The message displayed when the new password is the same as the old password"
+    },
+    "oldPasswordIsIncorrect" : "Old password is incorrect!",
+    "@oldPasswordIsIncorrect": {
+        "description": "The message displayed when the old password is incorrect"
+    },
+    "passwordChangedSuccessfully" : "Password changed successfully",
+    "@passwordChangedSuccessfully": {
+        "description": "The message displayed when the password is changed successfully"
+    },
+    "changePassword" : "Change password",
+    "@changePassword": {
+        "description": "The change password button"
+    },
+    "oldPassword" : "Old password",
+    "@oldPassword": {
+        "description": "The old password button"
+    },
+    "newPassword" : "New password",
+    "@newPassword": {
+        "description": "The new password button"
+    },
+    "confirmPassword" : "Confirm Password",
+    "@confirmPassword": {
+        "description": "The confirm password button"
+    },
+    "submit" : "Submit",
+    "@Submit": {
+        "description": "The submit button"
+    },
+    "nationalIDUploadedSuccessfully" : "National ID uploaded successfully",
+    "@nationalIDUploadedSuccessfully": {
+        "description": "The message displayed when the national ID is uploaded successfully"
+    },
+    "commercialRegisterUploadedSuccessfully" : "Commercial register uploaded successfully",
+    "@commercialRegisterUploadedSuccessfully": {
+        "description": "The message displayed when the commercial register is uploaded successfully"
+    },
+    "prefixAlreadyExists" : "Prefix already exists",
+    "@prefixAlreadyExists": {
+        "description": "The message displayed when the prefix already exists"
+    },
+    "businessNameEnglish" : "Business name (English)",
+    "@businessNameEnglish": {
+        "description": "The business name (English) button"
+    },
+    "businessNameArabic" : "Business name (Arabic)",
+    "@businessNameArabic": {
+        "description": "The business name (Arabic) button"
+    },
+    "salesChannels" : "Sales channels",
+    "@salesChannels": {
+        "description": "The sales channels button"
+    },
+    "salesChannelName"  : "Sales channel name",
+    "@salesChannelName": {
+        "description": "The sales channel name button"
+    },
+    "storeUrl" : "Store URL",
+    "@storeUrl": {
+        "description": "The store URL button"
+    },
+    "product" : "Product",
+    "@product": {
+        "description": "The product button"
+    },
+    "prefix" : "Prefix",
+    "@prefix": {
+        "description": "The prefix button"
+    },
+    "city" : "City",
+    "@city": {
+        "description": "The city button"
+    },
+    "streetName" : "Street name",
+    "@streetName": {
+        "description": "The street name button"
+    },
+    "buildingNumber" : "Building number",
+    "@buildingNumber": {
+        "description": "The building number button"
+    },
+    "floorNumber" : "Floor number",
+    "@floorNumber": {
+        "description": "The floor number button"
+    },
+    "apartmentNumber" : "Apartment number",
+    "@apartmentNumber": {
+        "description": "The apartment number button"
+    },
+    "services" : "Services",
+    "@services": {
+        "description": "The services button"
+    },
+    "selectServices" : "Select services",
+    "@selectServices": {
+        "description": "The select services button"
+    },
+    "uploadNationalId" : "Upload national ID",
+    "@uploadNationalId": {
+        "description": "The upload national ID button"
+    },
+    "uploadCommercialRegister" : "Upload commercial register",
+    "@uploadCommercialRegister": {
+        "description": "The upload commercial register button"
+    },
+    "emailSentTo" : "Email sent to",
+    "@emailSentTo":
+    {
+        "description": "The email sent to button"
+    },
+    "failedToSendEmailTo" : "Failed to send email to",
+    "@failedToSendEmailTo":
+    {
+        "description": "The failed to send email to button"
+    },
+    "emailVerificationDisabledFor" : "Email verification disabled for",
+    "@email":
+    {
+        "description": "The email button"
+    },
+    "min" : "min",
+    "@min":
+    {
+        "description": "The min button"
+    },
+    "sec" : "sec.",
+    "@sec":
+    {
+        "description": "The sec button"
+    },
+    "off" : "of",
+    "@off":
+    {
+        "description": "The of button"
+    },
+    "completeYour" : "Complete your",
+    "@completeYour":
+    {
+        "description": "The complete your button"
+    },
+    "accountFor" : "account for",
+    "@accountFor":
+    {
+        "description": "The account for button"
+    },
+    "aFullExperience" : "a full experience",
+    "@aFullExperience":
+    {
+        "description": "The a full experience button"
+    },
+    "shipmentsOverview" : "Shipments Overview",
+    "@shipmentsOverview":
+    {
+        "description": "The shipments overview button"
+    },
+    "newShipments" : "New Shipments",
+    "@newShipments":
+    {
+        "description": "The new shipments button"
+    },
+    "processingShipments" : "Processing Shipments",
+    "@processingShipments":
+    {
+        "description": "The processing shipments button"
+    },
+    "statusForAllShipmentsUnderProcessing" : "Status for all shipments under processing",
+    "@statusForAllShipmentsUnderProcessing":
+    {
+        "description": "The status for all shipments under processing button"
+    },
+    "inTransit" : "In Transit",
+    "@inTransit":
+    {
+        "description": "The in transit button"
+    },
+    "outForDelivery" : "Out For Delivery",
+    "@outForDelivery":
+    {
+        "description": "The out for delivery button"
+    },
+    "outForReturn" : "Out For Return",
+    "@outForReturn":
+    {
+        "description": "The out for return button"
+    },
+    "onHold" : "On Hold",
+    "@onHold":
+    {
+        "description": "The on hold button"
+    },
+    "delivered" : "Delivered",
+    "@delivered":
+    {
+        "description": "The delivered button"
+    },
+    "undelivered" : "Undelivered",
+    "@undelivered":
+    {
+        "description": "The undelivered button"
+    },
+    "returnedToShipper" : "Returned To Shipper",
+    "@returnedToShipper":
+    {
+        "description": "The returned to shipper button"
+    },
+    "yourBalance" : "Your Balance",
+    "@yourBalance":
+    {
+        "description": "The your balance button"
+    },
+    "newLocations" : "New Locations",
+    "@newLocations":
+    {
+        "description": "The new locations button"
+    },
+    "manageYourLocationsToControlYourShipmentsPickupAndReturnDestinations" : "Manage your locations to control your shipment's pickup and return destinations",
+    "@manageYourLocationsToControlYourShipmentsPickupAndReturnDestinations":
+    {
+        "description": "The manage your locations to control your shipment's pickup and return destinations button"
+    },
+    "addNewLocation" : "+ Add New Location",
+    "@addNewLocation":
+    {
+        "description": "The add new location button"
+    },
+    "active" : "Active",
+    "@active":
+    {
+        "description": "The active button"
+    },
+    "inactive" : "Inactive",
+    "@inactive":
+    {
+        "description": "The inactive button"
+    },
+    "locationNameIsRequired" : "Location name is required",
+    "@locationNameIsRequired":
+    {
+        "description": "The location name is required button"
+    },
+    "streetNameIsRequired" : "Street name is required",
+    "@streetNameIsRequired":
+    {
+        "description": "The street name is required button"
+    },
+    "buildingNumberIsRequired" : "Building number is required",
+    "@buildingNumberIsRequired":
+    {
+        "description": "The building number is required button"
+    },
+    "floorNumberIsRequired" : "Floor number is required",
+    "@floorNumberIsRequired":
+    {
+        "description": "The floor number is required button"
+    },
+    "apartmentNumberIsRequired" : "Apt. number is required",
+    "@apartmentNumberIsRequired":
+    {
+        "description": "The apt. number is required button"
+    },
+    "firstNameIsRequired" : "First name is required",
+    "@firstNameIsRequired":
+    {
+        "description": "The first name is required button"
+    },
+    "lastNameIsRequired" : "Last name is required",
+    "@lastNameIsRequired":
+    {
+        "description": "The last name is required button"
+    },
+    "phoneNumberIsRequired" : "Phone number is required",
+    "@phoneNumberIsRequired":
+    {
+        "description": "The phone number is required button"
+    },
+    "emailAddressIsRequired" : "Email address is required",
+    "@email":
+    {
+        "description": "The email address is required button"
+    },
+    "addPinLocation" : "Add Pin Location",
+    "@addPinLocation":
+    {
+        "description": "The add pin location button"
+    },
+    "addressType" : "Address type",
+    "@addressType":
+    {
+        "description": "The address type button"
+    },
+    "locationName" : "Location name",
+    "@locationName":
+    {
+        "description": "The location name button"
+    },
+    "postalCode" : "Postal code",
+    "@postalCode":
+    {
+        "description": "The postal code button"
+    },
+    "contactPerson" : "Contact Person",
+    "@ContactPerson":
+    {
+        "description": "The contact person button"
+    },
+    "save" : "Save",
+    "@save":
+    {
+        "description": "The save button"
+    },
+    "deActivate" : "De-Activate",
+    "@DeActivate":
+    {
+        "description": "The de-activate button"
+    },
+    "activate" : "Activate",    
+    "@Activate":
+    {
+        "description": "The activate button"
+    },
+    "firstName" : "First name",
+    "@firstName":
+    {
+        "description": "The first name button"
+    },
+    "lastName" : "Last name",
+    "@lastName":
+    {
+        "description": "The last name button"
+    },
+    "phoneNumber" : "Phone number",
+    "@phoneNumber":
+    {
+        "description": "The phone number button"
+    },
+    "confirmLocation" : "Confirm Location",
+    "@confirmLocation":
+    {
+        "description": "The confirm location button"
+    },
+    "chooseAPaymentMethod" : "Choose a payment method",
+    "@chooseAPaymentMethod":
+    {
+        "description": "The choose a payment method button"
+    },
+    "bankTransfer" : "Bank transfer",
+    "@bankTransfer":
+    {
+        "description": "The bank transfer button"
+    },
+    "mobileCash" : "Mobile Cash",
+    "@mobileCash":
+    {
+        "description": "The mobile cash button"
+    },
+    "nearestBranch" : "Nearest branch",
+    "@nearestBranch":
+    {
+        "description": "The nearest branch button"
+    },
+    "accountOwnerNameIsRequired" : "Account owner name is required",
+    "@accountOwnerNameIsRequired":
+    {
+        "description": "The account owner name is required button"
+    },
+    "accountNumberIsRequired" : "Account number is required",
+    "@accountNumberIsRequired":
+    {
+        "description": "The account number is required button"
+    },
+    "ibanIsRequired" : "IBAN is required",
+    "@ibanIsRequired":
+    {
+        "description": "The IBAN is required button"
+    },
+    "swiftCodeIsRequired" : "Swift code is required",
+    "@swiftCodeIsRequired":
+    {
+        "description": "The swift code is required button"
+    },
+    "bank" : "Bank",
+    "@bank":
+    {
+        "description": "The bank button"
+    },
+    "accountOwnerName" : "Account Owner Name",
+    "@accountOwnerName":
+    {
+        "description": "The account owner name button"
+    },
+    "accountNumber" : "Account Number",
+    "@accountNumber":
+    {
+        "description": "The account number button"
+    },
+    "iban" : "IBAN (International Bank Account Number)",
+    "@iban":
+    {
+        "description": "The IBAN button"
+    },
+    "swiftCode" : "Swift Code",
+    "@swiftCode":
+    {
+        "description": "The swift code button"
+    },
+    "mobileNumberIsRequired" : "Mobile number is required",
+    "@mobileNumberIsRequired":
+    {
+        "description": "The mobile number is required button"
+    },
+    "mobileNumberMustBeDigits" : "Mobile number must be 11 digits",
+    "@mobileNumberMustBeDigits":
+    {
+        "description": "The mobile number must be 11 digits button"
+    },
+    "mobileNumber" : "Mobile number",
+    "@mobileNumber":
+    {
+        "description": "The mobile number button"
+    },
+    "nearestBranch" : "Nearest Branch",
+    "@nearestBranch":
+    {
+        "description": "The nearest branch button"
+    },
+    "branch" : "Branch",
+    "@branch":
+    {
+        "description": "The branch button"
+    },
+    "enterAWalletNumber" : "Enter a wallet number",
+    "@enterAWalletNumber":
+    {
+        "description": "The enter a wallet number button"
+    },
+    "walletNumberShouldContainOnlyLettersAndNumbers" : "Wallet number should contain only letters and numbers",
+    "@walletNumberShouldContainOnlyLettersAndNumbers":
+    {
+        "description": "The wallet number should contain only letters and numbers button"
+    },
+    "walletNumber" : "Wallet number",
+    "@walletNumber":
+    {
+        "description": "The wallet number button"
+    },
+    "viewZonesDetails" : "View Zones Details",
+    "@viewZonesDetails":
+    {
+        "description": "The view zones details button"
+    },
+    "noSubaccounts" : "No subaccounts",
+    "@noSubaccounts":
+    {
+        "description": "The no subaccounts button"
+    },
+    "subAccountNumber" : "Sub Account Number: ",
+    "@subAccountNumber":
+    {
+        "description": "The sub account number button"
+    },
+    "pricePlanName" : "Price Plan Name: ",
+    "@pricePlanName":
+    {
+        "description": "The price plan name button"
+    },
+    "paymentMethodType" : "Payment Method Type: ",
+    "@paymentMethodType":
+    {
+        "description": "The payment method type button"
+    },
+    "productName" : "Product Name: ",
+    "@productName":
+    {
+        "description": "The product name button"
+    },
+    "prefix" : "Prefix: ",
+    "@prefix":
+    {
+        "description": "The prefix button"
+    },
+    "creationDate" : "Creation Date: ",
+    "@creationDate":
+    {
+        "description": "The creation date button"
+    },
+    "usernameAlreadyExists" : "Username already exists",
+    "@usernameAlreadyExists":
+    {
+        "description": "The username already exists button"
+    },
+    "addTeamMember" : "Add Team Member",
+    "@addTeamMember":
+    {
+        "description": "The add team member button"
+    },
+    "subAccountName" : "Sub Account Name",
+    "@subAccountName":
+    {
+        "description": "The sub account name button"
+    },
+    "fullName": "Full Name",
+    "@fullName":
+    {
+        "description": "The full name button"
+    },
+    "roles" : "Roles",
+    "@roles":
+    {
+        "description": "The roles button"
+    },
+    "noTeamMembers" : "No Team Members",
+    "@noTeamMembers":
+    {
+        "description": "The no team members button"
+    },
+    "status" : "Status: ",
+    "@status":
+    {
+        "description": "The status button"
+    },
+    "inactive" : "Inactive",
+    "@inactive":
+    {
+        "description": "The inactive button"
+    },
+    "role" : "Role: ",
+    "@role":
+    {
+        "description": "The role button"
+    },
+    "noTickets" : "No Tickets",
+    "@noTickets":
+    {
+        "description": "The no tickets button"
+    },
+    "awbDots" : "AWB: ",
+    "@awbDots":
+    {
+        "description": "The AWB button"
+    },
+    "ticketIssuer" : "Ticket Issuer: ",
+    "@ticketIssuer":
+    {
+        "description": "The ticket issuer button"
+    },
+    "ticketType": "Ticket Type: ",
+    "@ticketType":
+    {
+        "description": "The ticket type button"
+    },
+    "ticketStatus" : "Ticket Status: ",
+    "@ticketStatus":
+    {
+        "description": "The ticket status button"
+    },
+    "description" : "Description: ",
+    "@description":
+    {
+        "description": "The description button"
+    },
+    "lastActionDate": "Last Action Date: ",
+    "@lastActionDate":
+    {
+        "description": "The last action date button"
+    },
+    "closed" : "Closed",
+    "@closed":
+    {
+        "description": "The closed button"
+    },
+    "enterYourShipmentNumber" : "Enter your shipment number",
+    "@enterYourShipmentNumber":
+    {
+        "description": "The enter your shipment number button"
+    },
+    "noData" : "No Data",
+    "@noData":
+    {
+        "description": "The no data button"
+    },
+    "statusTracking" : "Status Tracking",
+    "@statusTracking":
+    {
+        "description": "The status tracking button"
+    },
+    "newShipment" : "New Shipment",
+    "@newShipment":
+    {
+        "description": "The new shipment button"
+    },
+    "shipmentDetails" : "Shipment Details",
+    "@shipmentDetails":
+    {
+        "description": "The shipment details button"
+    },
+    "service" : "Service",
+    "@service":
+    {
+        "description": "The service button"
+    },
+    "cashOnDelivery" : "Cash on delivery",
+    "@cashOnDelivery":
+    {
+        "description": "The cash on delivery button"
+    },
+    "specialInstructions" : "Special Instructions",
+    "@specialInstructions":
+    {
+        "description": "The special instructions button"
+    },
+    "customerDetails" : "Customer Details",
+    "@customerDetails":
+    {
+        "description": "The customer details button"
+    },
+    "track" : "Track",
+    "@track":
+    {
+        "description": "The track button"
+    },
+    "address" : "Address",
+    "@address":
+    {
+        "description": "The address button"
+    },
+    "noDate" : "No Date",
+    "@noDate":
+    {
+        "description": "The no date button"
+    },
+    "upcomingPickups" : "Upcoming Pickups",
+    "@upcomingPickups":
+    {
+        "description": "The upcoming pickups button"
+    },
+    "noUpcomingPickups" : "No Upcoming Pickups",
+    "@noUpcomingPickups":
+    {
+        "description": "The no upcoming pickups button"
+    },
+    "historyPickups" : "History Pickups",
+    "@historyPickups":
+    {
+        "description": "The history pickups button"
+    },
+    "noHistoryPickups" : "No History Pickups",
+    "@noHistoryPickups":
+    {
+        "description": "The no history pickups button"
+    },
+    "createNewPickup" : "Create new pickup",
+    "@createNewPickup":
+    {
+        "description": "The create new pickup button"
+    },
+    "theCourierWillComeSoonToPickYourOrders" : "The courier will come soon to pick your orders",
+    "@theCourierWillComeSoonToPickYourOrders":
+    {
+        "description": "The the courier will come soon to pick your orders button"
+    },
+    "selectLocationAndDateForPickup" : "Select location and date for pickup",
+    "@selectLocationAndDateForPickup":
+    {
+        "description": "The select location and date for pickup button"
+    },
+    "pickupLocation" : "Pickup Location",
+    "@pickupLocation":
+    {
+        "description": "The pickup location button"
+    },
+    "pickupDateRange" : "Pickup date range",
+    "@pickupDateRange":
+    {
+        "description": "The pickup date range button"
+    },
+    "scrollToViewMore" : "Scroll to view more",
+    "@scrollToViewMore":
+    {
+        "description": "The scroll to view more button"
+    },
+    "vehicleType" : "Vehicle Type",
+    "@vehicleType":
+    {
+        "description": "The vehicle type button"
+    },
+    "numberOfItems" : "Number of items",
+    "@numberOfItems":
+    {
+        "description": "The number of items button"
+    },
+    "notes" : "Notes",
+    "@notes":
+    {
+        "description": "The notes button"
+    },
+    "enterYourNotesHere" : "Enter your notes here",
+    "@enterYourNotesHere":
+    {
+        "description": "The enter your notes here button"
+    },
+    "createPickup" : "Create Pickup",
+    "@createPickup":
+    {
+        "description": "The create pickup button"
+    },
+    "createNewShipment" : "Create new shipment",
+    "@createNewShipment":
+    {
+        "description": "The create new shipment button"
+    },
+    "id" : "ID",
+    "@id":
+    {
+        "description": "The ID button"
+    },
+    "accountIsNotVerified" : "Account is not verified",
+    "@accountIsNotVerified":
+    {
+        "description": "The account is not verified button"
+    },
+    "pleaseVerifyYourAccountFirst" : "Please verify your account first",
+    "@pleaseVerifyYourAccountFirst":
+    {
+        "description": "The please verify your account first button"
+    },
+    "refAlreadyExists" : "Ref already exists",
+    "@refAlreadyExists":
+    {
+        "description": "The ref already exists button"
+    },
+    "pleaseEnterADifferentReference" : "Please enter a different reference",
+    "@pleaseEnterADifferentReference":
+    {
+        "description": "The please enter a different reference button"
+    }, 
+    "collectCash" : "Collect cash",
+    "@collectCash":
+    {
+        "description": "The collect cash button"
+    },
+    "cod" : "COD",
+    "@cod":
+    {
+        "description": "The COD button"
+    },
+    "deliveryShipmentDetails" : "Delivery Shipment Details",
+    "@deliveryShipmentDetails":
+    {
+        "description": "The delivery shipment details button"
+    },
+    "parcel" : "Parcel",
+    "@parcel":
+    {
+        "description": "The parcel button"
+    },
+    "document" : "Document",
+    "@document":
+    {
+        "description": "The document button"
+    },
+    "bulk" : "Bulk",
+    "@bulk":
+    {
+        "description": "The bulck button"
+    },
+    "weight" : "Weight",    
+    "@weight":
+    {
+        "description": "The weight button"
+    },
+    "orderReference"   : "Order Reference",
+    "@orderReference":
+    {
+        "description": "The order reference button"
+    },  
+    "content" : "Content",
+    "@content":
+    {
+        "description": "The content button"
+    },
+    "selectServices" : "Select Services",
+    "@selectServices":
+    {
+        "description": "The select services button"
+    },
+    "searchServices" : "Search Services",
+    "@searchServices":
+    {
+        "description": "The search services button"
+    },
+    "pickupDetails" : "Pickup Details",
+    "@pickupDetails":
+    {
+        "description": "The pickup details button"
+    },
+    "createShipment" : "Create Shipment",
+    "@createShipment":
+    {
+        "description": "The create shipment button"
+    },
+    "refundCash" : "Refund cash",
+    "@refundCash":
+    {
+        "description": "The refund cash button"
+    },
+    "returnShipmentDetails" : "Return Shipment Details",
+    "@returnShipmentDetails":
+    {
+        "description": "The return shipment details button"
+    },
+    "returnDetails" : "Return Details",
+    "@returnDetails":
+    {
+        "description": "The return details button"
+    },
+    "returnLocation" : "Return Location",
+    "@returnLocation":
+    {
+        "description": "The return location button"
+    },
+    "delivery" : "Delivery",
+    "@delivery":
+    {
+        "description": "The delivery button"
+    },
+    "returne" : "Return",
+    "@return":
+    {
+        "description": "The return button"
+    },
+    "exchange" : "Exchange",
+    "@exchange":
+    {
+        "description": "The exchange button"
+    },
+    "shipments" : "Shipments",
+    "@shipments":
+    {
+        "description": "The shipments button"
+    },
+    "filter" : "Filter",
+    "@filter":
+    {
+        "description": "The filter button"
+    },
+    "noUpcomingPickups" : "No Upcoming Pickups",
+    "@noUpcomingPickups":
+    {
+        "description": "The no upcoming pickups button"
+    },
+    "collect" : "Collect",
+    "@collect":
+    {
+        "description": "The collect button"
+    },
+    "refund" : "Refund",
+    "@refund":
+    {
+        "description": "The refund button"
+    },
+    "pickupAndReturnDetails" : "Pickup & Return Details",
+    "@pickupAndReturnDetails":
+    {
+        "description": "The pickup & return details button"
+    },
+    "pickups" : "Pickups",
+    "@pickups":
+    {
+        "description": "The pickups button"
+    },
+    "enterYourFirstAndLastName" : "Enter your first and last name",
+    "@enterYourFirstAndLastName":
+    {
+        "description": "The enter your first and last name button"
+    },
+    "enterAUserName" : "Enter a username",
+    "@enterAUserName":
+    {
+        "description": "The enter a username button"
+    },
+    "userNameShouldBeAtLeastCharactersLong" : "User name should be at least 8 characters long",
+    "@userNameShouldBeAtLeastCharactersLong":
+    {
+        "description": "The user name should be at least 8 characters long button"
+    },
+    "userNameShouldContainOnlyLettersNumbersAndSpaces" : "User name should contain only letters, numbers, and spaces", 
+    "@userNameShouldContainOnlyLettersNumbersAndSpaces":
+    {
+        "description": "The user name should contain only letters, numbers, and spaces button"
+    },
+    "enterAValidEmail" : "Enter a valid email",
+    "@enterAValidEmail":
+    {
+        "description": "The enter a valid email button"
+    },
+    "passwordDoesNotMatch" : "Passwords does not match",
+    "@passwordDoesNotMatch":
+    {
+        "description": "The passwords does not match button"
+    },
+    "phoneNumberIsRequired" : "Phone number is required",
+    "@phoneNumberIsRequired":
+    {
+        "description": "The phone number is required button"
+    },
+    "phoneNumberMustBeDigits" : "Phone number must be 11 digits",
+    "@phoneNumberMustBeDigits":
+    {
+        "description": "The phone number must be 11 digits button"
+    },
+    "termsAndConditions" : "Terms and Conditions",
+    "@termsAndConditions":
+    {
+        "description": "The terms and conditions button"
+    },
+    "close" : "Close",
+    "@close":
+    {
+        "description": "The close button"
+    },
+    "createAnAccount" : "Create an account",
+    "@createAnAccount":
+    {
+        "description": "The create an account button"
+    },
+    "startShippingWithAbs" : "Start shipping with ABS",
+    "@startShippingWithAbs":
+    {
+        "description": "The start shipping with ABS button"
+    },
+    "userNameAccountName" : "User Name / Account Name",
+    "@userNameAccountName":
+    {
+        "description": "The user name / account name button"
+    },
+    "readTermsAndConditions" : "Read Terms and Conditions",
+    "@readTermsAndConditions":
+    {
+        "description": "The read terms and conditions button"
+    },
+    "iAgreeToTheTermsAndConditions" : "I agree to the terms and conditions",
+    "@iAgreeToTheTermsAndConditions":
+    {
+        "description": "The I agree to the terms and conditions button"
+    },
+    "emailIsAlreadyTaken" : "Email is already taken.",
+    "@email":
+    {
+        "description": "The email button"
+    },
+    "usernameIsAlreadyTaken" : "Username is already taken.",
+    "@usernameIsAlreadyTaken":
+    {
+        "description": "The username is already taken button"
+    },
+    "mobileNumberIsAlreadyTaken" : "Mobile number is already taken.",
+    "@mobileNumberIsAlreadyTaken":
+    {
+        "description": "The mobile number is already taken button"
+    },
+    "next" : "Next",
+    "@next":
+    {
+        "description": "The next button"
+    },
+    "failedToGetUserInfo" : "Failed to get user info",
+    "@failedToGetUserInfo":
+    {
+        "description": "The failed to get user info button"
+    },
+    "confirmLogout" : "Confirm Logout",
+    "@confirmLogout":
+    {
+        "description": "The confirm logout button"
+    },
+    "areYouSureYouWantToLogout" : "Are you sure you want to logout?",
+    "@areYouSureYouWantToLogout":
+    {
+        "description": "The are you sure you want to logout button"
+    },
+    "cancel" : "Cancel",
+    "@cancel":
+    {
+        "description": "The cancel button"
+    },
+    "logout" : "Logout",
+    "@logout":
+    {
+        "description": "The logout button"
+    },
+    "zoneDetails" : "Zone Details",
+    "@zoneDetails":
+    {
+        "description": "The zone details button"
+    },
+    "zone" : "Zone",
+    "@zone":
+    {
+        "description": "The zone button"
+    },
+    "scrollToSeeMore" : "Scroll to see more",
+    "@scrollToSeeMore":
+    {
+        "description": "The scroll to see more button"
+    },
+    "plan" : "Plan",
+    "@plan":
+    {
+        "description": "The plan button"
+    },
+    "somethingWentWrongTryAgainLater" : "Something went wrong, try again later.",
+    "@somethingWentWrongTryAgainLater":
+    {
+        "description": "The something went wrong, try again later button"
+    },
+    "shipmentsMonth" : "Shipments / Month",
+    "@shipmentsMonth":
+    {
+        "description": "The shipments / month button"
+    },
+    "subscriptionPlans" : "Subscription Plans",
+    "@subscriptionPlans":
+    {
+        "description": "The subscription plans button"
+    },
+    "chooseASubscriptionPlan" : "Choose a Subscription Plan",
+    "@chooseASubscriptionPlan":
+    {
+        "description": "The choose a subscription plan button"
+    },
+    "businessPlan" : "Business Plan",
+    "@businessPlan":
+    {
+        "description": "The business plan button"
+    },
+    "guestPlan" : "Guest Plan",
+    "@guestPlan":
+    {
+        "description": "The guest plan button"
+    },
+    "viewZonesDetails" : "View Zones Details",
+    "@viewZonesDetails":
+    {
+        "description": "The view zones details button"
+    }, 
+    "register" : "Register",
+    "@register":
+    {
+        "description": "The register button"
     }
 }

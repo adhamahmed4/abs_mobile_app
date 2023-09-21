@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:abs_mobile_app/Configurations/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchPage extends StatefulWidget {
   @override
@@ -66,7 +67,7 @@ class _SearchPageState extends State<SearchPage> {
               ),
               width: double.infinity,
               child: Text(
-                'AWB: $awb',
+                '${AppLocalizations.of(context)!.awb} $awb',
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
@@ -80,8 +81,11 @@ class _SearchPageState extends State<SearchPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Cash: $cash EGP', style: const TextStyle(fontSize: 12)),
-                  Text('ABS Fees: $absfees EGP',
+                  Text(
+                      '${AppLocalizations.of(context)!.cash} $cash ${AppLocalizations.of(context)!.egp}',
+                      style: const TextStyle(fontSize: 12)),
+                  Text(
+                      '${AppLocalizations.of(context)!.absFees} $absfees ${AppLocalizations.of(context)!.egp}',
                       style: const TextStyle(fontSize: 12)),
                 ],
               ),
@@ -90,7 +94,8 @@ class _SearchPageState extends State<SearchPage> {
             Center(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 0),
-                child: Text('Delivery Date: ${formatDateTime(deliveryDate)}',
+                child: Text(
+                    '${AppLocalizations.of(context)!.deliveryDate} ${formatDateTime(deliveryDate)}',
                     style: const TextStyle(fontSize: 12)),
               ),
             ),
@@ -98,7 +103,8 @@ class _SearchPageState extends State<SearchPage> {
             Center(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                child: Text('Payment Date: ${formatDateTime(paymentDate)}',
+                child: Text(
+                    '${AppLocalizations.of(context)!.paymentDate} ${formatDateTime(paymentDate)}',
                     style: const TextStyle(fontSize: 12)),
               ),
             ),
@@ -139,14 +145,15 @@ class _SearchPageState extends State<SearchPage> {
             context: context,
             builder: (context) {
               return AlertDialog(
-                title: const Text('AWB Not Found'),
-                content: const Text('The AWB you entered was not found.'),
+                title: Text(AppLocalizations.of(context)!.awbNotFound),
+                content: Text(
+                    AppLocalizations.of(context)!.theAwbYouEnteredWasNotFound),
                 actions: <Widget>[
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: const Text('OK'),
+                    child: Text(AppLocalizations.of(context)!.ok),
                   ),
                 ],
               );
@@ -172,7 +179,7 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Search'),
+        title: Text(AppLocalizations.of(context)!.search),
         backgroundColor: const Color.fromARGB(255, 244, 246, 248),
         iconTheme: const IconThemeData(color: Colors.black),
         actions: [
@@ -183,7 +190,7 @@ class _SearchPageState extends State<SearchPage> {
                 child: TextField(
                   controller: _searchController,
                   decoration: InputDecoration(
-                    hintText: 'Search by AWB...',
+                    hintText: AppLocalizations.of(context)!.searchByawb,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20.0),
                     ),
@@ -248,7 +255,7 @@ class _SearchPageState extends State<SearchPage> {
                     );
                   },
                 )
-              : const Text('No search results.'),
+              : Text(AppLocalizations.of(context)!.noSearchResults),
         ),
       ),
     );

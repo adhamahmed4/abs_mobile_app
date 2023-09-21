@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BusinessInfoPage extends StatefulWidget {
   const BusinessInfoPage({super.key});
@@ -196,7 +197,7 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
               'Service Type': item['Service Type'] +
                   ' (' +
                   item['Price'].toString() +
-                  ' EGP)',
+                  ' ${AppLocalizations.of(context)!.egp})',
             };
           }).toList();
         });
@@ -243,11 +244,12 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("Success"),
-              content: Text("National ID Uploaded Successfully"),
+              title: Text(AppLocalizations.of(context)!.success),
+              content: Text(
+                  AppLocalizations.of(context)!.nationalIDUploadedSuccessfully),
               actions: <Widget>[
                 TextButton(
-                  child: Text("OK"),
+                  child: Text(AppLocalizations.of(context)!.ok),
                   onPressed: () {
                     Navigator.of(context).pop(); // Close the dialog
                   },
@@ -295,11 +297,12 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("Success"),
-              content: Text("Commercial Register Uploaded Successfully"),
+              title: Text(AppLocalizations.of(context)!.success),
+              content: Text(AppLocalizations.of(context)!
+                  .commercialRegisterUploadedSuccessfully),
               actions: <Widget>[
                 TextButton(
-                  child: Text("OK"),
+                  child: Text(AppLocalizations.of(context)!.ok),
                   onPressed: () {
                     Navigator.of(context).pop(); // Close the dialog
                   },
@@ -347,11 +350,11 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
           context: context,
           builder: (BuildContext context) {
             return AlertDialog(
-              title: Text("Error"),
-              content: Text("Prefix Already Exists"),
+              title: Text(AppLocalizations.of(context)!.error),
+              content: Text(AppLocalizations.of(context)!.prefixAlreadyExists),
               actions: <Widget>[
                 TextButton(
-                  child: Text("OK"),
+                  child: Text(AppLocalizations.of(context)!.ok),
                   onPressed: () {
                     Navigator.of(context).pop(); // Close the dialog
                   },
@@ -394,8 +397,8 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Business Info',
+          title: Text(
+            AppLocalizations.of(context)!.businessInfo,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
@@ -421,13 +424,14 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                               child: TextField(
                                 controller: _englishNameController,
                                 readOnly: _dataExists,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   fillColor: Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
                                   border: OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFFFAB4A))),
-                                  labelText: "Business Name (English)",
+                                  labelText: AppLocalizations.of(context)!
+                                      .businessNameEnglish,
                                 ),
                                 onChanged: (englishName) {
                                   _updateButtonEnabledStatus();
@@ -439,13 +443,14 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                               child: TextField(
                                 controller: _arabicNameController,
                                 readOnly: _dataExists,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   fillColor: Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
                                   border: OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFFFAB4A))),
-                                  labelText: 'Business Name (Arabic)',
+                                  labelText: AppLocalizations.of(context)!
+                                      .businessNameArabic,
                                 ),
                                 onChanged: (arabicName) {
                                   _updateButtonEnabledStatus();
@@ -455,14 +460,15 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                               child: InputDecorator(
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   fillColor: Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
                                   border: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A)),
                                   ),
-                                  labelText: 'Sales Channels',
+                                  labelText: AppLocalizations.of(context)!
+                                      .salesChannels,
                                 ),
                                 child: Container(
                                   height: 20,
@@ -500,13 +506,14 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                               child: TextField(
                                 controller: _salesChannelNameController,
                                 readOnly: _dataExists,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   fillColor: Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
                                   border: OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFFFAB4A))),
-                                  labelText: 'Sales Channel Name',
+                                  labelText: AppLocalizations.of(context)!
+                                      .salesChannelName,
                                 ),
                               ),
                             ),
@@ -515,27 +522,30 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                               child: TextField(
                                 controller: _storeURLController,
                                 readOnly: _dataExists,
-                                decoration: const InputDecoration(
+                                decoration: InputDecoration(
                                   fillColor: Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
                                   border: OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFFFAB4A))),
-                                  labelText: 'Store URL',
+                                  labelText:
+                                      AppLocalizations.of(context)!.storeUrl,
                                 ),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                               child: InputDecorator(
-                                decoration: const InputDecoration(
-                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                decoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A)),
                                   ),
-                                  labelText: 'Product',
+                                  labelText:
+                                      AppLocalizations.of(context)!.product,
                                 ),
                                 child: Container(
                                   height: 20,
@@ -579,27 +589,30 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                               child: TextField(
                                 controller: _prefixController,
                                 readOnly: _dataExists,
-                                decoration: const InputDecoration(
-                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                decoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFFFAB4A))),
-                                  labelText: "Prefix",
+                                  labelText:
+                                      AppLocalizations.of(context)!.prefix,
                                 ),
                               ),
                             ),
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                               child: InputDecorator(
-                                decoration: const InputDecoration(
-                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                decoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A)),
                                   ),
-                                  labelText: 'City',
+                                  labelText: AppLocalizations.of(context)!.city,
                                 ),
                                 child: Container(
                                   height: 20,
@@ -635,13 +648,15 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                               child: TextField(
                                 controller: _streetNameController,
                                 readOnly: _dataExists,
-                                decoration: const InputDecoration(
-                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                decoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFFFAB4A))),
-                                  labelText: "Street Name",
+                                  labelText:
+                                      AppLocalizations.of(context)!.streetName,
                                 ),
                                 onChanged: (streetName) {
                                   _updateButtonEnabledStatus();
@@ -653,13 +668,15 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                               child: TextField(
                                 controller: _buildingNumberController,
                                 readOnly: _dataExists,
-                                decoration: const InputDecoration(
-                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                decoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFFFAB4A))),
-                                  labelText: "Building Number",
+                                  labelText: AppLocalizations.of(context)!
+                                      .buildingNumber,
                                 ),
                                 onChanged: (buildingNumber) {
                                   _updateButtonEnabledStatus();
@@ -671,13 +688,15 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                               child: TextField(
                                 controller: _floorNumberController,
                                 readOnly: _dataExists,
-                                decoration: const InputDecoration(
-                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                decoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFFFAB4A))),
-                                  labelText: "Floor Number",
+                                  labelText:
+                                      AppLocalizations.of(context)!.floorNumber,
                                 ),
                                 onChanged: (floorNumber) {
                                   _updateButtonEnabledStatus();
@@ -689,13 +708,15 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                               child: TextField(
                                 controller: _apartmentNumberController,
                                 readOnly: _dataExists,
-                                decoration: const InputDecoration(
-                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                decoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFFFAB4A))),
-                                  labelText: "Apartment Number",
+                                  labelText: AppLocalizations.of(context)!
+                                      .apartmentNumber,
                                 ),
                                 onChanged: (apartmentNumber) {
                                   _updateButtonEnabledStatus();
@@ -705,14 +726,16 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                               child: InputDecorator(
-                                decoration: const InputDecoration(
-                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                decoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A)),
                                   ),
-                                  labelText: 'Services',
+                                  labelText:
+                                      AppLocalizations.of(context)!.services,
                                 ),
                                 child: IgnorePointer(
                                   ignoring: _dataExists,
@@ -733,10 +756,12 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                                       }
                                     },
                                     buttonText: !_dataExists
-                                        ? Text('Select Services')
+                                        ? Text(AppLocalizations.of(context)!
+                                            .selectServices)
                                         : Text(''),
                                     chipDisplay: MultiSelectChipDisplay(),
-                                    searchHint: 'Search Services',
+                                    searchHint: AppLocalizations.of(context)!
+                                        .selectServices,
                                   ),
                                 ),
                               ),
@@ -760,7 +785,8 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                                       _pickIDImage();
                                     }
                                   : null,
-                              child: Text("Upload National ID"),
+                              child: Text(AppLocalizations.of(context)!
+                                  .uploadNationalId),
                             ),
                           ],
                         ),
@@ -781,7 +807,8 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                                       _pickCommercialRegisterImage();
                                     }
                                   : null,
-                              child: Text("Upload Commercial Register"),
+                              child: Text(AppLocalizations.of(context)!
+                                  .uploadCommercialRegister),
                             ),
                           ],
                         ),
@@ -814,9 +841,9 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                                     }
                                   }
                                 : null, // Disable the button if fields are not valid
-                            child: const Padding(
-                              padding: EdgeInsets.all(12.0),
-                              child: Text('Submit'),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Text(AppLocalizations.of(context)!.submit),
                             ),
                           ),
                         ),

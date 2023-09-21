@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NearestBranchPage extends StatefulWidget {
   @override
@@ -126,14 +127,15 @@ class _NearestBranchPageState extends State<NearestBranchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Nearest Branch',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.nearestBranch,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: Stack(
         children: [
           if (!isLoading)
@@ -149,14 +151,15 @@ class _NearestBranchPageState extends State<NearestBranchPage> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                           child: InputDecorator(
-                            decoration: const InputDecoration(
-                              fillColor: Color.fromARGB(255, 250, 250, 250),
+                            decoration: InputDecoration(
+                              fillColor:
+                                  const Color.fromARGB(255, 250, 250, 250),
                               filled: true,
-                              border: OutlineInputBorder(
+                              border: const OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Color(0xFFFFAB4A)),
                               ),
-                              labelText: 'Branch',
+                              labelText: AppLocalizations.of(context)!.branch,
                             ),
                             child: SizedBox(
                               height: 20,
@@ -226,9 +229,10 @@ class _NearestBranchPageState extends State<NearestBranchPage> {
                                       }
                                     }
                                   : null, // Disable the button if fields are not valid
-                              child: const Padding(
-                                padding: EdgeInsets.all(12.0),
-                                child: Text('Submit'),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child:
+                                    Text(AppLocalizations.of(context)!.submit),
                               ),
                             )
                           : null,

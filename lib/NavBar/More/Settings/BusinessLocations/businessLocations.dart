@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BusinessLocationsPage extends StatefulWidget {
   const BusinessLocationsPage({super.key});
@@ -79,9 +80,10 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Business Locations',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.businessLocations,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
@@ -103,17 +105,18 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              'New Locations',
-                              style: TextStyle(
+                            Text(
+                              AppLocalizations.of(context)!.newLocations,
+                              style: const TextStyle(
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                             const SizedBox(height: 8.0),
-                            const Text(
-                              'Manage your locations to control your shipment\'s pickup and return destinations.',
-                              style: TextStyle(
+                            Text(
+                              AppLocalizations.of(context)!
+                                  .manageYourLocationsToControlYourShipmentsPickupAndReturnDestinations,
+                              style: const TextStyle(
                                 color: Colors.grey,
                               ),
                             ),
@@ -147,7 +150,8 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                                     getBusinessLocations();
                                   });
                                 },
-                                child: const Text('+ Add new location'),
+                                child: Text(AppLocalizations.of(context)!
+                                    .addNewLocation),
                               ),
                             ),
                           ],
@@ -279,8 +283,13 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                                                       ),
                                                       child: Text(
                                                         location["isActive"]
-                                                            ? 'Active'
-                                                            : 'Inactive',
+                                                            ? AppLocalizations
+                                                                    .of(
+                                                                        context)!
+                                                                .active
+                                                            : AppLocalizations
+                                                                    .of(context)!
+                                                                .inactive,
                                                         style: const TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 10.0,
