@@ -119,8 +119,7 @@ class _SubAccountsPageState extends State<SubAccountsPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-
-                                    '${AppLocalizations.of(context)!.subAccountNumber${locale.toString() == 'en' ? subAccount['Sub Account Number'] : subAccount['رقم الحساب الفرعي']}'),
+                                    '${AppLocalizations.of(context)!.subAccountNumber}${locale.toString() == 'en' ? subAccount['Sub Account Number'] : subAccount['رقم الحساب الفرعي']}'),
                                 Text(
                                     '${AppLocalizations.of(context)!.pricePlanName}${locale.toString() == 'en' ? subAccount['Price Plan Name'] : subAccount['اسم خطة الأسعار']}'),
                                 Text(
