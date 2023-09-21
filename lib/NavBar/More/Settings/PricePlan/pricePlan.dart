@@ -21,6 +21,7 @@ class _PricePlanPageState extends State<PricePlanPage> {
     final response = await http.get(url, headers: AppConfig.headers);
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body) as List<dynamic>;
+      print(jsonData);
 
       for (var apiRow in jsonData) {
         final row = <String, dynamic>{};

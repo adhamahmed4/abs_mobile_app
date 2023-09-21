@@ -1,3 +1,4 @@
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../Configurations/app_config.dart';
@@ -12,11 +13,17 @@ class SubAccountsPage extends StatefulWidget {
 class _SubAccountsPageState extends State<SubAccountsPage> {
   bool isLoading = true;
   List<dynamic> _subAccounts = [];
+  Locale? locale;
 
   @override
   void initState() {
     super.initState();
     getSubAccounts();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   String formatDateTime(String dateTimeString) {
@@ -101,7 +108,7 @@ class _SubAccountsPageState extends State<SubAccountsPage> {
                               padding: const EdgeInsets.all(8.0),
                               child: Center(
                                   child: Text(
-                                      '${subAccount['Sub Account Name']}',
+                                      '${locale.toString() == 'en' ? subAccount['Sub Account Name'] : subAccount['اسم الحساب الفرعي']}',
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20))),
@@ -110,16 +117,17 @@ class _SubAccountsPageState extends State<SubAccountsPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    'Sub Account Number: ${subAccount['Sub Account Number']}'),
+                                    'Sub Account Number: ${locale.toString() == 'en' ? subAccount['Sub Account Number'] : subAccount['رقم الحساب الفرعي']}'),
                                 Text(
-                                    'Price Plan Name: ${subAccount['Price Plan Name']}'),
+                                    'Price Plan Name: ${locale.toString() == 'en' ? subAccount['Price Plan Name'] : subAccount['اسم خطة الأسعار']}'),
                                 Text(
-                                    'Payment Method Type: ${subAccount['Payment Method Type']}'),
+                                    'Payment Method Type: ${locale.toString() == 'en' ? subAccount['Payment Method Type'] : subAccount['نوع طريقة الدفع']}'),
                                 Text(
-                                    'Product Name: ${subAccount['Product Name']}'),
-                                Text('Prefix: ${subAccount['Prefix']}'),
+                                    'Product Name: ${locale.toString() == 'en' ? subAccount['Product Name'] : subAccount['اسم المنتج']}'),
                                 Text(
-                                    'Creation Date: ${formatDateTime(subAccount['Creation Date'])}')
+                                    'Prefix: ${locale.toString() == 'en' ? subAccount['Prefix'] : subAccount['تبدأ الشحنة ب']}'),
+                                Text(
+                                    'Creation Date: ${formatDateTime(locale.toString() == 'en' ? subAccount['Creation Date'] : subAccount['تاريخ التسجيل'])}'),
                               ],
                             ),
                           ),

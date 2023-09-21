@@ -1,3 +1,4 @@
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import '../../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
@@ -20,11 +21,18 @@ class _NearestBranchPageState extends State<NearestBranchPage> {
 
   bool _dataExists = false;
 
+  Locale? locale;
+
   @override
   void initState() {
     super.initState();
     getBranches();
     getNearestBranchDetails();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   void _updateButtonEnabledStatus() {
@@ -69,14 +77,23 @@ class _NearestBranchPageState extends State<NearestBranchPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (mounted) {
-        setState(() {
-          _branches = jsonData.map<Map<String, dynamic>>((dynamic item) {
-            return {
-              'Branch ID': item['Branch ID'],
-              'Branch': item['Branch'],
-            };
-          }).toList();
-        });
+        locale.toString() == 'en'
+            ? setState(() {
+                _branches = jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'Branch ID': item['Branch ID'],
+                    'Branch': item['Branch'],
+                  };
+                }).toList();
+              })
+            : setState(() {
+                _branches = jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'رقم الفرع': item['رقم الفرع'],
+                    'الفرع': item['الفرع'],
+                  };
+                }).toList();
+              });
       }
     } else {
       throw Exception('Failed to load data');
@@ -156,15 +173,25 @@ class _NearestBranchPageState extends State<NearestBranchPage> {
                                           }
                                         }
                                       : null,
-                                  items:
-                                      _branches.map<DropdownMenuItem<String>>(
-                                    (Map<String, dynamic> value) {
-                                      return DropdownMenuItem<String>(
-                                        value: value['Branch ID'].toString(),
-                                        child: Text(value['Branch']),
-                                      );
-                                    },
-                                  ).toList(),
+                                  items: locale.toString() == 'en'
+                                      ? _branches.map<DropdownMenuItem<String>>(
+                                          (Map<String, dynamic> value) {
+                                            return DropdownMenuItem<String>(
+                                              value:
+                                                  value['Branch ID'].toString(),
+                                              child: Text(value['Branch']),
+                                            );
+                                          },
+                                        ).toList()
+                                      : _branches.map<DropdownMenuItem<String>>(
+                                          (Map<String, dynamic> value) {
+                                            return DropdownMenuItem<String>(
+                                              value:
+                                                  value['رقم الفرع'].toString(),
+                                              child: Text(value['الفرع']),
+                                            );
+                                          },
+                                        ).toList(),
                                 ),
                               ),
                             ),

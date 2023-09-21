@@ -1,3 +1,4 @@
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import '../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
@@ -13,6 +14,7 @@ class _ZoneDetailsPageState extends State<ZoneDetailsPage> {
   Map<int, List<dynamic>> zoneCities = {}; // Store cities for each zone
 
   bool isLoading = true;
+  Locale? locale;
 
   Future<void> getZones() async {
     final url = Uri.parse('${AppConfig.baseUrl}/zones/1');
@@ -26,7 +28,8 @@ class _ZoneDetailsPageState extends State<ZoneDetailsPage> {
       }
 
       for (var zone in zones) {
-        final zoneID = zone['Zone ID'];
+        final zoneID =
+            locale.toString() == 'en' ? zone['Zone ID'] : zone['رقم المنطقة'];
         final cities = await getZoneCities(zoneID);
         if (mounted) {
           setState(() {
@@ -64,6 +67,11 @@ class _ZoneDetailsPageState extends State<ZoneDetailsPage> {
   void initState() {
     super.initState();
     getZones();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   @override
@@ -84,7 +92,10 @@ class _ZoneDetailsPageState extends State<ZoneDetailsPage> {
             SingleChildScrollView(
               child: Column(
                 children: zones.map((zone) {
-                  final cities = zoneCities[zone['Zone ID']] ?? [];
+                  final cities = zoneCities[locale.toString() == 'en'
+                          ? zone['Zone ID']
+                          : zone['رقم المنطقة']] ??
+                      [];
 
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -98,7 +109,9 @@ class _ZoneDetailsPageState extends State<ZoneDetailsPage> {
                           children: [
                             Center(
                               child: Text(
-                                zone['Zone'],
+                                locale.toString() == 'en'
+                                    ? zone['Zone']
+                                    : zone['اسم المنطقة'],
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 18,
