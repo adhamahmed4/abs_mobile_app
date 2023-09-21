@@ -1,3 +1,4 @@
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../Configurations/app_config.dart';
@@ -13,11 +14,17 @@ class SubAccountsPage extends StatefulWidget {
 class _SubAccountsPageState extends State<SubAccountsPage> {
   bool isLoading = true;
   List<dynamic> _subAccounts = [];
+  Locale? locale;
 
   @override
   void initState() {
     super.initState();
     getSubAccounts();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   String formatDateTime(String dateTimeString) {
@@ -103,7 +110,7 @@ class _SubAccountsPageState extends State<SubAccountsPage> {
                               padding: const EdgeInsets.all(8.0),
                               child: Center(
                                   child: Text(
-                                      '${subAccount['Sub Account Name']}',
+                                      '${locale.toString() == 'en' ? subAccount['Sub Account Name'] : subAccount['اسم الحساب الفرعي']}',
                                       style: const TextStyle(
                                           fontWeight: FontWeight.bold,
                                           fontSize: 20))),
@@ -112,17 +119,18 @@ class _SubAccountsPageState extends State<SubAccountsPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    '${AppLocalizations.of(context)!.subAccountNumber}${subAccount['Sub Account Number']}'),
+
+                                    '${AppLocalizations.of(context)!.subAccountNumber${locale.toString() == 'en' ? subAccount['Sub Account Number'] : subAccount['رقم الحساب الفرعي']}'),
                                 Text(
-                                    '${AppLocalizations.of(context)!.pricePlanName}${subAccount['Price Plan Name']}'),
+                                    '${AppLocalizations.of(context)!.pricePlanName}${locale.toString() == 'en' ? subAccount['Price Plan Name'] : subAccount['اسم خطة الأسعار']}'),
                                 Text(
-                                    '${AppLocalizations.of(context)!.paymentMethodType}${subAccount['Payment Method Type']}'),
+                                    '${AppLocalizations.of(context)!.paymentMethodType}${locale.toString() == 'en' ? subAccount['Payment Method Type'] : subAccount['نوع طريقة الدفع']}'),
                                 Text(
-                                    '${AppLocalizations.of(context)!.productName}${subAccount['Product Name']}'),
+                                    '${AppLocalizations.of(context)!.productName}${locale.toString() == 'en' ? subAccount['Product Name'] : subAccount['اسم المنتج']}'),
                                 Text(
-                                    '${AppLocalizations.of(context)!.prefix}${subAccount['Prefix']}'),
+                                    '${AppLocalizations.of(context)!.prefix}${locale.toString() == 'en' ? subAccount['Prefix'] : subAccount['تبدأ الشحنة ب']}'),
                                 Text(
-                                    '${AppLocalizations.of(context)!.creationDate}${formatDateTime(subAccount['Creation Date'])}')
+                                    '${AppLocalizations.of(context)!.creationDate}${formatDateTime(locale.toString() == 'en' ? subAccount['Creation Date'] : subAccount['تاريخ التسجيل'])}'),
                               ],
                             ),
                           ),

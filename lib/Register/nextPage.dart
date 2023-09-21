@@ -4,6 +4,7 @@ import 'package:abs_mobile_app/NavBar/navBar.dart';
 import 'package:abs_mobile_app/Register/table_widget.dart';
 import 'package:abs_mobile_app/Register/user_data.dart';
 import 'package:abs_mobile_app/Register/zoneDetails.dart';
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -114,10 +115,16 @@ class _NextPageState extends State<NextPage> {
 
   int? selectedPricePlanId;
 
+  Locale? locale;
   @override
   void initState() {
     super.initState();
     fetchPlansFromApi();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   Future<void> register() async {
@@ -202,10 +209,14 @@ class _NextPageState extends State<NextPage> {
         guestPlans.clear();
 
         for (var apiPlan in jsonData) {
-          final pricePlanId = apiPlan['Price Plan ID'];
-          final title = apiPlan['Price Plan Name'];
+          final pricePlanId = locale.toString() == 'en'
+              ? apiPlan['Price Plan ID']
+              : apiPlan['رقم التسلسل'];
+          final title = locale.toString() == 'en'
+              ? apiPlan['Price Plan Name']
+              : apiPlan['اسم خطة الاسعار'];
           final price =
-              ' ${apiPlan['Number Of Shipments'] ?? 0} ${AppLocalizations.of(context)!.shipmentsMonth}';
+              ' ${locale.toString() == 'en' ? apiPlan['Number Of Shipments'] ?? 0 : apiPlan['عدد الشحنات'] ?? 0} ${AppLocalizations.of(context)!.shipmentsMonth}';
           final response = await http.get(Uri.parse(
               '${AppConfig.baseUrl}/price-plans-matrix-by-ID/$pricePlanId'));
 

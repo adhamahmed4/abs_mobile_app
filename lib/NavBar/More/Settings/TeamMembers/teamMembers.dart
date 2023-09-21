@@ -1,4 +1,5 @@
 import 'package:abs_mobile_app/NavBar/More/Settings/TeamMembers/addTeamMember.dart';
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
@@ -13,11 +14,17 @@ class TeamMembersPage extends StatefulWidget {
 class _TeamMembersPageState extends State<TeamMembersPage> {
   bool isLoading = true;
   List<dynamic> _teamMembers = [];
+  Locale? locale;
 
   @override
   void initState() {
     super.initState();
     getTeamMembers();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   Future<void> getTeamMembers() async {
@@ -105,22 +112,39 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
                         elevation: 4,
                         margin: EdgeInsets.all(10),
                         child: ListTile(
-                          leading: teamMember["Avatar"] != null
-                              ? CircleAvatar(
-                                  radius: 30,
-                                  backgroundImage: NetworkImage(
-                                    '${AppConfig.baseUrl}/images/getImage?name=${teamMember["Avatar"]}',
-                                  ),
-                                )
-                              : const CircleAvatar(
-                                  radius: 30,
-                                  child: Icon(
-                                    Icons.person,
-                                    size: 40,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                          title: Text('${teamMember['Username']}'),
+                          leading: locale.toString() == 'en'
+                              ? teamMember["Avatar"] != null
+                                  ? CircleAvatar(
+                                      radius: 30,
+                                      backgroundImage: NetworkImage(
+                                        '${AppConfig.baseUrl}/images/getImage?name=${teamMember["Avatar"]}',
+                                      ),
+                                    )
+                                  : const CircleAvatar(
+                                      radius: 30,
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 40,
+                                        color: Colors.white,
+                                      ),
+                                    )
+                              : teamMember["الصورة"] != null
+                                  ? CircleAvatar(
+                                      radius: 30,
+                                      backgroundImage: NetworkImage(
+                                        '${AppConfig.baseUrl}/images/getImage?name=${teamMember["الصورة"]}',
+                                      ),
+                                    )
+                                  : const CircleAvatar(
+                                      radius: 30,
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 40,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                          title: Text(
+                              '${locale.toString() == 'en' ? teamMember['Username'] : teamMember['اسم المستخدم']}'),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -128,19 +152,23 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
                                 children: [
                                   Text(AppLocalizations.of(context)!.status),
                                   Text(
-                                    teamMember['Status']
-                                        ? AppLocalizations.of(context)!.active
-                                        : AppLocalizations.of(context)!.active,
+                                    '${locale.toString() == 'en' ? teamMember['Status'] ? 'Active' : 'Inactive' : teamMember['الحالة'] ? 'نشط' : 'غير نشط'}',
                                     style: TextStyle(
-                                      color: teamMember['Status']
-                                          ? Colors.green
-                                          : Colors.red,
+                                      color: locale.toString() == 'en'
+                                          ? teamMember['Status']
+                                              ? Colors.green
+                                              : Colors.red
+                                          : teamMember['الحالة']
+                                              ? Colors.green
+                                              : Colors.red,
                                     ),
                                   ),
                                   const Spacer(), // Add this Spacer to push the icon to the right
                                   InkWell(
                                     onTap: () {
-                                      if (teamMember['Status']) {
+                                      if (locale.toString() == 'en'
+                                          ? teamMember['Status']
+                                          : teamMember['الحالة']) {
                                         isLoading = true;
                                         deActivateTeamMember(teamMember['id']);
                                       } else {
@@ -149,22 +177,29 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
                                       }
                                     },
                                     child: Icon(
-                                      teamMember['Status']
-                                          ? Icons
-                                              .cancel // Change this to your deactivate icon
-                                          : Icons
-                                              .check_circle, // Change this to your activate icon
-                                      color: teamMember['Status']
-                                          ? Colors.red
-                                          : Colors.green,
+                                      locale.toString() == 'en'
+                                          ? teamMember['Status']
+                                              ? Icons
+                                                  .cancel // Change this to your deactivate icon
+                                              : Icons.check_circle
+                                          : teamMember['الحالة']
+                                              ? Icons.cancel
+                                              : Icons.check_circle,
+                                      color: locale.toString() == 'en'
+                                          ? teamMember['Status']
+                                              ? Colors.red
+                                              : Colors.green
+                                          : teamMember['الحالة']
+                                              ? Colors.red
+                                              : Colors.green,
                                     ),
                                   ),
                                 ],
                               ),
                               Text(
-                                  '${AppLocalizations.of(context)!.role}${teamMember['Roles']}'),
+                                  '${AppLocalizations.of(context)!.role}${locale.toString() == 'en' ? teamMember['Roles'] : teamMember['صلاحيات']}'),
                               Text(
-                                  '${AppLocalizations.of(context)!.subAccountName}${teamMember['Sub-Account Name']}'),
+                                  '${AppLocalizations.of(context)!.subAccountName}${locale.toString() == 'en' ? teamMember['Sub-Account Name'] : teamMember['اسم الحساب الفرعي']}'),
                             ],
                           ),
                         ),

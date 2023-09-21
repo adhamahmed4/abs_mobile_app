@@ -1,3 +1,4 @@
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import '../../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
@@ -27,11 +28,18 @@ class _BankTransferPageState extends State<BankTransferPage> {
   String _swiftCodeErrorText = '';
   bool _isButtonEnabled = false;
   bool _dataExists = false;
+  Locale? locale;
 
+  @override
   void initState() {
     super.initState();
     getBanks();
     getBankDetails();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
     _accountOwnerNameController.addListener(() {
       _validateAccountOwnerName(_accountOwnerNameController.text);
       _updateButtonEnabledStatus();
@@ -149,16 +157,27 @@ class _BankTransferPageState extends State<BankTransferPage> {
       final List<dynamic> jsonData = json.decode(response.body);
       if (jsonData.isNotEmpty) {
         if (mounted) {
-          setState(() {
-            _selectedBank = jsonData[0]['Bank ID'].toString();
-            _accountOwnerNameController.text =
-                jsonData[0]['Account Holder Name'];
-            _accountNumberController.text = jsonData[0]['Account Number'];
-            _ibanController.text = jsonData[0]['IBAN'];
-            _swiftCodeController.text = jsonData[0]['Swift Code'];
-            _dataExists = true;
-            isLoading = false;
-          });
+          locale.toString() == 'en'
+              ? setState(() {
+                  _selectedBank = jsonData[0]['Bank ID'].toString();
+                  _accountOwnerNameController.text =
+                      jsonData[0]['Account Holder Name'];
+                  _accountNumberController.text = jsonData[0]['Account Number'];
+                  _ibanController.text = jsonData[0]['IBAN'];
+                  _swiftCodeController.text = jsonData[0]['Swift Code'];
+                  _dataExists = true;
+                  isLoading = false;
+                })
+              : setState(() {
+                  _selectedBank = jsonData[0]['رقم التسلسل'].toString();
+                  _accountOwnerNameController.text =
+                      jsonData[0]['اسم صاحب الحساب'];
+                  _accountNumberController.text = jsonData[0]['رقم الحساب'];
+                  _ibanController.text = jsonData[0]['رقم الحساب بصيغة IBAN'];
+                  _swiftCodeController.text = jsonData[0]['رمز السرعة'];
+                  _dataExists = true;
+                  isLoading = false;
+                });
         }
       } else {
         if (mounted) {
@@ -180,14 +199,24 @@ class _BankTransferPageState extends State<BankTransferPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (mounted) {
-        setState(() {
-          _banks = jsonData.map<Map<String, dynamic>>((dynamic item) {
-            return {
-              'ID': item['ID'],
-              'enBankName': item['enBankName'],
-            };
-          }).toList();
-        });
+        locale.toString() == 'en'
+            ? setState(() {
+                _banks = jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'ID': item['ID'],
+                    'enBankName': item['enBankName'],
+                  };
+                }).toList();
+              })
+            : setState(() {
+                _banks = jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'ID': item['ID'],
+                    'اسم البنك': item['اسم البنك'],
+                  };
+                }).toList();
+              });
+        print(response.body);
       }
     } else {
       throw Exception('Failed to load data');
@@ -274,15 +303,27 @@ class _BankTransferPageState extends State<BankTransferPage> {
                                               }
                                             }
                                           : null,
-                                      items:
-                                          _banks.map<DropdownMenuItem<String>>(
-                                        (Map<String, dynamic> value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value['ID'].toString(),
-                                            child: Text(value['enBankName']),
-                                          );
-                                        },
-                                      ).toList(),
+                                      items: locale.toString() == 'en'
+                                          ? _banks
+                                              .map<DropdownMenuItem<String>>(
+                                              (Map<String, dynamic> value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value['ID'].toString(),
+                                                  child:
+                                                      Text(value['enBankName']),
+                                                );
+                                              },
+                                            ).toList()
+                                          : _banks
+                                              .map<DropdownMenuItem<String>>(
+                                              (Map<String, dynamic> value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value['ID'].toString(),
+                                                  child:
+                                                      Text(value['اسم البنك']),
+                                                );
+                                              },
+                                            ).toList(),
                                     ),
                                   ),
                                 ),

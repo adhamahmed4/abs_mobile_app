@@ -1,3 +1,4 @@
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:abs_mobile_app/Configurations/app_config.dart';
@@ -13,6 +14,17 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
   List<dynamic> searchResults = [];
+  Locale? locale;
+
+  @override
+  void initState() {
+    super.initState();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
+  }
 
   String formatDateTime(String dateTimeString) {
     final dateTime = DateTime.parse(dateTimeString).toLocal();
@@ -225,11 +237,21 @@ class _SearchPageState extends State<SearchPage> {
                   itemBuilder: (BuildContext context, int index) {
                     final result = searchResults[index];
                     return buildInfoCard(
-                      result["AWB"],
-                      result["ABS Fees"].toString(),
-                      result["Delivery Date"],
-                      result["Payment Date"],
-                      result["Cash"].toString(),
+                      locale.toString() == 'en'
+                          ? result["AWB"]
+                          : result["رقم الشحنة"],
+                      locale.toString() == 'en'
+                          ? result["ABS Fees"].toString()
+                          : result["مصاريف الشحن"].toString(),
+                      locale.toString() == 'en'
+                          ? result["Delivery Date"]
+                          : result["تاريخ التسليم"],
+                      locale.toString() == 'en'
+                          ? result["Payment Date"]
+                          : result["تاريخ الدفع"],
+                      locale.toString() == 'en'
+                          ? result["Cash"].toString()
+                          : result["المبلغ"].toString(),
                     );
                   },
                 )

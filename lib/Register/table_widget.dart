@@ -76,7 +76,8 @@ class TableWidget extends StatelessWidget {
                             return DataCell(
                               Center(
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 8),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
                                   child: Text(rowData['#'] ?? ''),
                                 ),
                               ),

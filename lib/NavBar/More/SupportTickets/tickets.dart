@@ -1,4 +1,5 @@
 import 'package:abs_mobile_app/NavBar/More/SupportTickets/addTicket.dart';
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../Configurations/app_config.dart';
@@ -14,11 +15,17 @@ class TicketsPage extends StatefulWidget {
 class _TicketsPageState extends State<TicketsPage> {
   bool isLoading = true;
   List<dynamic> _tickets = [];
+  Locale? locale;
 
   @override
   void initState() {
     super.initState();
     getTickets();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   String formatDateTime(String dateTimeString) {
@@ -94,31 +101,33 @@ class _TicketsPageState extends State<TicketsPage> {
                         margin: const EdgeInsets.all(10),
                         child: ListTile(
                           title: Text(
-                              '${AppLocalizations.of(context)!.awbDots}${ticket['AWB']}'),
+                              '${AppLocalizations.of(context)!.awbDots}${locale.toString() == 'en' ? ticket['AWB'] : ticket['رقم الشحنة']}'),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                  '${AppLocalizations.of(context)!.ticketIssuer}${ticket['Ticket Issuer']}'),
+                                  '${AppLocalizations.of(context)!.ticketIssuer}${locale.toString() == 'en' ? ticket['Ticket Issuer'] : ticket['مصدر التذكرة']}'),
                               Text(
-                                  '${AppLocalizations.of(context)!.ticketType}${ticket['Ticket Type']}'),
+                                  '${AppLocalizations.of(context)!.ticketType}${locale.toString() == 'en' ? ticket['Ticket Type'] : ticket['نوع التذكرة']}'),
                               Text(
-                                  '${AppLocalizations.of(context)!.ticketStatus}${ticket['Ticket Status']}'),
+                                  '${AppLocalizations.of(context)!.ticketStatus}${locale.toString() == 'en' ? ticket['Ticket Status'] : ticket['حالة التذكرة']}'),
                               Text(
-                                  '${AppLocalizations.of(context)!.description}${ticket['Description']}'),
+                                  '${AppLocalizations.of(context)!.description}${locale.toString() == 'en' ? ticket['Description'] : ticket['وصف']}'),
                               Text(
-                                  '${AppLocalizations.of(context)!.lastActionDate}${formatDateTime(ticket['Last Action Date'])}'),
+                                  '${AppLocalizations.of(context)!.lastActionDate}${formatDateTime(locale.toString() == 'en' ? ticket['Last Action Date'] : ticket['تاريخ آخر إجراء'])}'),
                               Row(
                                 children: [
                                   Text(AppLocalizations.of(context)!.status),
                                   Text(
-                                    ticket['Closed']
-                                        ? AppLocalizations.of(context)!.closed
-                                        : AppLocalizations.of(context)!.active,
+                                    '${locale.toString() == 'en' ? ticket['Closed'] ? 'Closed' : 'Active' : ticket['تم غلق التذكرة'] ? 'مغلق' : 'نشط'}',
                                     style: TextStyle(
-                                      color: ticket['Closed']
-                                          ? Colors.red
-                                          : Colors.green,
+                                      color: locale.toString() == 'en'
+                                          ? ticket['Closed']
+                                              ? Colors.red
+                                              : Colors.green
+                                          : ticket['تم غلق التذكرة']
+                                              ? Colors.red
+                                              : Colors.green,
                                     ),
                                   ),
                                 ],

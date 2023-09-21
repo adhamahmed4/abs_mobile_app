@@ -34,7 +34,7 @@ class AppConfig {
   static Map<String, String> get headers {
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
-      'Accept-Language': 'en',
+      'Accept-Language': 'ar',
       'Authorization': 'Bearer $jwtToken'
     };
 

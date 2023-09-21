@@ -1,3 +1,4 @@
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -28,12 +29,18 @@ class _AddTicketPageState extends State<AddTicketPage> {
   String? ticketDocument;
 
   bool _isButtonEnabled = false;
+  Locale? locale;
 
   @override
   void initState() {
     super.initState();
     getTicketTypes();
     _updateButtonEnabledStatus();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   void _updateButtonEnabledStatus() {
@@ -51,14 +58,25 @@ class _AddTicketPageState extends State<AddTicketPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (mounted) {
-        setState(() {
-          _ticketTypes = jsonData.map<Map<String, dynamic>>((dynamic item) {
-            return {
-              'ID': item['ID'],
-              'enTicketType': item['enTicketType'],
-            };
-          }).toList();
-        });
+        locale.toString() == 'en'
+            ? setState(() {
+                _ticketTypes =
+                    jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'ID': item['ID'],
+                    'enTicketType': item['enTicketType'],
+                  };
+                }).toList();
+              })
+            : setState(() {
+                _ticketTypes =
+                    jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'ID': item['ID'],
+                    'نوع التذكرة': item['نوع التذكرة'],
+                  };
+                }).toList();
+              });
       }
     } else {
       throw Exception('Failed to load data');
@@ -236,15 +254,27 @@ class _AddTicketPageState extends State<AddTicketPage> {
                                         }
                                         _updateButtonEnabledStatus();
                                       },
-                                      items: _ticketTypes
-                                          .map<DropdownMenuItem<String>>(
-                                        (Map<String, dynamic> value) {
-                                          return DropdownMenuItem<String>(
-                                            value: value['ID'].toString(),
-                                            child: Text(value['enTicketType']),
-                                          );
-                                        },
-                                      ).toList(),
+                                      items: locale.toString() == 'en'
+                                          ? _ticketTypes
+                                              .map<DropdownMenuItem<String>>(
+                                              (Map<String, dynamic> value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value['ID'].toString(),
+                                                  child: Text(
+                                                      value['enTicketType']),
+                                                );
+                                              },
+                                            ).toList()
+                                          : _ticketTypes
+                                              .map<DropdownMenuItem<String>>(
+                                              (Map<String, dynamic> value) {
+                                                return DropdownMenuItem<String>(
+                                                  value: value['ID'].toString(),
+                                                  child: Text(
+                                                      value['نوع التذكرة']),
+                                                );
+                                              },
+                                            ).toList(),
                                     ),
                                   ),
                                 ),

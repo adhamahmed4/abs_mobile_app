@@ -1,3 +1,4 @@
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:abs_mobile_app/Configurations/app_config.dart';
@@ -22,6 +23,7 @@ class _AddPickupPageState extends State<AddPickupPage> {
   int _numberOfItems = 1;
 
   TextEditingController _notesController = TextEditingController();
+  Locale? locale;
 
   @override
   void initState() {
@@ -29,6 +31,11 @@ class _AddPickupPageState extends State<AddPickupPage> {
     generateDatePoints();
     getPickupLocations();
     getVehicleTypes();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   Future<void> getPickupLocations() async {
@@ -62,14 +69,25 @@ class _AddPickupPageState extends State<AddPickupPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (mounted) {
-        setState(() {
-          vehicleTypes = jsonData.map<Map<String, dynamic>>((dynamic item) {
-            return {
-              'Vehicle Type ID': item['Vehicle Type ID'],
-              'Vehicle Type': item['Vehicle Type'],
-            };
-          }).toList();
-        });
+        locale.toString() == 'en'
+            ? setState(() {
+                vehicleTypes =
+                    jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'Vehicle Type ID': item['Vehicle Type ID'],
+                    'Vehicle Type': item['Vehicle Type'],
+                  };
+                }).toList();
+              })
+            : setState(() {
+                vehicleTypes =
+                    jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'رقم نوع السيارة': item['رقم نوع السيارة'],
+                    'نوع السيارة': item['نوع السيارة'],
+                  };
+                }).toList();
+              });
       }
     } else {
       throw Exception('Failed to load data');
@@ -447,12 +465,16 @@ class _AddPickupPageState extends State<AddPickupPage> {
                               value: selectedVehicleType,
                               items: vehicleTypes.map((type) {
                                 return DropdownMenuItem<String>(
-                                  value: type["Vehicle Type ID"].toString(),
+                                  value: locale.toString() == 'en'
+                                      ? type["Vehicle Type ID"].toString()
+                                      : type["رقم نوع السيارة"].toString(),
                                   child: Padding(
                                     padding:
                                         const EdgeInsets.fromLTRB(16, 8, 40, 8),
                                     child: Text(
-                                      type["Vehicle Type"],
+                                      locale.toString() == 'en'
+                                          ? type["Vehicle Type"]
+                                          : type["نوع السيارة"],
                                       style: const TextStyle(
                                         color: Color(0xFF2B2E83),
                                         fontSize: 14.0,

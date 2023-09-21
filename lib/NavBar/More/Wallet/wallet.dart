@@ -1,3 +1,4 @@
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:abs_mobile_app/Configurations/app_config.dart';
@@ -15,6 +16,8 @@ class _WalletPageState extends State<WalletPage> {
   final TextEditingController _dateController = TextEditingController();
   DateTime? _selectedStartDate;
   DateTime? _selectedEndDate;
+  Locale? locale;
+
   @override
   void initState() {
     super.initState();
@@ -22,6 +25,11 @@ class _WalletPageState extends State<WalletPage> {
     getPaidCash(_selectedStartDate, _selectedEndDate);
     getABSFees(_selectedStartDate, _selectedEndDate);
     getPaidShipments(_selectedStartDate, _selectedEndDate);
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   int collectedCash = 0;
@@ -425,11 +433,22 @@ class _WalletPageState extends State<WalletPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: paidShipments
                               .map((shipment) => buildInfoCard(
-                                  shipment["AWB"],
-                                  shipment["ABS Fees"].toString(),
-                                  shipment["Delivery Date"],
-                                  shipment["Payment Date"],
-                                  shipment["Cash"].toString()))
+                                    locale.toString() == 'en'
+                                        ? shipment["AWB"]
+                                        : shipment["رقم الشحنة"],
+                                    locale.toString() == 'en'
+                                        ? shipment["ABS Fees"].toString()
+                                        : shipment["مصاريف الشحن"].toString(),
+                                    locale.toString() == 'en'
+                                        ? shipment["Delivery Date"]
+                                        : shipment["تاريخ التسليم"],
+                                    locale.toString() == 'en'
+                                        ? shipment["Payment Date"]
+                                        : shipment["تاريخ الدفع"],
+                                    locale.toString() == 'en'
+                                        ? shipment["Cash"].toString()
+                                        : shipment["المبلغ"].toString(),
+                                  ))
                               .toList(),
                         ),
                       if ((!isClicked && paidShipments.length + 5 == limit) ||
