@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TableWidget extends StatelessWidget {
   final List<Map<String, dynamic>> tableData;
@@ -11,19 +12,19 @@ class TableWidget extends StatelessWidget {
         tableData.length + 1; // Number of columns (zones + header)
 
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 16),
+      margin: const EdgeInsets.symmetric(vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           // Show the "Scroll to see more" message when needed
           if (columnsCount > 5) // Adjust the threshold as needed
             Center(
               child: Padding(
-                padding: EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.only(bottom: 8),
                 child: Text(
-                  'Scroll to see more',
-                  style: TextStyle(
+                  AppLocalizations.of(context)!.scrollToSeeMore,
+                  style: const TextStyle(
                     color: Colors.blue, // You can choose your preferred color
                   ),
                 ),
@@ -48,14 +49,15 @@ class TableWidget extends StatelessWidget {
                       return DataColumn(
                         label: Container(
                           padding: EdgeInsets.symmetric(horizontal: 8),
-                          child: Text('Zone'),
+                          child: Text(AppLocalizations.of(context)!.zone),
                         ),
                       );
                     } else {
                       return DataColumn(
                         label: Container(
                           padding: EdgeInsets.symmetric(horizontal: 8),
-                          child: Text('Zone$index'),
+                          child: Text(
+                              '${AppLocalizations.of(context)!.zone}$index'),
                         ),
                       );
                     }
@@ -85,8 +87,11 @@ class TableWidget extends StatelessWidget {
                             return DataCell(
                               Center(
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 8),
-                                  child: Text(zoneValue.toString() + ' EGP'),
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Text(zoneValue.toString() +
+                                      ' ' +
+                                      AppLocalizations.of(context)!.egp),
                                 ),
                               ),
                             );

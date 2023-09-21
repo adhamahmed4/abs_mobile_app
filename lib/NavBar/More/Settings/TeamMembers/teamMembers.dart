@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TeamMembersPage extends StatefulWidget {
   @override
@@ -69,24 +70,25 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Team Members',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.teamMembers,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: Column(
         children: [
           Expanded(
             child: Stack(
               children: [
                 if (!isLoading && _teamMembers.isEmpty)
-                  const Center(
+                  Center(
                     child: Text(
-                      'No Team Members',
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.noTeamMembers,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.grey, // Customize the color
@@ -110,7 +112,7 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
                                     '${AppConfig.baseUrl}/images/getImage?name=${teamMember["Avatar"]}',
                                   ),
                                 )
-                              : CircleAvatar(
+                              : const CircleAvatar(
                                   radius: 30,
                                   child: Icon(
                                     Icons.person,
@@ -124,16 +126,18 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
                             children: [
                               Row(
                                 children: [
-                                  Text('Status: '),
+                                  Text(AppLocalizations.of(context)!.status),
                                   Text(
-                                    '${teamMember['Status'] ? 'Active' : 'Inactive'}',
+                                    teamMember['Status']
+                                        ? AppLocalizations.of(context)!.active
+                                        : AppLocalizations.of(context)!.active,
                                     style: TextStyle(
                                       color: teamMember['Status']
                                           ? Colors.green
                                           : Colors.red,
                                     ),
                                   ),
-                                  Spacer(), // Add this Spacer to push the icon to the right
+                                  const Spacer(), // Add this Spacer to push the icon to the right
                                   InkWell(
                                     onTap: () {
                                       if (teamMember['Status']) {
@@ -157,9 +161,10 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
                                   ),
                                 ],
                               ),
-                              Text('Role: ${teamMember['Roles']}'),
                               Text(
-                                  'Sub-Account Name: ${teamMember['Sub-Account Name']}'),
+                                  '${AppLocalizations.of(context)!.role}${teamMember['Roles']}'),
+                              Text(
+                                  '${AppLocalizations.of(context)!.subAccountName}${teamMember['Sub-Account Name']}'),
                             ],
                           ),
                         ),
@@ -194,7 +199,7 @@ class _TeamMembersPageState extends State<TeamMembersPage> {
                     ),
                   ).then((value) => getTeamMembers());
                 },
-                child: Icon(Icons.add),
+                child: const Icon(Icons.add),
               ),
             ),
           ),

@@ -3,6 +3,7 @@ import 'dart:developer';
 import '../../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class WalletDetailsPage extends StatefulWidget {
   @override
@@ -54,14 +55,15 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
     if (walletNumber.isEmpty) {
       if (mounted) {
         setState(() {
-          _walletNumberErrorText = 'Enter a wallet number';
+          _walletNumberErrorText =
+              AppLocalizations.of(context)!.enterAWalletNumber;
         });
       }
     } else if (!RegExp(r'^[a-zA-Z0-9]+$').hasMatch(walletNumber)) {
       if (mounted) {
         setState(() {
-          _walletNumberErrorText =
-              'Wallet number should contain only letters and numbers';
+          _walletNumberErrorText = AppLocalizations.of(context)!
+              .walletNumberShouldContainOnlyLettersAndNumbers;
         });
       }
     } else {
@@ -79,13 +81,15 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
     if (mobileNumber.isEmpty) {
       if (mounted) {
         setState(() {
-          _mobileNumberErrorText = 'Mobile number is required';
+          _mobileNumberErrorText =
+              AppLocalizations.of(context)!.mobileNumberIsRequired;
         });
       }
     } else if (mobileNumber.length != 11) {
       if (mounted) {
         setState(() {
-          _mobileNumberErrorText = 'Mobile number must be 11 digits';
+          _mobileNumberErrorText =
+              AppLocalizations.of(context)!.mobileNumberMustBeDigits;
         });
       }
     } else {
@@ -164,14 +168,15 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Wallet',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.wallet,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: Stack(
         children: [
           if (!isLoading)
@@ -190,12 +195,14 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                             controller: _walletNumberController,
                             readOnly: _dataExists,
                             decoration: InputDecoration(
-                              fillColor: Color.fromARGB(255, 250, 250, 250),
+                              fillColor:
+                                  const Color.fromARGB(255, 250, 250, 250),
                               filled: true,
                               border: const OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xFFFFAB4A))),
-                              labelText: "Wallet Number",
+                              labelText:
+                                  AppLocalizations.of(context)!.walletNumber,
                               errorText: _walletNumberErrorText.isNotEmpty
                                   ? _walletNumberErrorText
                                   : null,
@@ -218,7 +225,8 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                               border: const OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Color(0xFFFFAB4A))),
-                              labelText: "Mobile Number",
+                              labelText:
+                                  AppLocalizations.of(context)!.mobileNumber,
                               errorText: _mobileNumberErrorText.isNotEmpty
                                   ? _mobileNumberErrorText
                                   : null,
@@ -258,9 +266,10 @@ class _WalletDetailsPageState extends State<WalletDetailsPage> {
                                       }
                                     }
                                   : null, // Disable the button if fields are not valid
-                              child: const Padding(
-                                padding: EdgeInsets.all(12.0),
-                                child: Text('Submit'),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child:
+                                    Text(AppLocalizations.of(context)!.submit),
                               ),
                             )
                           : null,

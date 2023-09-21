@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TicketsPage extends StatefulWidget {
   @override
@@ -57,23 +58,24 @@ class _TicketsPageState extends State<TicketsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Tickets',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.supportTickets,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: Column(
         children: [
           Expanded(
             child: Stack(
               children: [
                 if (!isLoading && _tickets.isEmpty)
-                  const Center(
+                  Center(
                     child: Text(
-                      'No Tickets',
+                      AppLocalizations.of(context)!.noTickets,
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -91,21 +93,28 @@ class _TicketsPageState extends State<TicketsPage> {
                         elevation: 4,
                         margin: const EdgeInsets.all(10),
                         child: ListTile(
-                          title: Text('AWB: ${ticket['AWB']}'),
+                          title: Text(
+                              '${AppLocalizations.of(context)!.awbDots}${ticket['AWB']}'),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Ticket Issuer: ${ticket['Ticket Issuer']}'),
-                              Text('Ticket Type: ${ticket['Ticket Type']}'),
-                              Text('Ticket Status: ${ticket['Ticket Status']}'),
-                              Text('Description: ${ticket['Description']}'),
                               Text(
-                                  'Last Action Date: ${formatDateTime(ticket['Last Action Date'])}'),
+                                  '${AppLocalizations.of(context)!.ticketIssuer}${ticket['Ticket Issuer']}'),
+                              Text(
+                                  '${AppLocalizations.of(context)!.ticketType}${ticket['Ticket Type']}'),
+                              Text(
+                                  '${AppLocalizations.of(context)!.ticketStatus}${ticket['Ticket Status']}'),
+                              Text(
+                                  '${AppLocalizations.of(context)!.description}${ticket['Description']}'),
+                              Text(
+                                  '${AppLocalizations.of(context)!.lastActionDate}${formatDateTime(ticket['Last Action Date'])}'),
                               Row(
                                 children: [
-                                  Text('Status: '),
+                                  Text(AppLocalizations.of(context)!.status),
                                   Text(
-                                    '${ticket['Closed'] ? 'Closed' : 'Active'}',
+                                    ticket['Closed']
+                                        ? AppLocalizations.of(context)!.closed
+                                        : AppLocalizations.of(context)!.active,
                                     style: TextStyle(
                                       color: ticket['Closed']
                                           ? Colors.red

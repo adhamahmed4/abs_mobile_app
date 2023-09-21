@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PersonalInfoPage extends StatefulWidget {
   @override
@@ -84,14 +85,15 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         showDialog(
             context: context,
             builder: (context) => AlertDialog(
-                  title: Text("Success"),
-                  content: Text("Image uploaded successfully"),
+                  title: Text(AppLocalizations.of(context)!.success),
+                  content: Text(
+                      AppLocalizations.of(context)!.imageUploadedSuccessfully),
                   actions: [
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text("OK"),
+                      child: Text(AppLocalizations.of(context)!.ok),
                     ),
                   ],
                 ));
@@ -99,14 +101,15 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
         showDialog(
             context: context,
             builder: (context) => AlertDialog(
-                  title: Text("Error"),
-                  content: Text("Failed to upload image"),
+                  title: Text(AppLocalizations.of(context)!.error),
+                  content:
+                      Text(AppLocalizations.of(context)!.failedToUploadImage),
                   actions: [
                     TextButton(
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      child: Text("OK"),
+                      child: Text(AppLocalizations.of(context)!.ok),
                     ),
                   ],
                 ));
@@ -115,14 +118,15 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-                title: Text("Error"),
-                content: Text("Failed to upload image"),
+                title: Text(AppLocalizations.of(context)!.error),
+                content:
+                    Text(AppLocalizations.of(context)!.failedToUploadImage),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text("OK"),
+                    child: Text(AppLocalizations.of(context)!.ok),
                   ),
                 ],
               ));
@@ -133,8 +137,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Personal Info',
+          title: Text(
+            AppLocalizations.of(context)!.personalInfo,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
@@ -164,7 +168,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                 border: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A))),
-                                labelText: 'Name',
+                                labelText: AppLocalizations.of(context)!.name,
                               ),
                             ),
                           ),
@@ -179,7 +183,7 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                 border: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A))),
-                                labelText: 'Phone',
+                                labelText: AppLocalizations.of(context)!.phone,
                               ),
                             ),
                           ),
@@ -194,7 +198,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                 border: OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A))),
-                                labelText: 'Email Address',
+                                labelText:
+                                    AppLocalizations.of(context)!.emailAddress,
                               ),
                             ),
                           ),
@@ -206,7 +211,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                   onPressed: () {
                                     _pickProfilePicture();
                                   },
-                                  child: Text("Upload Profile Picture"),
+                                  child: Text(AppLocalizations.of(context)!
+                                      .uploadProfilePicture),
                                 ),
                               ],
                             ),
@@ -240,7 +246,8 @@ class _PersonalInfoPageState extends State<PersonalInfoPage> {
                                       ),
                                     );
                                   },
-                                  child: Text("Change Password"),
+                                  child: Text(AppLocalizations.of(context)!
+                                      .changePassword),
                                 ),
                               ],
                             ),

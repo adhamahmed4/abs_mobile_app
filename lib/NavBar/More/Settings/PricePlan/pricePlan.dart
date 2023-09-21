@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../Configurations/app_config.dart';
 import 'package:http/http.dart' as http; // Import the http package
 import 'dart:convert';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PricePlanPage extends StatefulWidget {
   @override
@@ -58,8 +59,8 @@ class _PricePlanPageState extends State<PricePlanPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Price Plan',
+          title: Text(
+            AppLocalizations.of(context)!.pricingPlan,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
@@ -104,7 +105,8 @@ class _PricePlanPageState extends State<PricePlanPage> {
                             ),
                           );
                         },
-                        child: Text('View Zones Details'),
+                        child: Text(
+                            AppLocalizations.of(context)!.viewZonesDetails),
                       ),
                     ),
                   ],
@@ -112,7 +114,7 @@ class _PricePlanPageState extends State<PricePlanPage> {
               ],
             ),
           if (isLoading)
-            Center(
+            const Center(
               child: CircularProgressIndicator(),
             ),
         ],

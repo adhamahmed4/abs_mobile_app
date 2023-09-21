@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ZoneDetailsPage extends StatefulWidget {
   @override
@@ -70,9 +71,10 @@ class _ZoneDetailsPageState extends State<ZoneDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Zone Details',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.zoneDetails,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,

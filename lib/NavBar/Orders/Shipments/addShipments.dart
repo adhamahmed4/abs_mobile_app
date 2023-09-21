@@ -3,6 +3,7 @@ import 'package:abs_mobile_app/NavBar/Orders/Shipments/exchange.dart';
 import 'package:abs_mobile_app/NavBar/Orders/Shipments/return.dart';
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddShipmentPage extends StatefulWidget {
   @override
@@ -16,9 +17,9 @@ class _AddShipmentPageState extends State<AddShipmentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Create new shipment',
-          style: TextStyle(color: Colors.black),
+        title: Text(
+          AppLocalizations.of(context)!.createNewShipment,
+          style: const TextStyle(color: Colors.black),
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
@@ -41,7 +42,11 @@ class _AddShipmentPageState extends State<AddShipmentPage> {
                   minWidth: 120.0,
                   cornerRadius: 10.0,
                   minHeight: 27.0,
-                  labels: const ['Delivery', 'Return', 'Exchange'],
+                  labels: [
+                    AppLocalizations.of(context)!.delivery,
+                    AppLocalizations.of(context)!.returne,
+                    AppLocalizations.of(context)!.exchange
+                  ],
                   onToggle: (index) {
                     setState(() {
                       _currentIndex = index!;

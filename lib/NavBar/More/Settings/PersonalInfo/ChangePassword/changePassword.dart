@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChangePasswordPage extends StatefulWidget {
   @override
@@ -46,15 +47,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
       showDialog(
           context: context,
           builder: (context) => AlertDialog(
-                title: Text('Error'),
-                content:
-                    Text('New password cannot be the same as old password!'),
+                title: Text(AppLocalizations.of(context)!.error),
+                content: Text(AppLocalizations.of(context)!
+                    .newPasswordCannotBeTheSameAsOldPassword),
                 actions: [
                   TextButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
-                    child: Text('OK'),
+                    child: Text(AppLocalizations.of(context)!.ok),
                   ),
                 ],
               ));
@@ -74,14 +75,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         showDialog(
             context: context,
             builder: (context) => AlertDialog(
-                  title: Text('Error'),
-                  content: Text('Old password is incorrect!'),
+                  title: Text(AppLocalizations.of(context)!.error),
+                  content: Text(
+                      AppLocalizations.of(context)!.oldPasswordIsIncorrect),
                   actions: [
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      child: Text('OK'),
+                      child: Text(AppLocalizations.of(context)!.ok),
                     ),
                   ],
                 ));
@@ -89,15 +91,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
         showDialog(
             context: context,
             builder: (context) => AlertDialog(
-                  title: Text('Success'),
-                  content: Text('Password changed successfully'),
+                  title: Text(AppLocalizations.of(context)!.success),
+                  content: Text(AppLocalizations.of(context)!
+                      .passwordChangedSuccessfully),
                   actions: [
                     TextButton(
                       onPressed: () {
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },
-                      child: Text('OK'),
+                      child: Text(AppLocalizations.of(context)!.ok),
                     ),
                   ],
                 ));
@@ -109,14 +112,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Change Password',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.changePassword,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: Form(
         key: _formKey,
         child: SingleChildScrollView(
@@ -139,7 +143,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             border: OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: 'Old Password',
+                            labelText:
+                                AppLocalizations.of(context)!.oldPassword,
                             suffixIcon: GestureDetector(
                               onTap: () {
                                 if (mounted) {
@@ -180,7 +185,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             border: const OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: 'New Password',
+                            labelText:
+                                AppLocalizations.of(context)!.newPassword,
                             suffixIcon: GestureDetector(
                               onTap: () {
                                 if (mounted) {
@@ -240,7 +246,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                             border: OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Color(0xFFFFAB4A))),
-                            labelText: 'Confirm Password',
+                            labelText:
+                                AppLocalizations.of(context)!.confirmPassword,
                             suffixIcon: GestureDetector(
                               onTap: () {
                                 if (mounted) {
@@ -283,9 +290,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                                     }
                                   }
                                 : null, // Disable the button if fields are not valid
-                            child: const Padding(
+                            child: Padding(
                               padding: EdgeInsets.all(12.0),
-                              child: Text('Submit'),
+                              child: Text(AppLocalizations.of(context)!.submit),
                             ),
                           ),
                         ),

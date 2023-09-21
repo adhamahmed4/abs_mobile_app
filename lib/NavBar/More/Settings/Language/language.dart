@@ -21,7 +21,7 @@ class _LanguagePageState extends State<LanguagePage> {
     },
     {
       'value': 'ar',
-      'title': 'Arabic',
+      'title': 'العربية',
     },
   ];
   String? _selectedLanguage;
@@ -51,9 +51,10 @@ class _LanguagePageState extends State<LanguagePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Language',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.language,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
@@ -69,13 +70,13 @@ class _LanguagePageState extends State<LanguagePage> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                   child: InputDecorator(
-                    decoration: const InputDecoration(
-                      fillColor: Color.fromARGB(255, 250, 250, 250),
+                    decoration: InputDecoration(
+                      fillColor: const Color.fromARGB(255, 250, 250, 250),
                       filled: true,
-                      border: OutlineInputBorder(
+                      border: const OutlineInputBorder(
                         borderSide: BorderSide(color: Color(0xFFFFAB4A)),
                       ),
-                      labelText: 'Language',
+                      labelText: AppLocalizations.of(context)!.language,
                     ),
                     child: SizedBox(
                       height: 20,
@@ -120,9 +121,9 @@ class _LanguagePageState extends State<LanguagePage> {
               onPressed: () {
                 _changeLanguage(context, _selectedLanguage!);
               },
-              child: const Padding(
-                padding: EdgeInsets.all(12.0),
-                child: Text('Submit'),
+              child: Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Text(AppLocalizations.of(context)!.submit),
               ),
             ),
           ),

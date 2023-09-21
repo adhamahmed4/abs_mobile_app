@@ -53,14 +53,14 @@ class _MorePageState extends State<MorePage> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: const Text('Failed to get user info'),
-              content: const Text('Failed to get user info.'),
+              title: Text(AppLocalizations.of(context)!.failedToGetUserInfo),
+              content: Text(AppLocalizations.of(context)!.failedToGetUserInfo),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child: const Text('OK'),
+                  child: Text(AppLocalizations.of(context)!.ok),
                 ),
               ],
             );
@@ -310,17 +310,22 @@ class _MorePageState extends State<MorePage> {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: const Center(
-                                            child: Text('Confirm Logout')),
-                                        content: const Text(
-                                            'Are you sure you want to logout?'),
+                                        title: Center(
+                                            child: Text(
+                                                AppLocalizations.of(context)!
+                                                    .confirmLogout)),
+                                        content: Text(
+                                            AppLocalizations.of(context)!
+                                                .areYouSureYouWantToLogout),
                                         actions: [
                                           TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop();
-                                            },
-                                            child: const Text('Cancel'),
-                                          ),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: Text(
+                                                AppLocalizations.of(context)!
+                                                    .cancel,
+                                              )),
                                           TextButton(
                                             onPressed: () async {
                                               final prefs =
@@ -335,8 +340,9 @@ class _MorePageState extends State<MorePage> {
                                                         LoginPage()),
                                               );
                                             },
-                                            child: const Text(
-                                              'Logout',
+                                            child: Text(
+                                              AppLocalizations.of(context)!
+                                                  .logout,
                                               style: TextStyle(
                                                 color: Colors.red,
                                               ),

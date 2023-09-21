@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class PickupsPage extends StatefulWidget {
   @override
@@ -72,7 +73,7 @@ class _PickupsPageState extends State<PickupsPage> {
 
   String formatDateTime(String dateTimeString) {
     if (dateTimeString == null || dateTimeString == "") {
-      return "No Date";
+      return AppLocalizations.of(context)!.noDate;
     }
     final dateTime = DateTime.parse(dateTimeString).toLocal();
     final formatter = DateFormat('dd-MM-yyyy h:mm a');
@@ -112,8 +113,8 @@ class _PickupsPageState extends State<PickupsPage> {
                         padding: const EdgeInsets.fromLTRB(16, 24, 0, 12),
                         child: Row(
                           children: [
-                            const Text('Upcoming Pickups',
-                                style: TextStyle(
+                            Text(AppLocalizations.of(context)!.upcomingPickups,
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 )),
@@ -217,9 +218,9 @@ class _PickupsPageState extends State<PickupsPage> {
                                 });
                               }
                             },
-                            child: const Text(
-                              'Load More',
-                              style: TextStyle(
+                            child: Text(
+                              AppLocalizations.of(context)!.loadMore,
+                              style: const TextStyle(
                                 color: Colors.orange,
                                 fontSize: 16,
                                 fontWeight: FontWeight.bold,
@@ -228,10 +229,10 @@ class _PickupsPageState extends State<PickupsPage> {
                           ),
                         ),
                       if (_upcomingPickups.isEmpty)
-                        const Center(
+                        Center(
                           child: Text(
-                            'No Upcoming Pickups',
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.noUpcomingPickups,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Colors.grey,
@@ -242,8 +243,8 @@ class _PickupsPageState extends State<PickupsPage> {
                         padding: const EdgeInsets.fromLTRB(16, 24, 0, 12),
                         child: Row(
                           children: [
-                            const Text('History Pickups',
-                                style: TextStyle(
+                            Text(AppLocalizations.of(context)!.historyPickups,
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 )),
@@ -358,9 +359,9 @@ class _PickupsPageState extends State<PickupsPage> {
                                   });
                                 }
                               },
-                              child: const Text(
-                                'Load More',
-                                style: TextStyle(
+                              child: Text(
+                                AppLocalizations.of(context)!.loadMore,
+                                style: const TextStyle(
                                   color: Colors.red,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -370,10 +371,10 @@ class _PickupsPageState extends State<PickupsPage> {
                           ),
                         ),
                       if (_historyPickups.isEmpty)
-                        const Center(
+                        Center(
                           child: Text(
-                            'No History Pickups',
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.noHistoryPickups,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Colors.grey,

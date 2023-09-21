@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SubAccountsPage extends StatefulWidget {
   @override
@@ -56,24 +57,25 @@ class _SubAccountsPageState extends State<SubAccountsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Sub Accounts',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.subAccounts,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
           shadowColor: Colors.transparent,
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: const IconThemeData(color: Colors.black)),
       body: Column(
         children: [
           Expanded(
             child: Stack(
               children: [
                 if (!isLoading && _subAccounts.isEmpty)
-                  const Center(
+                  Center(
                     child: Text(
-                      'No Subaccounts',
-                      style: TextStyle(
+                      AppLocalizations.of(context)!.noSubaccounts,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                         color: Colors.grey, // Customize the color
@@ -110,16 +112,17 @@ class _SubAccountsPageState extends State<SubAccountsPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                    'Sub Account Number: ${subAccount['Sub Account Number']}'),
+                                    '${AppLocalizations.of(context)!.subAccountNumber}${subAccount['Sub Account Number']}'),
                                 Text(
-                                    'Price Plan Name: ${subAccount['Price Plan Name']}'),
+                                    '${AppLocalizations.of(context)!.pricePlanName}${subAccount['Price Plan Name']}'),
                                 Text(
-                                    'Payment Method Type: ${subAccount['Payment Method Type']}'),
+                                    '${AppLocalizations.of(context)!.paymentMethodType}${subAccount['Payment Method Type']}'),
                                 Text(
-                                    'Product Name: ${subAccount['Product Name']}'),
-                                Text('Prefix: ${subAccount['Prefix']}'),
+                                    '${AppLocalizations.of(context)!.productName}${subAccount['Product Name']}'),
                                 Text(
-                                    'Creation Date: ${formatDateTime(subAccount['Creation Date'])}')
+                                    '${AppLocalizations.of(context)!.prefix}${subAccount['Prefix']}'),
+                                Text(
+                                    '${AppLocalizations.of(context)!.creationDate}${formatDateTime(subAccount['Creation Date'])}')
                               ],
                             ),
                           ),

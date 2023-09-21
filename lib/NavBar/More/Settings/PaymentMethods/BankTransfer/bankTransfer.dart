@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BankTransferPage extends StatefulWidget {
   @override
@@ -58,7 +59,8 @@ class _BankTransferPageState extends State<BankTransferPage> {
     if (accountOwnerName.isEmpty) {
       if (mounted) {
         setState(() {
-          _accountOwnerNameErrorText = 'Account Owner Name is required';
+          _accountOwnerNameErrorText =
+              AppLocalizations.of(context)!.accountOwnerNameIsRequired;
         });
       }
     } else {
@@ -75,7 +77,8 @@ class _BankTransferPageState extends State<BankTransferPage> {
     if (accountNumber.isEmpty) {
       if (mounted) {
         setState(() {
-          _accountNumberErrorText = 'Account Number is required';
+          _accountNumberErrorText =
+              AppLocalizations.of(context)!.accountNumberIsRequired;
         });
       }
     } else {
@@ -92,7 +95,7 @@ class _BankTransferPageState extends State<BankTransferPage> {
     if (iban.isEmpty) {
       if (mounted) {
         setState(() {
-          _ibanErrorText = 'IBAN is required';
+          _ibanErrorText = AppLocalizations.of(context)!.ibanIsRequired;
         });
       }
     } else {
@@ -109,7 +112,8 @@ class _BankTransferPageState extends State<BankTransferPage> {
     if (swiftCode.isEmpty) {
       if (mounted) {
         setState(() {
-          _swiftCodeErrorText = 'Swift Code is required';
+          _swiftCodeErrorText =
+              AppLocalizations.of(context)!.swiftCodeIsRequired;
         });
       }
     } else {
@@ -220,9 +224,10 @@ class _BankTransferPageState extends State<BankTransferPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Bank Transfer',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.bankTransfer,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
@@ -245,14 +250,15 @@ class _BankTransferPageState extends State<BankTransferPage> {
                             Padding(
                               padding: const EdgeInsets.fromLTRB(0, 0, 0, 16),
                               child: InputDecorator(
-                                decoration: const InputDecoration(
-                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                decoration: InputDecoration(
+                                  fillColor:
+                                      const Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
-                                  border: OutlineInputBorder(
+                                  border: const OutlineInputBorder(
                                     borderSide:
                                         BorderSide(color: Color(0xFFFFAB4A)),
                                   ),
-                                  labelText: 'Bank',
+                                  labelText: AppLocalizations.of(context)!.bank,
                                 ),
                                 child: SizedBox(
                                   height: 20,
@@ -288,12 +294,14 @@ class _BankTransferPageState extends State<BankTransferPage> {
                                 controller: _accountOwnerNameController,
                                 readOnly: _dataExists,
                                 decoration: InputDecoration(
-                                  fillColor: Color.fromARGB(255, 250, 250, 250),
+                                  fillColor:
+                                      const Color.fromARGB(255, 250, 250, 250),
                                   filled: true,
                                   border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFFFAB4A))),
-                                  labelText: "Account Owner Name",
+                                  labelText: AppLocalizations.of(context)!
+                                      .accountOwnerName,
                                   errorText:
                                       _accountOwnerNameErrorText.isNotEmpty
                                           ? _accountOwnerNameErrorText
@@ -316,7 +324,8 @@ class _BankTransferPageState extends State<BankTransferPage> {
                                   border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFFFAB4A))),
-                                  labelText: 'Account Number',
+                                  labelText: AppLocalizations.of(context)!
+                                      .accountNumber,
                                   errorText: _accountNumberErrorText.isNotEmpty
                                       ? _accountNumberErrorText
                                       : null,
@@ -338,8 +347,7 @@ class _BankTransferPageState extends State<BankTransferPage> {
                                   border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFFFAB4A))),
-                                  labelText:
-                                      'IBAN (International Bank Account Number)',
+                                  labelText: AppLocalizations.of(context)!.iban,
                                   errorText: _ibanErrorText.isNotEmpty
                                       ? _ibanErrorText
                                       : null,
@@ -361,7 +369,7 @@ class _BankTransferPageState extends State<BankTransferPage> {
                                   border: const OutlineInputBorder(
                                       borderSide:
                                           BorderSide(color: Color(0xFFFFAB4A))),
-                                  labelText: 'Swift Code',
+                                  labelText: AppLocalizations.of(context)!.swiftCode,
                                   errorText: _swiftCodeErrorText.isNotEmpty
                                       ? _swiftCodeErrorText
                                       : null,
@@ -402,9 +410,10 @@ class _BankTransferPageState extends State<BankTransferPage> {
                                         }
                                       }
                                     : null, // Disable the button if fields are not valid
-                                child: const Padding(
-                                  padding: EdgeInsets.all(12.0),
-                                  child: Text('Submit'),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Text(
+                                      AppLocalizations.of(context)!.submit),
                                 ),
                               )
                             : null,

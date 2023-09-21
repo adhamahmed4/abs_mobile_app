@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AddNewLocationPage extends StatefulWidget {
   final int locationID;
@@ -107,7 +108,8 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
     if (locationName.isEmpty) {
       if (mounted) {
         setState(() {
-          __locationNameErrorText = 'Location Name is required';
+          __locationNameErrorText =
+              AppLocalizations.of(context)!.locationNameIsRequired;
         });
       }
     } else {
@@ -124,7 +126,8 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
     if (streetName.isEmpty) {
       if (mounted) {
         setState(() {
-          _streetNameErrorText = 'Street name is required';
+          _streetNameErrorText =
+              AppLocalizations.of(context)!.streetNameIsRequired;
         });
       }
     } else {
@@ -141,7 +144,8 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
     if (building.isEmpty) {
       if (mounted) {
         setState(() {
-          _buildingErrorText = 'Building number is required';
+          _buildingErrorText =
+              AppLocalizations.of(context)!.buildingNumberIsRequired;
         });
       }
     } else {
@@ -158,7 +162,7 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
     if (floor.isEmpty) {
       if (mounted) {
         setState(() {
-          _floorErrorText = 'Floor number is required';
+          _floorErrorText = AppLocalizations.of(context)!.floorNumberIsRequired;
         });
       }
     } else {
@@ -175,7 +179,8 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
     if (apt.isEmpty) {
       if (mounted) {
         setState(() {
-          _aptErrorText = 'Apt. number is required';
+          _aptErrorText =
+              AppLocalizations.of(context)!.apartmentNumberIsRequired;
         });
       }
     } else {
@@ -192,7 +197,8 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
     if (firstName.isEmpty) {
       if (mounted) {
         setState(() {
-          _firstNameErrorText = 'First name is required';
+          _firstNameErrorText =
+              AppLocalizations.of(context)!.firstNameIsRequired;
         });
       }
     } else {
@@ -209,7 +215,7 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
     if (lastName.isEmpty) {
       if (mounted) {
         setState(() {
-          _lastNameErrorText = 'Last name is required';
+          _lastNameErrorText = AppLocalizations.of(context)!.lastNameIsRequired;
         });
       }
     } else {
@@ -226,7 +232,8 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
     if (phoneNumber.isEmpty) {
       if (mounted) {
         setState(() {
-          _phoneNumberErrorText = 'Phone number is required';
+          _phoneNumberErrorText =
+              AppLocalizations.of(context)!.phoneNumberIsRequired;
         });
       }
     } else {
@@ -243,7 +250,8 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
     if (email.isEmpty) {
       if (mounted) {
         setState(() {
-          _emailErrorText = 'Email is required';
+          _emailErrorText =
+              AppLocalizations.of(context)!.emailAddressIsRequired;
         });
       }
     } else {
@@ -459,9 +467,10 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const Text(
-            'Business Locations',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.businessLocations,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: Colors.white,
@@ -552,7 +561,9 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                                       }
                                                     : null,
                                                 icon: Icon(Icons.location_on),
-                                                label: Text('Add Pin Location'),
+                                                label: Text(AppLocalizations.of(
+                                                        context)!
+                                                    .addPinLocation),
                                               ),
                                             ),
                                           ),
@@ -563,15 +574,17 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 0, 0, 16),
                                       child: InputDecorator(
-                                        decoration: const InputDecoration(
-                                          fillColor: Color.fromARGB(
+                                        decoration: InputDecoration(
+                                          fillColor: const Color.fromARGB(
                                               255, 250, 250, 250),
                                           filled: true,
-                                          border: OutlineInputBorder(
+                                          border: const OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Color(0xFFFFAB4A)),
                                           ),
-                                          labelText: 'Address Type',
+                                          labelText:
+                                              AppLocalizations.of(context)!
+                                                  .addressType,
                                         ),
                                         child: SizedBox(
                                           height: 20,
@@ -615,7 +628,9 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                           border: const OutlineInputBorder(
                                               borderSide: BorderSide(
                                                   color: Color(0xFFFFAB4A))),
-                                          labelText: "Location Name",
+                                          labelText:
+                                              AppLocalizations.of(context)!
+                                                  .locationName,
                                           errorText:
                                               __locationNameErrorText.isNotEmpty
                                                   ? __locationNameErrorText
@@ -631,15 +646,17 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 0, 0, 16),
                                       child: InputDecorator(
-                                        decoration: const InputDecoration(
-                                          fillColor: Color.fromARGB(
+                                        decoration: InputDecoration(
+                                          fillColor: const Color.fromARGB(
                                               255, 250, 250, 250),
                                           filled: true,
-                                          border: OutlineInputBorder(
+                                          border: const OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 color: Color(0xFFFFAB4A)),
                                           ),
-                                          labelText: 'City',
+                                          labelText:
+                                              AppLocalizations.of(context)!
+                                                  .city,
                                         ),
                                         child: SizedBox(
                                           height: 20,
@@ -682,7 +699,9 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                           border: const OutlineInputBorder(
                                               borderSide: BorderSide(
                                                   color: Color(0xFFFFAB4A))),
-                                          labelText: 'Street name',
+                                          labelText:
+                                              AppLocalizations.of(context)!
+                                                  .streetName,
                                           errorText:
                                               _streetNameErrorText.isNotEmpty
                                                   ? _streetNameErrorText
@@ -714,7 +733,9 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                                   borderSide: BorderSide(
                                                       color: Color(0xFFFFAB4A)),
                                                 ),
-                                                labelText: 'Building',
+                                                labelText: AppLocalizations.of(
+                                                        context)!
+                                                    .buildingNumber,
                                                 errorText: _buildingErrorText
                                                         .isNotEmpty
                                                     ? _buildingErrorText
@@ -745,7 +766,9 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                                   borderSide: BorderSide(
                                                       color: Color(0xFFFFAB4A)),
                                                 ),
-                                                labelText: 'Floor',
+                                                labelText: AppLocalizations.of(
+                                                        context)!
+                                                    .floorNumber,
                                                 errorText:
                                                     _floorErrorText.isNotEmpty
                                                         ? _floorErrorText
@@ -776,7 +799,9 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                                   borderSide: BorderSide(
                                                       color: Color(0xFFFFAB4A)),
                                                 ),
-                                                labelText: 'Apt.',
+                                                labelText: AppLocalizations.of(
+                                                        context)!
+                                                    .apartmentNumber,
                                                 errorText:
                                                     _aptErrorText.isNotEmpty
                                                         ? _aptErrorText
@@ -803,7 +828,9 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                           border: const OutlineInputBorder(
                                               borderSide: BorderSide(
                                                   color: Color(0xFFFFAB4A))),
-                                          labelText: 'Postal code',
+                                          labelText:
+                                              AppLocalizations.of(context)!
+                                                  .postalCode,
                                         ),
                                       ),
                                     ),
@@ -819,12 +846,13 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                               child: Container(
                                 child: Column(
                                   children: [
-                                    const Padding(
+                                    Padding(
                                       padding: const EdgeInsets.fromLTRB(
                                           0, 0, 0, 16),
                                       child: Text(
-                                        'Contact Person',
-                                        style: TextStyle(
+                                        AppLocalizations.of(context)!
+                                            .contactPerson,
+                                        style: const TextStyle(
                                           fontSize: 16,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -842,7 +870,9 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                           border: const OutlineInputBorder(
                                               borderSide: BorderSide(
                                                   color: Color(0xFFFFAB4A))),
-                                          labelText: 'First name',
+                                          labelText:
+                                              AppLocalizations.of(context)!
+                                                  .firstName,
                                           errorText:
                                               _firstNameErrorText.isNotEmpty
                                                   ? _firstNameErrorText
@@ -866,7 +896,9 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                           border: const OutlineInputBorder(
                                               borderSide: BorderSide(
                                                   color: Color(0xFFFFAB4A))),
-                                          labelText: 'Last name',
+                                          labelText:
+                                              AppLocalizations.of(context)!
+                                                  .lastName,
                                           errorText:
                                               _lastNameErrorText.isNotEmpty
                                                   ? _lastNameErrorText
@@ -890,7 +922,9 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                           border: const OutlineInputBorder(
                                               borderSide: BorderSide(
                                                   color: Color(0xFFFFAB4A))),
-                                          labelText: 'Phone number',
+                                          labelText:
+                                              AppLocalizations.of(context)!
+                                                  .phoneNumber,
                                           errorText:
                                               _phoneNumberErrorText.isNotEmpty
                                                   ? _phoneNumberErrorText
@@ -914,7 +948,9 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                           border: const OutlineInputBorder(
                                               borderSide: BorderSide(
                                                   color: Color(0xFFFFAB4A))),
-                                          labelText: 'Email',
+                                          labelText:
+                                              AppLocalizations.of(context)!
+                                                  .emailAddress,
                                           errorText: _emailErrorText.isNotEmpty
                                               ? _emailErrorText
                                               : null,
@@ -962,9 +998,10 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                       }
                                     }
                                   : null,
-                              child: const Padding(
-                                padding: EdgeInsets.all(12.0),
-                                child: Text('Add new location'),
+                              child: Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Text(AppLocalizations.of(context)!
+                                    .addNewLocation),
                               ),
                             ),
                           )
@@ -995,9 +1032,10 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                           }
                                         }
                                       : null,
-                                  child: const Padding(
-                                    padding: EdgeInsets.all(12.0),
-                                    child: Text('Save'),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Text(
+                                        AppLocalizations.of(context)!.save),
                                   ),
                                 ),
                               ),
@@ -1026,7 +1064,11 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                   child: Padding(
                                     padding: const EdgeInsets.all(12.0),
                                     child: Text(
-                                      _isActive! ? 'De-activate' : 'Activate',
+                                      _isActive!
+                                          ? AppLocalizations.of(context)!
+                                              .deActivate
+                                          : AppLocalizations.of(context)!
+                                              .activate,
                                       style: const TextStyle(
                                         color: Colors.black,
                                       ),
@@ -1041,7 +1083,7 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
               ],
             ),
           if (isLoading)
-            Center(
+            const Center(
               child: CircularProgressIndicator(),
             ),
         ],

@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../Configurations/app_config.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class Plan {
   final String title;
@@ -73,7 +74,7 @@ class AnimatedPlanCard extends StatelessWidget {
                 ),
               ),
               Text(
-                "Plan",
+                AppLocalizations.of(context)!.plan,
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -168,14 +169,17 @@ class _NextPageState extends State<NextPage> {
           context: context,
           builder: (context) {
             return AlertDialog(
-              title: const Text('Error'),
-              content: const Text('Something went wrong, try again later.'),
+              title: Text(
+                AppLocalizations.of(context)!.error,
+              ),
+              content: Text(AppLocalizations.of(context)!
+                  .somethingWentWrongTryAgainLater),
               actions: <Widget>[
                 TextButton(
                   onPressed: () {
                     Navigator.pop(context);
                   },
-                  child: const Text('OK'),
+                  child: Text(AppLocalizations.of(context)!.ok),
                 ),
               ],
             );
@@ -201,7 +205,7 @@ class _NextPageState extends State<NextPage> {
           final pricePlanId = apiPlan['Price Plan ID'];
           final title = apiPlan['Price Plan Name'];
           final price =
-              ' ${apiPlan['Number Of Shipments'] ?? 0} Shipments / Month';
+              ' ${apiPlan['Number Of Shipments'] ?? 0} ${AppLocalizations.of(context)!.shipmentsMonth}';
           final response = await http.get(Uri.parse(
               '${AppConfig.baseUrl}/price-plans-matrix-by-ID/$pricePlanId'));
 
@@ -247,9 +251,10 @@ class _NextPageState extends State<NextPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-          title: const Text(
-            'Subscription Plans',
-            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+          title: Text(
+            AppLocalizations.of(context)!.subscriptionPlans,
+            style: const TextStyle(
+                color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,
           backgroundColor: const Color.fromARGB(255, 244, 246, 248),
@@ -265,16 +270,16 @@ class _NextPageState extends State<NextPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const SizedBox(height: 16),
-                    const Text(
-                      'Choose a Subscription Plan',
-                      style:
-                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    Text(
+                      AppLocalizations.of(context)!.chooseASubscriptionPlan,
+                      style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
-                    const Text(
-                      'Business Plan', // Add this text
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    Text(
+                      AppLocalizations.of(context)!.businessPlan,
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     Row(
@@ -325,10 +330,10 @@ class _NextPageState extends State<NextPage> {
                       ),
                     const SizedBox(
                         height: 32), // Add some space between sections
-                    const Text(
-                      'Guest Plan', // Add this text
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    Text(
+                      AppLocalizations.of(context)!.guestPlan, // Add this text
+                      style: const TextStyle(
+                          fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(height: 16),
                     Row(
@@ -410,7 +415,7 @@ class _NextPageState extends State<NextPage> {
                       ),
                     );
                   },
-                  child: const Text('View Zones Details'),
+                  child: Text(AppLocalizations.of(context)!.viewZonesDetails),
                 ),
               ),
               Container(
@@ -423,7 +428,9 @@ class _NextPageState extends State<NextPage> {
                           register();
                         }
                       : null,
-                  child: const Text('Register'),
+                  child: Text(
+                    AppLocalizations.of(context)!.register,
+                  ),
                 ),
               ),
             ],

@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ShipmentsPage extends StatefulWidget {
   @override
@@ -49,7 +50,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
 
   String formatDateTime(String dateTimeString) {
     if (dateTimeString == "") {
-      return "No Date";
+      return AppLocalizations.of(context)!.noDate;
     }
     final dateTime = DateTime.parse(dateTimeString).toLocal();
     final formatter = DateFormat('dd-MM-yyyy h:mm a');
@@ -79,8 +80,8 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                         padding: const EdgeInsets.fromLTRB(16, 24, 0, 12),
                         child: Row(
                           children: [
-                            const Text('Shipments',
-                                style: TextStyle(
+                            Text(AppLocalizations.of(context)!.shipments,
+                                style: const TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
                                 )),
@@ -105,16 +106,17 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                   borderRadius: BorderRadius.circular(4),
                                 ),
                                 elevation: 2,
-                                child: const Padding(
-                                  padding: EdgeInsets.fromLTRB(8, 8, 8, 8),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(8, 8, 8, 8),
                                   child: Row(
                                     children: [
-                                      Icon(Icons.filter_list,
+                                      const Icon(Icons.filter_list,
                                           color: Colors.black, size: 18),
-                                      SizedBox(width: 8),
+                                      const SizedBox(width: 8),
                                       Text(
-                                        'Filter',
-                                        style: TextStyle(
+                                        AppLocalizations.of(context)!.filter,
+                                        style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 15,
                                         ),
@@ -229,7 +231,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                                     BorderRadius.circular(20),
                                               ),
                                               child: Text(
-                                                '${shipment["Cash"] != null ? shipment["Cash"].abs() : '0'} EGP',
+                                                '${shipment["Cash"] != null ? shipment["Cash"].abs() : '0'} ${AppLocalizations.of(context)!.egp}',
                                                 style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 14),
@@ -295,9 +297,9 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                   });
                                 }
                               },
-                              child: const Text(
-                                'Load More',
-                                style: TextStyle(
+                              child: Text(
+                                AppLocalizations.of(context)!.loadMore,
+                                style: const TextStyle(
                                   color: Colors.black,
                                   fontSize: 16,
                                   fontWeight: FontWeight.bold,
@@ -307,10 +309,10 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                           ),
                         ),
                       if (_shipments.isEmpty)
-                        const Center(
+                        Center(
                           child: Text(
-                            'No Upcoming Pickups',
-                            style: TextStyle(
+                            AppLocalizations.of(context)!.noUpcomingPickups,
+                            style: const TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                               color: Colors.grey,
