@@ -248,7 +248,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                                     BorderRadius.circular(20),
                                               ),
                                               child: Text(
-                                                '${locale.toString() == 'en' ? shipment["Cash"].abs() : shipment["النقود"].abs()} ${AppLocalizations.of(context)!.egp',
+                                                '${locale.toString() == 'en' ? shipment["Cash"].abs() : shipment["النقود"].abs()} ${AppLocalizations.of(context)!.egp}',
                                                 style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 14),
