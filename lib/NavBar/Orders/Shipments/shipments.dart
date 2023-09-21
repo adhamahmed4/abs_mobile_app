@@ -1,5 +1,6 @@
 import 'package:abs_mobile_app/NavBar/Orders/Shipments/addShipments.dart';
 import 'package:abs_mobile_app/Track/track.dart';
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../Configurations/app_config.dart';
@@ -19,6 +20,8 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
   bool isClicked = false;
 
   bool isLoading = true;
+
+  Locale? locale;
 
   Future<void> getShipments() async {
     final url = Uri.parse(
@@ -60,6 +63,11 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
   void initState() {
     super.initState();
     getShipments();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   @override
@@ -149,7 +157,9 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                       transitionDuration:
                                           const Duration(milliseconds: 300),
                                       pageBuilder: (_, __, ___) => TrackPage(
-                                        awb: shipment["AWB"],
+                                        awb: locale.toString() == 'en'
+                                            ? shipment["AWB"]
+                                            : shipment["رقم الشحنة"],
                                       ),
                                       transitionsBuilder: (_,
                                           Animation<double> animation,
@@ -181,7 +191,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                         Row(
                                           children: [
                                             Text(
-                                              '${shipment?["AWB"]}',
+                                              '${locale.toString() == 'en' ? shipment["AWB"] : shipment["رقم الشحنة"]}',
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.grey,
@@ -199,7 +209,9 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                                     BorderRadius.circular(20),
                                               ),
                                               child: Text(
-                                                shipment["Status"] ?? '',
+                                                locale.toString() == 'en'
+                                                    ? shipment["Status"]
+                                                    : shipment["الحالة"],
                                                 style: const TextStyle(
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.bold,
@@ -212,7 +224,12 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                         Row(
                                           children: [
                                             Text(
-                                              shipment["Consignee Name"] ?? '',
+                                              locale.toString() == 'en'
+                                                  ? shipment[
+                                                          "Consignee Name"] ??
+                                                      ''
+                                                  : shipment["اسم العميل"] ??
+                                                      '',
                                               style: const TextStyle(
                                                 fontSize: 15,
                                                 color: Colors.black,
@@ -229,7 +246,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                                     BorderRadius.circular(20),
                                               ),
                                               child: Text(
-                                                '${shipment["Cash"] != null ? shipment["Cash"].abs() : '0'} EGP',
+                                                '${locale.toString() == 'en' ? shipment["Cash"].abs() : shipment["النقود"].abs()} EGP',
                                                 style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 14),
@@ -241,29 +258,46 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                         Row(
                                           children: [
                                             Text(
-                                              shipment[
-                                                      "Consignee Phone Number"] ??
-                                                  '',
+                                              locale.toString() == 'en'
+                                                  ? shipment[
+                                                          "Consignee Phone Number"] ??
+                                                      ''
+                                                  : shipment[
+                                                          "رقم تليفون العميل"] ??
+                                                      '',
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.grey,
                                               ),
                                             ),
                                             Text(
-                                              shipment["Consignee Phone Number"] !=
-                                                          null &&
-                                                      shipment[
-                                                              "Consignee City"] !=
-                                                          null
-                                                  ? '|'
-                                                  : '',
+                                              locale.toString() == 'en'
+                                                  ? shipment["Consignee Phone Number"] !=
+                                                              null &&
+                                                          shipment[
+                                                                  "Consignee City"] !=
+                                                              null
+                                                      ? '|'
+                                                      : ''
+                                                  : shipment["رقم تليفون العميل"] !=
+                                                              null &&
+                                                          shipment[
+                                                                  "مدينة العميل"] !=
+                                                              null
+                                                      ? '|'
+                                                      : '',
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.grey,
                                               ),
                                             ),
                                             Text(
-                                              shipment["Consignee City"] ?? '',
+                                              locale.toString() == 'en'
+                                                  ? shipment[
+                                                          "Consignee City"] ??
+                                                      ''
+                                                  : shipment["مدينة العميل"] ??
+                                                      '',
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 color: Colors.grey,

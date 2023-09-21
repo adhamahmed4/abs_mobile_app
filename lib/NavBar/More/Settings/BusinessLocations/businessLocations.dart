@@ -1,5 +1,6 @@
 // ignore_for_file: library_private_types_in_public_api
 import 'package:abs_mobile_app/NavBar/More/Settings/BusinessLocations/addBusinessLocation.dart';
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
@@ -15,6 +16,7 @@ class BusinessLocationsPage extends StatefulWidget {
 class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
   List<dynamic>? locations = [];
   bool isLoading = true;
+  Locale? locale;
 
   Future<void> getBusinessLocations() async {
     final url =
@@ -47,15 +49,26 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
   void initState() {
     super.initState();
     getBusinessLocations();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   Color _getColorForLocationType(String locationType) {
     switch (locationType) {
       case 'Pickup':
         return Colors.orange;
+      case 'بيكاب':
+        return Colors.orange;
       case 'Return':
         return Colors.blue;
+      case 'مرتجع':
+        return Colors.blue;
       case 'Company':
+        return Colors.deepPurple;
+      case 'شركة':
         return Colors.deepPurple;
       default:
         return Colors.grey;
@@ -171,7 +184,12 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                                                           milliseconds: 300),
                                                   pageBuilder: (_, __, ___) =>
                                                       AddNewLocationPage(
-                                                    locationID: location["ID"],
+                                                    locationID:
+                                                        locale.toString() ==
+                                                                'en'
+                                                            ? location["ID"]
+                                                            : location[
+                                                                "رقم التسلسل"],
                                                   ),
                                                   transitionsBuilder: (_,
                                                       Animation<double>
@@ -200,7 +218,11 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                                                 child: Row(
                                                   children: [
                                                     Text(
-                                                      location["Location Name"],
+                                                      locale.toString() == 'en'
+                                                          ? location[
+                                                              "Location Name"]
+                                                          : location[
+                                                              "اسم العنوان"],
                                                       style: const TextStyle(
                                                         fontSize: 14.0,
                                                         color: Colors.grey,
@@ -214,15 +236,23 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                                                           vertical: 4.0),
                                                       decoration: BoxDecoration(
                                                         color: _getColorForLocationType(
-                                                            location[
-                                                                "Location Type"]),
+                                                            locale.toString() ==
+                                                                    'en'
+                                                                ? location[
+                                                                    "Location Type"]
+                                                                : location[
+                                                                    "نوع العنوان"]),
                                                         borderRadius:
                                                             BorderRadius
                                                                 .circular(8.0),
                                                       ),
                                                       child: Text(
-                                                        location[
-                                                            "Location Type"],
+                                                        locale.toString() ==
+                                                                'en'
+                                                            ? location[
+                                                                "Location Type"]
+                                                            : location[
+                                                                "نوع العنوان"],
                                                         style: const TextStyle(
                                                           color: Colors.white,
                                                           fontSize: 10.0,
@@ -261,7 +291,9 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
                                                 ),
                                               ),
                                               subtitle: Text(
-                                                location["Address"],
+                                                locale.toString() == 'en'
+                                                    ? location["Address"]
+                                                    : location["العنوان"],
                                                 style: const TextStyle(
                                                   color: Colors.black,
                                                 ),

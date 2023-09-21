@@ -1,4 +1,5 @@
 import 'package:abs_mobile_app/NavBar/More/SupportTickets/addTicket.dart';
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../../../../Configurations/app_config.dart';
@@ -13,11 +14,17 @@ class TicketsPage extends StatefulWidget {
 class _TicketsPageState extends State<TicketsPage> {
   bool isLoading = true;
   List<dynamic> _tickets = [];
+  Locale? locale;
 
   @override
   void initState() {
     super.initState();
     getTickets();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   String formatDateTime(String dateTimeString) {
@@ -91,25 +98,34 @@ class _TicketsPageState extends State<TicketsPage> {
                         elevation: 4,
                         margin: const EdgeInsets.all(10),
                         child: ListTile(
-                          title: Text('AWB: ${ticket['AWB']}'),
+                          title: Text(
+                              'AWB: ${locale.toString() == 'en' ? ticket['AWB'] : ticket['رقم الشحنة']}'),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Ticket Issuer: ${ticket['Ticket Issuer']}'),
-                              Text('Ticket Type: ${ticket['Ticket Type']}'),
-                              Text('Ticket Status: ${ticket['Ticket Status']}'),
-                              Text('Description: ${ticket['Description']}'),
                               Text(
-                                  'Last Action Date: ${formatDateTime(ticket['Last Action Date'])}'),
+                                  'Ticket Issuer: ${locale.toString() == 'en' ? ticket['Ticket Issuer'] : ticket['مصدر التذكرة']}'),
+                              Text(
+                                  'Ticket Type: ${locale.toString() == 'en' ? ticket['Ticket Type'] : ticket['نوع التذكرة']}'),
+                              Text(
+                                  'Ticket Status: ${locale.toString() == 'en' ? ticket['Ticket Status'] : ticket['حالة التذكرة']}'),
+                              Text(
+                                  'Description: ${locale.toString() == 'en' ? ticket['Description'] : ticket['وصف']}'),
+                              Text(
+                                  'Last Action Date: ${formatDateTime(locale.toString() == 'en' ? ticket['Last Action Date'] : ticket['تاريخ آخر إجراء'])}'),
                               Row(
                                 children: [
                                   Text('Status: '),
                                   Text(
-                                    '${ticket['Closed'] ? 'Closed' : 'Active'}',
+                                    '${locale.toString() == 'en' ? ticket['Closed'] ? 'Closed' : 'Active' : ticket['تم غلق التذكرة'] ? 'مغلق' : 'نشط'}',
                                     style: TextStyle(
-                                      color: ticket['Closed']
-                                          ? Colors.red
-                                          : Colors.green,
+                                      color: locale.toString() == 'en'
+                                          ? ticket['Closed']
+                                              ? Colors.red
+                                              : Colors.green
+                                          : ticket['تم غلق التذكرة']
+                                              ? Colors.red
+                                              : Colors.green,
                                     ),
                                   ),
                                 ],

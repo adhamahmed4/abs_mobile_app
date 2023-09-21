@@ -1,4 +1,5 @@
 import 'package:abs_mobile_app/NavBar/More/Settings/BusinessLocations/maps.dart';
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
@@ -47,10 +48,16 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
   String _emailErrorText = '';
   bool _isButtonEnabled = false;
   bool _dataExists = false;
+  Locale? locale;
 
   void initState() {
     super.initState();
     getAddressTypes();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
     if (widget.locationID != 0) {
       getBusinessLocation();
     }
@@ -321,12 +328,22 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
       final List<dynamic> jsonData = json.decode(response.body);
       if (mounted) {
         setState(() {
-          _addressTypes = jsonData.map<Map<String, dynamic>>((dynamic item) {
-            return {
-              'ID': item['ID'],
-              'enAddressType': item['enAddressType'],
-            };
-          }).toList();
+          locale.toString() == 'en'
+              ? _addressTypes =
+                  jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'ID': item['ID'],
+                    'enAddressType': item['enAddressType'],
+                  };
+                }).toList()
+              : _addressTypes =
+                  jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'ID': item['ID'],
+                    'arAddressType': item['arAddressType'],
+                  };
+                }).toList();
+          ;
         });
       }
     } else {
@@ -586,18 +603,33 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                                   });
                                                 }
                                               },
-                                              items: _addressTypes.map<
-                                                  DropdownMenuItem<String>>(
-                                                (Map<String, dynamic> value) {
-                                                  return DropdownMenuItem<
-                                                      String>(
-                                                    value:
-                                                        value['ID'].toString(),
-                                                    child: Text(
-                                                        value['enAddressType']),
-                                                  );
-                                                },
-                                              ).toList(),
+                                              items: locale.toString() == 'en'
+                                                  ? _addressTypes.map<
+                                                      DropdownMenuItem<String>>(
+                                                      (Map<String, dynamic>
+                                                          value) {
+                                                        return DropdownMenuItem<
+                                                            String>(
+                                                          value: value['ID']
+                                                              .toString(),
+                                                          child: Text(value[
+                                                              'enAddressType']),
+                                                        );
+                                                      },
+                                                    ).toList()
+                                                  : _addressTypes.map<
+                                                      DropdownMenuItem<String>>(
+                                                      (Map<String, dynamic>
+                                                          value) {
+                                                        return DropdownMenuItem<
+                                                            String>(
+                                                          value: value['ID']
+                                                              .toString(),
+                                                          child: Text(value[
+                                                              'arAddressType']),
+                                                        );
+                                                      },
+                                                    ).toList(),
                                             ),
                                           ),
                                         ),

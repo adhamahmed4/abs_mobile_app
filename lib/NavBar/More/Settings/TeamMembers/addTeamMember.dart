@@ -1,3 +1,4 @@
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
@@ -30,12 +31,19 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
   bool _isButtonEnabled = false;
   bool _dataExists = false;
 
+  Locale? locale;
+
   @override
   void initState() {
     super.initState();
     getSubAccounts();
     getRoles();
     _updateButtonEnabledStatus();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   void _updateButtonEnabledStatus() {
@@ -59,14 +67,25 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (mounted) {
-        setState(() {
-          _subAccounts = jsonData.map<Map<String, dynamic>>((dynamic item) {
-            return {
-              'ID': item['ID'],
-              'Sub Account Name': item['Sub Account Name'],
-            };
-          }).toList();
-        });
+        locale.toString() == 'en'
+            ? setState(() {
+                _subAccounts =
+                    jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'ID': item['ID'],
+                    'Sub Account Name': item['Sub Account Name'],
+                  };
+                }).toList();
+              })
+            : setState(() {
+                _subAccounts =
+                    jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'ID': item['ID'],
+                    'اسم الحساب الفرعي': item['اسم الحساب الفرعي'],
+                  };
+                }).toList();
+              });
       }
     } else {
       throw Exception('Failed to load data');
@@ -79,14 +98,24 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (mounted) {
-        setState(() {
-          _roles = jsonData.map<Map<String, dynamic>>((dynamic item) {
-            return {
-              'Role ID': item['Role ID'],
-              'Role': item['Role'],
-            };
-          }).toList();
-        });
+        locale.toString() == 'en'
+            ? setState(() {
+                _roles = jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'Role ID': item['Role ID'],
+                    'Role': item['Role'],
+                  };
+                }).toList();
+              })
+            : setState(() {
+                _roles = jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'رقم التسلسلي': item['رقم التسلسلي'],
+                    'الصلاحية': item['الصلاحية'],
+                  };
+                }).toList();
+              });
+        ;
       }
     } else {
       throw Exception('Failed to load data');
@@ -197,16 +226,31 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
                                                 }
                                               }
                                             : null,
-                                        items: _subAccounts
-                                            .map<DropdownMenuItem<String>>(
-                                          (Map<String, dynamic> value) {
-                                            return DropdownMenuItem<String>(
-                                              value: value['ID'].toString(),
-                                              child: Text(
-                                                  value['Sub Account Name']),
-                                            );
-                                          },
-                                        ).toList(),
+                                        items: locale.toString() == 'en'
+                                            ? _subAccounts
+                                                .map<DropdownMenuItem<String>>(
+                                                (Map<String, dynamic> value) {
+                                                  return DropdownMenuItem<
+                                                      String>(
+                                                    value:
+                                                        value['ID'].toString(),
+                                                    child: Text(value[
+                                                        'Sub Account Name']),
+                                                  );
+                                                },
+                                              ).toList()
+                                            : _subAccounts
+                                                .map<DropdownMenuItem<String>>(
+                                                (Map<String, dynamic> value) {
+                                                  return DropdownMenuItem<
+                                                      String>(
+                                                    value:
+                                                        value['ID'].toString(),
+                                                    child: Text(value[
+                                                        'اسم الحساب الفرعي']),
+                                                  );
+                                                },
+                                              ).toList(),
                                       ),
                                     ),
                                   ),
@@ -324,8 +368,8 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
                                       fontWeight: FontWeight.bold)),
                               Column(
                                 children: _roles.map((role) {
-                                  final roleID = role['Role ID'];
-                                  final roleName = role['Role'];
+                                  final roleID = role['رقم التسلسلي'];
+                                  final roleName = role['الصلاحية'];
                                   return Padding(
                                     padding:
                                         const EdgeInsets.fromLTRB(0, 0, 0, 4),

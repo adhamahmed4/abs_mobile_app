@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'package:abs_mobile_app/main.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,7 @@ class _DeliveryPageState extends State<DeliveryPage> {
 
   String? _selectedPickupLocation;
   String? _selectedVehicleType;
+  Locale? locale;
 
   Future<void> getSubAccounts() async {
     final url =
@@ -61,14 +63,25 @@ class _DeliveryPageState extends State<DeliveryPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (mounted) {
-        setState(() {
-          _subAccounts = jsonData.map<Map<String, dynamic>>((dynamic item) {
-            return {
-              'ID': item['ID'],
-              'Sub Account Name': item['Sub Account Name'],
-            };
-          }).toList();
-        });
+        locale.toString() == 'en'
+            ? setState(() {
+                _subAccounts =
+                    jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'ID': item['ID'],
+                    'Sub Account Name': item['Sub Account Name'],
+                  };
+                }).toList();
+              })
+            : setState(() {
+                _subAccounts =
+                    jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'ID': item['ID'],
+                    'اسم الحساب الفرعي': item['اسم الحساب الفرعي'],
+                  };
+                }).toList();
+              });
       }
     } else {
       throw Exception('Failed to load data');
@@ -145,14 +158,25 @@ class _DeliveryPageState extends State<DeliveryPage> {
     if (response.statusCode == 200) {
       final List<dynamic> jsonData = json.decode(response.body);
       if (mounted) {
-        setState(() {
-          vehicleTypes = jsonData.map<Map<String, dynamic>>((dynamic item) {
-            return {
-              'Vehicle Type ID': item['Vehicle Type ID'],
-              'Vehicle Type': item['Vehicle Type'],
-            };
-          }).toList();
-        });
+        locale.toString() == 'en'
+            ? setState(() {
+                vehicleTypes =
+                    jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'Vehicle Type ID': item['Vehicle Type ID'],
+                    'Vehicle Type': item['Vehicle Type'],
+                  };
+                }).toList();
+              })
+            : setState(() {
+                vehicleTypes =
+                    jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'رقم نوع السيارة': item['رقم نوع السيارة'],
+                    'نوع السيارة': item['نوع السيارة'],
+                  };
+                }).toList();
+              });
       }
     } else {
       throw Exception('Failed to load data');
@@ -316,6 +340,11 @@ class _DeliveryPageState extends State<DeliveryPage> {
     getPickupLocations();
     getVehicleTypes();
     getSubAccounts();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   @override
@@ -358,14 +387,23 @@ class _DeliveryPageState extends State<DeliveryPage> {
                                 getSubAccountServiceTypeIDs(newValue!);
                               }
                             },
-                            items: _subAccounts.map<DropdownMenuItem<String>>(
-                              (Map<String, dynamic> value) {
-                                return DropdownMenuItem<String>(
-                                  value: value['ID'].toString(),
-                                  child: Text(value['Sub Account Name']),
-                                );
-                              },
-                            ).toList(),
+                            items: locale.toString() == 'en'
+                                ? _subAccounts.map<DropdownMenuItem<String>>(
+                                    (Map<String, dynamic> value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value['ID'].toString(),
+                                        child: Text(value['Sub Account Name']),
+                                      );
+                                    },
+                                  ).toList()
+                                : _subAccounts.map<DropdownMenuItem<String>>(
+                                    (Map<String, dynamic> value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value['ID'].toString(),
+                                        child: Text(value['اسم الحساب الفرعي']),
+                                      );
+                                    },
+                                  ).toList(),
                           ),
                         ),
                       ),
@@ -943,16 +981,27 @@ class _DeliveryPageState extends State<DeliveryPage> {
                                     });
                                   }
                                 },
-                                items:
-                                    vehicleTypes.map<DropdownMenuItem<String>>(
-                                  (Map<String, dynamic> value) {
-                                    return DropdownMenuItem<String>(
-                                      value:
-                                          value['Vehicle Type ID'].toString(),
-                                      child: Text(value['Vehicle Type']),
-                                    );
-                                  },
-                                ).toList(),
+                                items: locale.toString() == 'en'
+                                    ? vehicleTypes
+                                        .map<DropdownMenuItem<String>>(
+                                        (Map<String, dynamic> value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value['Vehicle Type ID']
+                                                .toString(),
+                                            child: Text(value['Vehicle Type']),
+                                          );
+                                        },
+                                      ).toList()
+                                    : vehicleTypes
+                                        .map<DropdownMenuItem<String>>(
+                                        (Map<String, dynamic> value) {
+                                          return DropdownMenuItem<String>(
+                                            value: value['رقم نوع السيارة']
+                                                .toString(),
+                                            child: Text(value['نوع السيارة']),
+                                          );
+                                        },
+                                      ).toList(),
                               ),
                             ),
                           ),

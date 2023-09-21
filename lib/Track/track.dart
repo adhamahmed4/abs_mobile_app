@@ -108,31 +108,31 @@ class _TrackPageState extends State<TrackPage> {
         for (final shipment in shipmentHistory) {
           final status = shipment['Status'];
 
-          if (status == 'New') {
+          if (status == 'New' || status == ' جديد') {
             if (mounted) {
               setState(() {
                 isNew = true;
               });
             }
-          } else if (status == 'In Transit') {
+          } else if (status == 'In Transit' || status == 'فى العمليات') {
             if (mounted) {
               setState(() {
                 isInTransit = true;
               });
             }
-          } else if (status == 'Out For Delivery') {
+          } else if (status == 'Out For Delivery' || status == 'خرج للتوزيع') {
             if (mounted) {
               setState(() {
                 isOutForDelivery = true;
               });
             }
-          } else if (status == 'Delivered') {
+          } else if (status == 'Delivered' || status == 'تم التوصيل') {
             if (mounted) {
               setState(() {
                 isDelivered = true;
               });
             }
-          } else if (status == 'Undelivered') {
+          } else if (status == 'Undelivered' || status == 'لم يتم التوصيل') {
             if (mounted) {
               setState(() {
                 isUndelivered = true;
@@ -344,21 +344,25 @@ class _TrackPageState extends State<TrackPage> {
                                   MyTimeLineTile(
                                     isFirst: true,
                                     isLast: false,
-                                    isCurrent: isCurrent == 'New',
+                                    isCurrent: isCurrent == 'New' ||
+                                        isCurrent == ' جديد',
                                     isPast: isNew,
                                     text: "New Shipment",
                                   ),
                                   MyTimeLineTile(
                                     isFirst: false,
                                     isLast: false,
-                                    isCurrent: isCurrent == 'In Transit',
+                                    isCurrent: isCurrent == 'In Transit' ||
+                                        isCurrent == 'فى العمليات',
                                     isPast: isInTransit,
                                     text: "In Transit",
                                   ),
                                   MyTimeLineTile(
                                     isFirst: false,
                                     isLast: false,
-                                    isCurrent: isCurrent == 'Out For Delivery',
+                                    isCurrent:
+                                        isCurrent == 'Out For Delivery' ||
+                                            isCurrent == 'خرج للتوزيع',
                                     isPast: isOutForDelivery,
                                     text: "Out For Delivery",
                                   ),
@@ -366,7 +370,9 @@ class _TrackPageState extends State<TrackPage> {
                                     isFirst: false,
                                     isLast: true,
                                     isCurrent: isCurrent == 'Delivered' ||
-                                        isCurrent == 'Undelivered',
+                                        isCurrent == 'Undelivered' ||
+                                        isCurrent == 'تم التوصيل' ||
+                                        isCurrent == 'لم يتم التوصيل',
                                     isPast: isDelivered || isUndelivered,
                                     text: isUndelivered
                                         ? "Undelivered"

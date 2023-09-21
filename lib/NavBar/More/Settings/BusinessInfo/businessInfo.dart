@@ -1,3 +1,4 @@
+import 'package:abs_mobile_app/main.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_select_flutter/multi_select_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -54,6 +55,7 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
   String? idImagePath;
   String? commercialRegisterImageName;
   String? commercialRegisterImagePath;
+  Locale? locale;
 
   @override
   void initState() {
@@ -63,6 +65,11 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
     getCities();
     getServices();
     getCurrentBusinessInfo();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   Future<void> getCurrentBusinessInfo() async {
@@ -136,12 +143,19 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
       final List<dynamic> jsonData = json.decode(response.body);
       if (mounted) {
         setState(() {
-          _products = jsonData.map<Map<String, dynamic>>((dynamic item) {
-            return {
-              'ID': item['ID'],
-              'enProduct': item['enProduct'],
-            };
-          }).toList();
+          locale.toString() == 'en'
+              ? _products = jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'ID': item['ID'],
+                    'enProduct': item['enProduct'],
+                  };
+                }).toList()
+              : _products = jsonData.map<Map<String, dynamic>>((dynamic item) {
+                  return {
+                    'ID': item['ID'],
+                    'arProduct': item['arProduct'],
+                  };
+                }).toList();
         });
       }
     } else {
@@ -538,14 +552,23 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                                               _updateButtonEnabledStatus();
                                             }
                                           : null,
-                                      items: _products
-                                          .map<DropdownMenuItem<String>>(
-                                              (Map<String, dynamic> value) {
-                                        return DropdownMenuItem<String>(
-                                          value: value['ID'].toString(),
-                                          child: Text(value['enProduct']),
-                                        );
-                                      }).toList(),
+                                      items: locale.toString() == 'en'
+                                          ? _products
+                                              .map<DropdownMenuItem<String>>(
+                                                  (Map<String, dynamic> value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value['ID'].toString(),
+                                                child: Text(value['enProduct']),
+                                              );
+                                            }).toList()
+                                          : _products
+                                              .map<DropdownMenuItem<String>>(
+                                                  (Map<String, dynamic> value) {
+                                              return DropdownMenuItem<String>(
+                                                value: value['ID'].toString(),
+                                                child: Text(value['arProduct']),
+                                              );
+                                            }).toList(),
                                     ),
                                   ),
                                 ),
