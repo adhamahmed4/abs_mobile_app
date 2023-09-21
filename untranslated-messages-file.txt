@@ -1,0 +1,7 @@
+{
+  "ar": [
+    "resetPasswordLinkSentToYourEmail",
+    "roles",
+    "id"
+  ]
+}
