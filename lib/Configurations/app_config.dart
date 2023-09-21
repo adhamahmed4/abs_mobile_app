@@ -3,8 +3,13 @@ import 'dart:ui';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppConfig {
-  static const String baseUrl = 'http://192.168.137.31:3000';
+  static const String baseUrl = 'http://192.168.1.138:3000';
   static String? jwtToken;
+  static Locale? _selectedLanguage;
+
+  static void setSelectedLanguage(Locale locale) {
+    _selectedLanguage = locale;
+  }
 
   static Future<void> storeToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
@@ -34,9 +39,12 @@ class AppConfig {
   static Map<String, String> get headers {
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
-      'Accept-Language': 'ar',
       'Authorization': 'Bearer $jwtToken'
     };
+
+    if (_selectedLanguage != null) {
+      headers['Accept-Language'] = _selectedLanguage!.languageCode;
+    }
 
     return headers;
   }
