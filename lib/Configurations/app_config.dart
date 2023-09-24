@@ -36,6 +36,11 @@ class AppConfig {
     return null;
   }
 
+  static Future<void> saveFcmToken(String token) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString("fcmToken", token);
+  }
+
   static Map<String, String> get headers {
     final Map<String, String> headers = {
       'Content-Type': 'application/json',
