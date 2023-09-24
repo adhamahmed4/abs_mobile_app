@@ -1,19 +1,47 @@
 // ignore_for_file: must_be_immutable
 import 'package:abs_mobile_app/Configurations/app_config.dart';
+import 'package:abs_mobile_app/FirebaseApi/firebase_api.dart';
 import 'package:abs_mobile_app/NavBar/navBar.dart';
 import 'package:abs_mobile_app/l10n/l10n.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'Login/login.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+      // name: 'ABS-MobileApp',
+      // options: DefaultFirebaseOptions.currentPlatform,
+      );
+  await FirebaseApi().initNotification();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    print('Got a message whilst in the foreground!');
+    print('Title: ${message.notification!.title}');
+    print('Body: ${message.notification!.body}');
+    print('Message data: ${message.data}');
+    if (message.notification != null) {
+      print('Message also contained a notification: ${message.notification}');
+    }
+  });
+
   runApp(
     const MyApp(),
   );
+}
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  final notification = message.notification;
+  final data = message.data;
+
+  print("Notification: $notification");
+  print("Data: $data");
 }
 
 class MyApp extends StatefulWidget {
@@ -28,6 +56,11 @@ class MyApp extends StatefulWidget {
   static Locale getLocale(BuildContext context) {
     _MyAppState state = context.findAncestorStateOfType<_MyAppState>()!;
     return state._locale;
+  }
+
+  Future<void> backgroundNotifHandler(RemoteMessage message) async {
+    await Firebase.initializeApp();
+    print("Handling a background message: ${message.messageId}");
   }
 
   @override
@@ -62,6 +95,8 @@ class _MyAppState extends State<MyApp> {
   void initState() {
     super.initState();
     _loadSavedLanguage();
+    var fbm = FirebaseMessaging.instance;
+    fbm.requestPermission();
   }
 
   @override
