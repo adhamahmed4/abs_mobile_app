@@ -87,6 +87,7 @@ class _MyAppState extends State<MyApp> {
     if (savedLanguage != null) {
       setState(() {
         _locale = Locale(savedLanguage);
+        AppConfig.setSelectedLanguage(_locale);
       });
     }
   }
