@@ -81,7 +81,6 @@ class _HomePageState extends State<HomePage> {
   Future<void> getUserData() async {
     final url = Uri.parse('${AppConfig.baseUrl}/users-with-info-client');
     final response = await http.get(url, headers: AppConfig.headers);
-
     if (response.statusCode == 200) {
       final responseBody = json.decode(response.body);
       if (mounted) {
