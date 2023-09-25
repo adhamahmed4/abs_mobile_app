@@ -1304,5 +1304,15 @@
     "@register":
     {
         "description": "The register button"
+    },
+    "completeYour2" : "Complete your",
+    "@completeYour2":
+    {
+        "description": "The complete your button"
+    },
+    "accountFor2" : "account for",
+    "@accountFor2":
+    {
+        "description": "The account for button"
     }
 }

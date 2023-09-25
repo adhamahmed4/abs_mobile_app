@@ -79,7 +79,7 @@ class _LanguagePageState extends State<LanguagePage> {
                       labelText: AppLocalizations.of(context)!.language,
                     ),
                     child: SizedBox(
-                      height: 20,
+                      height: 25,
                       child: DropdownButtonHideUnderline(
                         child: DropdownButton<String>(
                           value: _selectedLanguage,

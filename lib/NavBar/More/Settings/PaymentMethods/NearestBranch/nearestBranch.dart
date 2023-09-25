@@ -162,7 +162,7 @@ class _NearestBranchPageState extends State<NearestBranchPage> {
                               labelText: AppLocalizations.of(context)!.branch,
                             ),
                             child: SizedBox(
-                              height: 20,
+                              height: 25,
                               child: DropdownButtonHideUnderline(
                                 child: DropdownButton<String>(
                                   value: _selectedBranch,

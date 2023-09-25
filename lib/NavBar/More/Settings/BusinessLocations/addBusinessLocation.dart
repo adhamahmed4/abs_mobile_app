@@ -604,7 +604,7 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                                   .addressType,
                                         ),
                                         child: SizedBox(
-                                          height: 20,
+                                          height: 25,
                                           child: DropdownButtonHideUnderline(
                                             child: DropdownButton<String>(
                                               value: _selectedAddressType,
@@ -691,7 +691,7 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                                   .city,
                                         ),
                                         child: SizedBox(
-                                          height: 20,
+                                          height: 25,
                                           child: DropdownButtonHideUnderline(
                                             child: DropdownButton<String>(
                                               value: _selectedCity,

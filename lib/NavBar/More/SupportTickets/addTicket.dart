@@ -242,7 +242,7 @@ class _AddTicketPageState extends State<AddTicketPage> {
                                   labelText: 'Ticket Subject',
                                 ),
                                 child: SizedBox(
-                                  height: 20,
+                                  height: 25,
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       value: _selectedTicketType,

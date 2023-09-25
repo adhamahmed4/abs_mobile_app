@@ -16,9 +16,9 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
-      // name: 'ABS-MobileApp',
-      // options: DefaultFirebaseOptions.currentPlatform,
-      );
+    name: 'ABS-MobileApp',
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await FirebaseApi().initNotification();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {

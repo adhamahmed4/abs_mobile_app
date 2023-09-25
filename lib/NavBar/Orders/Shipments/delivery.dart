@@ -10,6 +10,7 @@ import '../../../../Configurations/app_config.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:abs_mobile_app/main.dart';
 
 class DeliveryPage extends StatefulWidget {
   @override
@@ -379,7 +380,7 @@ class _DeliveryPageState extends State<DeliveryPage> {
                         labelText: AppLocalizations.of(context)!.subAccountName,
                       ),
                       child: SizedBox(
-                        height: 20,
+                        height: 25,
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             value: _selectedSubAccount,
@@ -442,7 +443,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(16, 16, 4, 4),
+                              padding: locale.toString() == 'en'
+                                  ? const EdgeInsets.fromLTRB(16, 16, 4, 4)
+                                  : const EdgeInsets.fromLTRB(4, 16, 16, 4),
                               child: TextField(
                                 controller: _firstNameController,
                                 decoration: InputDecoration(
@@ -461,7 +464,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(4, 16, 16, 4),
+                              padding: locale.toString() == 'en'
+                                  ? const EdgeInsets.fromLTRB(4, 16, 16, 4)
+                                  : const EdgeInsets.fromLTRB(16, 16, 4, 4),
                               child: TextField(
                                 controller: _lastNameController,
                                 decoration: InputDecoration(
@@ -498,7 +503,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
                         child: Align(
-                          alignment: Alignment.centerLeft,
+                          alignment: locale.toString() == 'en'
+                              ? Alignment.centerLeft
+                              : Alignment.centerRight,
                           child: Text(
                             AppLocalizations.of(context)!.address,
                             style: const TextStyle(fontWeight: FontWeight.bold),
@@ -517,7 +524,7 @@ class _DeliveryPageState extends State<DeliveryPage> {
                             labelText: AppLocalizations.of(context)!.city,
                           ),
                           child: SizedBox(
-                            height: 20,
+                            height: 25,
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 value: _selectedCity,
@@ -559,7 +566,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
+                              padding: locale.toString() == 'en'
+                                  ? const EdgeInsets.fromLTRB(16, 16, 8, 16)
+                                  : const EdgeInsets.fromLTRB(8, 16, 16, 16),
                               child: TextField(
                                 controller: _buildingController,
                                 decoration: InputDecoration(
@@ -578,7 +587,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 16, 8, 16),
+                              padding: locale.toString() == 'en'
+                                  ? const EdgeInsets.fromLTRB(0, 16, 8, 16)
+                                  : const EdgeInsets.fromLTRB(8, 16, 0, 16),
                               child: TextField(
                                 controller: _floorController,
                                 decoration: InputDecoration(
@@ -597,7 +608,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 16, 16, 16),
+                              padding: locale.toString() == 'en'
+                                  ? const EdgeInsets.fromLTRB(0, 16, 16, 16)
+                                  : const EdgeInsets.fromLTRB(16, 16, 0, 16),
                               child: TextField(
                                 controller: _aptController,
                                 decoration: InputDecoration(
@@ -644,7 +657,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
+                        padding: locale.toString() == 'en'
+                            ? const EdgeInsets.fromLTRB(16, 8, 0, 8)
+                            : const EdgeInsets.fromLTRB(0, 8, 16, 8),
                         child: Row(
                           children: [
                             Text(AppLocalizations.of(context)!.collectCash),
@@ -660,8 +675,9 @@ class _DeliveryPageState extends State<DeliveryPage> {
                               visible: _collectCash,
                               child: Expanded(
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 0, 16, 8),
+                                  padding: locale.toString() == 'en'
+                                      ? const EdgeInsets.fromLTRB(0, 0, 16, 8)
+                                      : const EdgeInsets.fromLTRB(16, 0, 0, 8),
                                   child: SizedBox(
                                     width: double.infinity,
                                     child: TextField(
@@ -964,7 +980,7 @@ class _DeliveryPageState extends State<DeliveryPage> {
                                 AppLocalizations.of(context)!.pickupLocation,
                           ),
                           child: SizedBox(
-                            height: 20,
+                            height: 25,
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 value: _selectedPickupLocation,
@@ -1002,7 +1018,7 @@ class _DeliveryPageState extends State<DeliveryPage> {
                                 AppLocalizations.of(context)!.vehicleType,
                           ),
                           child: SizedBox(
-                            height: 20,
+                            height: 25,
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 value: _selectedVehicleType,

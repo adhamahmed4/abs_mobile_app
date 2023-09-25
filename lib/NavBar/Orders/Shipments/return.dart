@@ -331,7 +331,7 @@ class _ReturnPageState extends State<ReturnPage> {
                         labelText: AppLocalizations.of(context)!.subAccountName,
                       ),
                       child: SizedBox(
-                        height: 20,
+                        height: 25,
                         child: DropdownButtonHideUnderline(
                           child: DropdownButton<String>(
                             value: _selectedSubAccount,
@@ -392,7 +392,9 @@ class _ReturnPageState extends State<ReturnPage> {
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(16, 16, 4, 4),
+                              padding: locale.toString() == 'en'
+                                  ? const EdgeInsets.fromLTRB(16, 16, 4, 4)
+                                  : const EdgeInsets.fromLTRB(4, 16, 16, 4),
                               child: TextField(
                                 controller: _firstNameController,
                                 decoration: InputDecoration(
@@ -411,7 +413,9 @@ class _ReturnPageState extends State<ReturnPage> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(4, 16, 16, 4),
+                              padding: locale.toString() == 'en'
+                                  ? const EdgeInsets.fromLTRB(4, 16, 16, 4)
+                                  : const EdgeInsets.fromLTRB(16, 16, 4, 4),
                               child: TextField(
                                 controller: _lastNameController,
                                 decoration: InputDecoration(
@@ -448,7 +452,9 @@ class _ReturnPageState extends State<ReturnPage> {
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 4),
                         child: Align(
-                          alignment: Alignment.centerLeft,
+                          alignment: locale.toString() == 'en'
+                              ? Alignment.centerLeft
+                              : Alignment.centerRight,
                           child: Text(
                             AppLocalizations.of(context)!.address,
                             style: const TextStyle(fontWeight: FontWeight.bold),
@@ -467,7 +473,7 @@ class _ReturnPageState extends State<ReturnPage> {
                             labelText: AppLocalizations.of(context)!.city,
                           ),
                           child: SizedBox(
-                            height: 20,
+                            height: 25,
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 value: _selectedCity,
@@ -509,7 +515,9 @@ class _ReturnPageState extends State<ReturnPage> {
                         children: [
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(16, 16, 8, 16),
+                              padding: locale.toString() == 'en'
+                                  ? const EdgeInsets.fromLTRB(16, 16, 8, 16)
+                                  : const EdgeInsets.fromLTRB(8, 16, 16, 16),
                               child: TextField(
                                 controller: _buildingController,
                                 decoration: InputDecoration(
@@ -528,7 +536,9 @@ class _ReturnPageState extends State<ReturnPage> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 16, 8, 16),
+                              padding: locale.toString() == 'en'
+                                  ? const EdgeInsets.fromLTRB(0, 16, 8, 16)
+                                  : const EdgeInsets.fromLTRB(8, 16, 0, 16),
                               child: TextField(
                                 controller: _floorController,
                                 decoration: InputDecoration(
@@ -547,7 +557,9 @@ class _ReturnPageState extends State<ReturnPage> {
                           ),
                           Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 16, 16, 16),
+                              padding: locale.toString() == 'en'
+                                  ? const EdgeInsets.fromLTRB(0, 16, 16, 16)
+                                  : const EdgeInsets.fromLTRB(16, 16, 0, 16),
                               child: TextField(
                                 controller: _aptController,
                                 decoration: InputDecoration(
@@ -591,7 +603,9 @@ class _ReturnPageState extends State<ReturnPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 8, 0, 8),
+                        padding: locale.toString() == 'en'
+                            ? const EdgeInsets.fromLTRB(16, 8, 0, 8)
+                            : const EdgeInsets.fromLTRB(0, 8, 16, 8),
                         child: Row(
                           children: [
                             Text(AppLocalizations.of(context)!.refundCash),
@@ -607,8 +621,9 @@ class _ReturnPageState extends State<ReturnPage> {
                               visible: _refundCash,
                               child: Expanded(
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 0, 16, 8),
+                                  padding: locale.toString() == 'en'
+                                      ? const EdgeInsets.fromLTRB(0, 0, 16, 8)
+                                      : const EdgeInsets.fromLTRB(16, 0, 0, 8),
                                   child: SizedBox(
                                     width: double.infinity,
                                     child: TextField(
@@ -876,7 +891,7 @@ class _ReturnPageState extends State<ReturnPage> {
                                 AppLocalizations.of(context)!.returnLocation,
                           ),
                           child: SizedBox(
-                            height: 20,
+                            height: 25,
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 value: _selectedReturnLocation,
@@ -914,7 +929,7 @@ class _ReturnPageState extends State<ReturnPage> {
                                 AppLocalizations.of(context)!.vehicleType,
                           ),
                           child: SizedBox(
-                            height: 20,
+                            height: 25,
                             child: DropdownButtonHideUnderline(
                               child: DropdownButton<String>(
                                 value: _selectedVehicleType,

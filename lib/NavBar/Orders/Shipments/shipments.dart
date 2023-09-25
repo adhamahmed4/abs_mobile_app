@@ -85,7 +85,9 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 24, 0, 12),
+                        padding: locale.toString() == 'en'
+                            ? const EdgeInsets.fromLTRB(16, 24, 0, 12)
+                            : const EdgeInsets.fromLTRB(0, 24, 16, 12),
                         child: Row(
                           children: [
                             Text(AppLocalizations.of(context)!.shipments,
@@ -108,7 +110,9 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                             ),
                             const Spacer(),
                             Padding(
-                              padding: const EdgeInsets.fromLTRB(0, 0, 8, 0),
+                              padding: locale.toString() == 'en'
+                                  ? const EdgeInsets.fromLTRB(0, 0, 8, 0)
+                                  : const EdgeInsets.fromLTRB(8, 0, 0, 0),
                               child: Card(
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(4),
@@ -212,8 +216,8 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                               ),
                                               child: Text(
                                                 locale.toString() == 'en'
-                                                    ? shipment["Status"]
-                                                    : shipment["الحالة"],
+                                                    ? shipment["Status"] ?? ''
+                                                    : shipment["الحالة"] ?? '',
                                                 style: const TextStyle(
                                                     color: Colors.black,
                                                     fontWeight: FontWeight.bold,
@@ -248,7 +252,7 @@ class _ShipmentsPageState extends State<ShipmentsPage> {
                                                     BorderRadius.circular(20),
                                               ),
                                               child: Text(
-                                                '${locale.toString() == 'en' ? shipment["Cash"].abs() : shipment["النقود"].abs()} ${AppLocalizations.of(context)!.egp}',
+                                                '${locale.toString() == 'en' ? shipment["Cash"]?.abs() : shipment["النقود"]?.abs()} ${AppLocalizations.of(context)!.egp}',
                                                 style: const TextStyle(
                                                     color: Colors.white,
                                                     fontSize: 14),

@@ -290,7 +290,7 @@ class _BankTransferPageState extends State<BankTransferPage> {
                                   labelText: AppLocalizations.of(context)!.bank,
                                 ),
                                 child: SizedBox(
-                                  height: 20,
+                                  height: 25,
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       value: _selectedBank,

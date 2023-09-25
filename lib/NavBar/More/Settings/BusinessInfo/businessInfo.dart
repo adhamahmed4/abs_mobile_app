@@ -471,7 +471,7 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                                       .salesChannels,
                                 ),
                                 child: Container(
-                                  height: 20,
+                                  height: 25,
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       value: _selectedSalesChannel,
@@ -548,7 +548,7 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                                       AppLocalizations.of(context)!.product,
                                 ),
                                 child: Container(
-                                  height: 20,
+                                  height: 25,
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       value: _selectedProduct,
@@ -615,7 +615,7 @@ class _BusinessInfoPageState extends State<BusinessInfoPage> {
                                   labelText: AppLocalizations.of(context)!.city,
                                 ),
                                 child: Container(
-                                  height: 20,
+                                  height: 25,
                                   child: DropdownButtonHideUnderline(
                                     child: DropdownButton<String>(
                                       value: _selectedCity,
