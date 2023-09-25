@@ -68,9 +68,12 @@ dependencies:
   easy_localization: ^3.0.3
   firebase_messaging: ^14.6.8
   firebase_core: ^2.16.0
+  flutter_local_notifications: ^15.1.1
+  shimmer: ^3.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
+    
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

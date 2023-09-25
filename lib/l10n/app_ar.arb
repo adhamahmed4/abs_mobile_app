@@ -276,5 +276,7 @@
     "businessPlan" : "خطة الأعمال",
     "guestPlan" : "خطة الزائر",
     "viewZonesDetails" : "عرض تفاصيل المناطق",
-    "register" : "تسجيل"
+    "register" : "تسجيل",
+    "completeYour2" : "أكمل حسابك",
+    "accountFor2" : "لتجربة كاملة"
 }

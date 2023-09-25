@@ -96,7 +96,8 @@ class _BusinessLocationsPageState extends State<BusinessLocationsPage> {
               child: SizedBox(
                 height: MediaQuery.of(context).size.height,
                 width: MediaQuery.of(context).size.width,
-                child: ListView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Card(
                       margin: const EdgeInsets.fromLTRB(0, 16.0, 0, 0),

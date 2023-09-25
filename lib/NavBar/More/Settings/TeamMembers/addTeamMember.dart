@@ -216,7 +216,7 @@ class _AddTeamMemberPageState extends State<AddTeamMemberPage> {
                                         .subAccountName,
                                   ),
                                   child: SizedBox(
-                                    height: 20,
+                                    height: 25,
                                     child: DropdownButtonHideUnderline(
                                       child: DropdownButton<String>(
                                         value: _selectedSubAccount,

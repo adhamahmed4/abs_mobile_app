@@ -5,6 +5,7 @@ import '../../../../Configurations/app_config.dart';
 import 'dart:convert'; // for JSON decoding and encoding
 import 'package:http/http.dart' as http;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:abs_mobile_app/main.dart';
 
 class PickupsPage extends StatefulWidget {
   @override
@@ -22,6 +23,7 @@ class _PickupsPageState extends State<PickupsPage> {
   bool historyClicked = false;
 
   bool isLoading = true;
+  Locale? locale;
 
   Future<void> getUpcomingPickups() async {
     final url = Uri.parse(
@@ -94,6 +96,11 @@ class _PickupsPageState extends State<PickupsPage> {
   void initState() {
     super.initState();
     loadData();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   @override
@@ -110,7 +117,9 @@ class _PickupsPageState extends State<PickupsPage> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 24, 0, 12),
+                        padding: locale.toString() == 'en'
+                            ? const EdgeInsets.fromLTRB(16, 24, 0, 12)
+                            : const EdgeInsets.fromLTRB(0, 24, 16, 12),
                         child: Row(
                           children: [
                             Text(AppLocalizations.of(context)!.upcomingPickups,
@@ -240,7 +249,9 @@ class _PickupsPageState extends State<PickupsPage> {
                           ),
                         ),
                       Padding(
-                        padding: const EdgeInsets.fromLTRB(16, 24, 0, 12),
+                        padding: locale.toString() == 'en'
+                            ? const EdgeInsets.fromLTRB(16, 24, 0, 12)
+                            : const EdgeInsets.fromLTRB(0, 24, 16, 12),
                         child: Row(
                           children: [
                             Text(AppLocalizations.of(context)!.historyPickups,

@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:abs_mobile_app/NavBar/More/Settings/BusinessInfo/businessInfo.dart';
 import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/paymentMethods.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:abs_mobile_app/main.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -41,11 +42,17 @@ class _HomePageState extends State<HomePage> {
 
   int totalCash = 0;
   int absFees = 0;
+  Locale? locale;
 
   @override
   void initState() {
     super.initState();
     loadData();
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
+    }
   }
 
   Future<void> loadData() async {
@@ -200,6 +207,84 @@ class _HomePageState extends State<HomePage> {
             }
           }
           break;
+        case 'أضف مكان البيكاب':
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => BusinessLocationsPage()),
+          );
+          break;
+        case 'أضف طريقة الدفع':
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => PaymentMethodsPage()),
+          );
+          break;
+        case 'أضف معلومات شركتك':
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => BusinessInfoPage()),
+          );
+          break;
+        case 'قم بتفعيل بريدك الالكترونى':
+          if (!isVerified && !emailVerificationClicked) {
+            final url = Uri.parse(
+                '${AppConfig.baseUrl}/subAccounts-verification/send-email');
+
+            final requestBody = {'email': email};
+
+            final jsonBody = json.encode(requestBody);
+            final response = await http.post(url,
+                headers: AppConfig.headers, body: jsonBody);
+            if (response.statusCode == 200) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    '${AppLocalizations.of(context)!.emailSentTo} $email',
+                  ),
+                ),
+              );
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    '${AppLocalizations.of(context)!.failedToSendEmailTo} $email',
+                  ),
+                ),
+              );
+            }
+            if (mounted) {
+              setState(() {
+                emailVerificationClicked = true;
+                emailVerificationTime = DateTime.now();
+              });
+            }
+          } else if (emailVerificationClicked) {
+            final currentTime = DateTime.now();
+            if (emailVerificationTime != null &&
+                currentTime.difference(emailVerificationTime!) >
+                    const Duration(minutes: 2)) {
+              if (mounted) {
+                setState(() {
+                  emailVerificationClicked = false;
+                  emailVerificationTime = null;
+                });
+              }
+            } else {
+              final timeRemainingInSeconds = (2 * 60) -
+                  currentTime.difference(emailVerificationTime!).inSeconds;
+              final minutes = (timeRemainingInSeconds / 60).floor();
+              final seconds = timeRemainingInSeconds % 60;
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    '${AppLocalizations.of(context)!.emailVerificationDisabledFor} $minutes ${AppLocalizations.of(context)!.min} $seconds ${AppLocalizations.of(context)!.sec}',
+                  ),
+                ),
+              );
+            }
+          }
+          break;
         default:
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -232,7 +317,11 @@ class _HomePageState extends State<HomePage> {
               color: isVerified ? Colors.grey : const Color(0xFF2B2E83),
             ),
             child: Icon(
-              isVerified ? Icons.check : Icons.keyboard_double_arrow_right,
+              isVerified
+                  ? Icons.check
+                  : locale.toString() == 'en'
+                      ? Icons.keyboard_double_arrow_right
+                      : Icons.keyboard_double_arrow_left,
               color: Colors.white,
               size: 20,
             ),
@@ -451,19 +540,29 @@ class _HomePageState extends State<HomePage> {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       const SizedBox(width: 8),
-                                      Text(
-                                        '${AppLocalizations.of(context)!.completeYour}'
-                                        '\n'
-                                        '${AppLocalizations.of(context)!.accountFor}'
-                                        '\n'
-                                        '${AppLocalizations.of(context)!.aFullExperience}',
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
-                                          color: Color.fromARGB(249, 0, 0, 0),
+                                      Padding(
+                                        padding: locale.toString() == 'en'
+                                            ? const EdgeInsets.fromLTRB(
+                                                0, 0, 80, 0)
+                                            : const EdgeInsets.fromLTRB(
+                                                110, 0, 0, 0),
+                                        child: Text(
+                                          locale.toString() == 'en'
+                                              ? '${AppLocalizations.of(context)!.completeYour}'
+                                                  '\n'
+                                                  '${AppLocalizations.of(context)!.accountFor}'
+                                                  '\n'
+                                                  '${AppLocalizations.of(context)!.aFullExperience}'
+                                              : '${AppLocalizations.of(context)!.completeYour2}'
+                                                  '\n'
+                                                  '${AppLocalizations.of(context)!.accountFor2}',
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color.fromARGB(249, 0, 0, 0),
+                                          ),
                                         ),
                                       ),
-                                      const SizedBox(width: 70),
                                       _buildStatusCircle(
                                           validatedConditionsCount,
                                           totalConditionsCount),
@@ -548,7 +647,8 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Positioned(
                                           top: 0,
-                                          left: 8,
+                                          left: 8, // Keep left value the same
+                                          right: 8, // Add right value
                                           child: Text(
                                             newShipmentsCount.toString(),
                                             style: const TextStyle(
@@ -586,7 +686,8 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Positioned(
                                           top: 0,
-                                          left: 8,
+                                          left: 8, // Keep left value the same
+                                          right: 8, // Add right value
                                           child: Text(
                                             processingShipmentsCount.toString(),
                                             style: const TextStyle(

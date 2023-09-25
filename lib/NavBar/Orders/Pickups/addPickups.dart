@@ -339,8 +339,10 @@ class _AddPickupPageState extends State<AddPickupPage> {
                               color: Colors.grey, // Adjust the color as needed
                             ),
                           ),
-                          const Icon(
-                            Icons.arrow_right_alt,
+                          Icon(
+                            locale.toString() == 'en'
+                                ? Icons.keyboard_arrow_right_outlined
+                                : Icons.keyboard_arrow_left_outlined,
                             size: 20, // Adjust the size as needed
                             color: Colors.grey, // Adjust the color as needed
                           ),
@@ -489,10 +491,11 @@ class _AddPickupPageState extends State<AddPickupPage> {
                                       newValue ?? 'Default Vehicle Type';
                                 });
                               },
-                              icon: const Padding(
-                                padding:
-                                    const EdgeInsets.fromLTRB(150, 0, 0, 0),
-                                child: Icon(
+                              icon: Padding(
+                                padding: locale.toString() == 'en'
+                                    ? const EdgeInsets.fromLTRB(150, 0, 0, 0)
+                                    : const EdgeInsets.fromLTRB(0, 0, 150, 0),
+                                child: const Icon(
                                   Icons.keyboard_arrow_down,
                                   color: Colors.black,
                                 ),
