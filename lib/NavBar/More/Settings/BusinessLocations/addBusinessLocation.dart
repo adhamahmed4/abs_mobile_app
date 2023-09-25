@@ -725,7 +725,7 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                       child: TextField(
                                         controller: _streetNameController,
                                         decoration: InputDecoration(
-                                          fillColor: Color.fromARGB(
+                                          fillColor: const Color.fromARGB(
                                               255, 250, 250, 250),
                                           filled: true,
                                           border: const OutlineInputBorder(
@@ -749,15 +749,15 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                       children: [
                                         Expanded(
                                           child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0,
-                                                0,
-                                                8,
-                                                16), // Adjust padding as needed
+                                            padding: locale.toString() == 'en'
+                                                ? const EdgeInsets.fromLTRB(
+                                                    0, 0, 8, 16)
+                                                : const EdgeInsets.fromLTRB(
+                                                    8, 0, 0, 16),
                                             child: TextField(
                                               controller: _buildingController,
                                               decoration: InputDecoration(
-                                                fillColor: Color.fromARGB(
+                                                fillColor: const Color.fromARGB(
                                                     255, 250, 250, 250),
                                                 filled: true,
                                                 border:
@@ -782,15 +782,15 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                         ),
                                         Expanded(
                                           child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0,
-                                                0,
-                                                8,
-                                                16), // Adjust padding as needed
+                                            padding: locale.toString() == 'en'
+                                                ? const EdgeInsets.fromLTRB(
+                                                    0, 0, 8, 16)
+                                                : const EdgeInsets.fromLTRB(
+                                                    8, 0, 8, 16),
                                             child: TextField(
                                               controller: _floorController,
                                               decoration: InputDecoration(
-                                                fillColor: Color.fromARGB(
+                                                fillColor: const Color.fromARGB(
                                                     255, 250, 250, 250),
                                                 filled: true,
                                                 border:
@@ -815,11 +815,11 @@ class _AddNewLocationPageState extends State<AddNewLocationPage> {
                                         ),
                                         Expanded(
                                           child: Padding(
-                                            padding: const EdgeInsets.fromLTRB(
-                                                0,
-                                                0,
-                                                0,
-                                                16), // Adjust padding as needed
+                                            padding: locale.toString() == 'en'
+                                                ? const EdgeInsets.fromLTRB(
+                                                    0, 0, 0, 16)
+                                                : const EdgeInsets.fromLTRB(
+                                                    0, 0, 8, 16),
                                             child: TextField(
                                               controller: _aptController,
                                               decoration: InputDecoration(

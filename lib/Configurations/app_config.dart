@@ -3,8 +3,7 @@ import 'dart:ui';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AppConfig {
-
-  static const String baseUrl = 'http://192.168.137.1:3000';
+  static const String baseUrl = 'http://192.168.1.138:3000';
   static String? jwtToken;
   static Locale? _selectedLanguage;
 
@@ -48,7 +47,7 @@ class AppConfig {
       'Authorization': 'Bearer $jwtToken'
     };
 
-    headers['Accept-Language'] = _selectedLanguage!.languageCode;
+    headers['Accept-Language'] = _selectedLanguage?.languageCode ?? 'en';
 
     return headers;
   }

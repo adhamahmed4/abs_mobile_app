@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:abs_mobile_app/main.dart';
 
 class TrackPage extends StatefulWidget {
   String? awb;
@@ -42,6 +43,8 @@ class _TrackPageState extends State<TrackPage> {
   final TextEditingController _phoneNumberController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
 
+  Locale? locale;
+
   @override
   void initState() {
     super.initState();
@@ -49,6 +52,11 @@ class _TrackPageState extends State<TrackPage> {
       _searchController.text = widget.awb!;
       getShipmentHistory();
       getShipmentData();
+    }
+    if (mounted) {
+      setState(() {
+        locale = MyApp.getLocale(context);
+      });
     }
   }
 
@@ -188,7 +196,7 @@ class _TrackPageState extends State<TrackPage> {
             _serviceController.text = jsonData['Service'];
             _productController.text = jsonData['Product'];
             _codController.text =
-                '${jsonData['Cash'].abs()} ${AppLocalizations.of(context)!.egp}}';
+                '${jsonData['Cash'].abs()} ${AppLocalizations.of(context)!.egp}';
             _specialInstructionsController.text =
                 jsonData['Special Instructions'];
             _nameController.text = jsonData['Consignee'];
@@ -437,8 +445,9 @@ class _TrackPageState extends State<TrackPage> {
                             children: [
                               Expanded(
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(16, 16, 4, 4),
+                                  padding: locale.toString() == 'en'
+                                      ? const EdgeInsets.fromLTRB(16, 16, 4, 4)
+                                      : const EdgeInsets.fromLTRB(4, 16, 16, 4),
                                   child: TextField(
                                     controller: _serviceController,
                                     readOnly: true,
@@ -458,8 +467,9 @@ class _TrackPageState extends State<TrackPage> {
                               ),
                               Expanded(
                                 child: Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(4, 16, 16, 4),
+                                  padding: locale.toString() == 'en'
+                                      ? const EdgeInsets.fromLTRB(4, 16, 16, 4)
+                                      : const EdgeInsets.fromLTRB(16, 16, 4, 4),
                                   child: TextField(
                                     controller: _productController,
                                     readOnly: true,
