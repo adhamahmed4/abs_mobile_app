@@ -4,6 +4,10 @@ import 'package:http/http.dart' as http;
 import 'package:abs_mobile_app/Configurations/app_config.dart';
 import 'dart:convert';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:abs_mobile_app/Courier/PendingPickups/pendingPickups.dart';
+import 'package:abs_mobile_app/Courier/PendingShipments/pendingShipments.dart';
+import 'package:abs_mobile_app/Courier/Pickups/pickups.dart';
+import 'package:abs_mobile_app/Courier/Shipments/shipments.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -12,12 +16,36 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  void navigateToPickupsPage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const PickupsPage(),
+      ),
+    );
+  }
+
+  void navigateToShipmentsPage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const ShipmentsPage(),
+      ),
+    );
+  }
+
+  void navigateToHomePage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const HomePage(),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       drawer: Drawer(
         child: ListView(
-          children: const <Widget>[
+          children: <Widget>[
             Padding(
               padding: EdgeInsets.fromLTRB(0, 16, 0, 8),
               child: CircleAvatar(
@@ -52,7 +80,7 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               leading: Icon(Icons.home),
               title: Text('Home'),
-              onTap: null,
+              onTap: () => navigateToHomePage(context),
             ),
             Divider(
               color: Colors.grey,
@@ -60,16 +88,15 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               leading: Icon(Icons.local_shipping),
               title: Text('Shipments'),
-              onTap: null,
+              onTap: () => navigateToShipmentsPage(context),
             ),
             Divider(
               color: Colors.grey,
             ),
             ListTile(
-              leading: Icon(Icons.delivery_dining),
-              title: Text('Pickups'),
-              onTap: null,
-            ),
+                leading: Icon(Icons.delivery_dining),
+                title: Text('Pickups'),
+                onTap: () => navigateToPickupsPage(context)),
             Divider(
               color: Colors.grey,
             ),
