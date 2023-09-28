@@ -13,10 +13,6 @@ import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/MobileCash/mo
 import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/WalletDetails/walletDetails.dart';
 import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/NearestBranch/nearestBranch.dart';
 import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/BankTransfer/bankTransfer.dart';
-import 'package:abs_mobile_app/Courier/PendingPickups/pendingPickups.dart';
-import 'package:abs_mobile_app/Courier/PendingShipments/pendingShipments.dart';
-import 'package:abs_mobile_app/Courier/Pickups/pickups.dart';
-import 'package:abs_mobile_app/Courier/Shipments/shipments.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -712,73 +708,6 @@ class _HomePageState extends State<HomePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Center(
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const PickupsPage(),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text(
-                                      'Go to Pcikups Page',
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      // Navigate to the CardPage
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const PendingPickupsPage(),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text(
-                                      'Go to Pending Pickups Page',
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      // Navigate to the CardPage
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const PendingShipmentsPage(),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text(
-                                      'Go to Pending Shipments Page',
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                ),
-                                Center(
-                                  child: ElevatedButton(
-                                    onPressed: () {
-                                      // Navigate to the CardPage
-                                      Navigator.of(context).push(
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              const ShipmentsPage(),
-                                        ),
-                                      );
-                                    },
-                                    child: const Text(
-                                      'Go to Shipments Page',
-                                      style: TextStyle(fontSize: 18),
-                                    ),
-                                  ),
-                                ),
                                 Text(
                                   AppLocalizations.of(context)!
                                       .shipmentsOverview,
