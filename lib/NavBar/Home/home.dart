@@ -9,6 +9,11 @@ import 'package:abs_mobile_app/NavBar/More/Settings/BusinessInfo/businessInfo.da
 import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/paymentMethods.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:abs_mobile_app/main.dart';
+import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/MobileCash/mobileCash.dart';
+import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/WalletDetails/walletDetails.dart';
+import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/NearestBranch/nearestBranch.dart';
+import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/BankTransfer/bankTransfer.dart';
+import 'package:abs_mobile_app/courier/courier.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -125,6 +130,115 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> hasPaymentMethod() async {
+    final url = Uri.parse('${AppConfig.baseUrl}/sub-accounts-payment-method');
+    final response = await http.get(url, headers: AppConfig.headers);
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      final paymentMethod = jsonData['paymentMethodID'];
+      if (jsonData['paymentMethodID'] != null) {
+        if (paymentMethod == 1) {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration:
+                  Duration(milliseconds: 300), // Adjust the animation duration
+              pageBuilder: (_, __, ___) => MobileCashPage(),
+              transitionsBuilder:
+                  (_, Animation<double> animation, __, Widget child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                );
+              },
+            ),
+          );
+        } else if (paymentMethod == 2) {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration:
+                  Duration(milliseconds: 300), // Adjust the animation duration
+              pageBuilder: (_, __, ___) => WalletDetailsPage(),
+              transitionsBuilder:
+                  (_, Animation<double> animation, __, Widget child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                );
+              },
+            ),
+          );
+        } else if (paymentMethod == 3) {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration:
+                  Duration(milliseconds: 300), // Adjust the animation duration
+              pageBuilder: (_, __, ___) => NearestBranchPage(),
+              transitionsBuilder:
+                  (_, Animation<double> animation, __, Widget child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                );
+              },
+            ),
+          );
+        } else if (paymentMethod == 4) {
+          Navigator.push(
+            context,
+            PageRouteBuilder(
+              transitionDuration:
+                  Duration(milliseconds: 300), // Adjust the animation duration
+              pageBuilder: (_, __, ___) => BankTransferPage(),
+              transitionsBuilder:
+                  (_, Animation<double> animation, __, Widget child) {
+                return SlideTransition(
+                  position: Tween<Offset>(
+                    begin: Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(animation),
+                  child: child,
+                );
+              },
+            ),
+          );
+        }
+      } else {
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            transitionDuration:
+                Duration(milliseconds: 300), // Adjust the animation duration
+            pageBuilder: (_, __, ___) => PaymentMethodsPage(),
+            transitionsBuilder:
+                (_, Animation<double> animation, __, Widget child) {
+              return SlideTransition(
+                position: Tween<Offset>(
+                  begin: Offset(1.0, 0.0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              );
+            },
+          ),
+        );
+      }
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
   Widget _buildStatusRow(BuildContext context, String title, bool isVerified) {
     void navigateToPage(String title) async {
       switch (title) {
@@ -135,10 +249,7 @@ class _HomePageState extends State<HomePage> {
           );
           break;
         case 'Add your payment method':
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => PaymentMethodsPage()),
-          );
+          hasPaymentMethod();
           break;
         case 'Add your business info':
           Navigator.push(
@@ -213,10 +324,7 @@ class _HomePageState extends State<HomePage> {
           );
           break;
         case 'أضف طريقة الدفع':
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => PaymentMethodsPage()),
-          );
+          hasPaymentMethod();
           break;
         case 'أضف معلومات شركتك':
           Navigator.push(
@@ -972,62 +1080,60 @@ class _HomePageState extends State<HomePage> {
                                   ),
                                 ],
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  Padding(
+                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
+                                    child: Text(
+                                      AppLocalizations.of(context)!.yourBalance,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color.fromARGB(249, 0, 0, 0),
+                                      ),
+                                    ),
+                                  ),
+                                  Row(
                                     children: [
+                                      Text(
+                                        ((totalCash - absFees)
+                                            .toString()), // Replace with your balance calculation
+                                        style: const TextStyle(
+                                          fontSize: 45,
+                                          color: Color(0xFF2B2E83),
+                                        ),
+                                      ),
                                       Padding(
-                                        padding:
-                                            EdgeInsets.fromLTRB(0, 0, 0, 16),
+                                        padding: EdgeInsets.all(8.0),
                                         child: Text(
-                                          AppLocalizations.of(context)!
-                                              .yourBalance,
+                                          AppLocalizations.of(context)!.egp,
                                           style: const TextStyle(
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold,
-                                            color: Color.fromARGB(249, 0, 0, 0),
+                                            fontSize: 20,
+                                            color: Colors.grey,
                                           ),
                                         ),
                                       ),
-                                      Row(
-                                        children: [
-                                          Text(
-                                            ((totalCash - absFees)
-                                                .toString()), // Replace with your balance calculation
-                                            style: const TextStyle(
-                                              fontSize: 45,
-                                              color: Color(0xFF2B2E83),
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: Text(
-                                              AppLocalizations.of(context)!.egp,
-                                              style: const TextStyle(
-                                                fontSize: 20,
-                                                color: Colors.grey,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
                                     ],
                                   ),
-                                  Container(
-                                    width: 70,
-                                    height: 70,
-                                    decoration: const BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: Color(0xFF2B2E83),
-                                    ),
-                                    child: const Icon(
-                                      Icons.account_balance_wallet,
-                                      color: Colors.white,
-                                      size: 45,
+                                  const SizedBox(
+                                      height:
+                                          20), // Add spacing between balance and button
+                                  Center(
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        // Navigate to the CardPage
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                const CourierPage(),
+                                          ),
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Go to Card Page',
+                                        style: TextStyle(fontSize: 18),
+                                      ),
                                     ),
                                   ),
                                 ],
