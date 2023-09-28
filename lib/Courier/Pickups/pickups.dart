@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 
-class PendingPickupsPage extends StatefulWidget {
-  const PendingPickupsPage({Key? key}) : super(key: key);
+class PickupsPage extends StatefulWidget {
+  const PickupsPage({Key? key}) : super(key: key);
 
   @override
-  _PendingPickupsPageState createState() => _PendingPickupsPageState();
+  _PickupsPageState createState() => _PickupsPageState();
 }
 
-class _PendingPickupsPageState extends State<PendingPickupsPage> {
+class _PickupsPageState extends State<PickupsPage> {
   String _scanBarcode = 'Unknown';
   Future<void> scanBarcodeNormal() async {
     String barcodeScanRes;
@@ -61,7 +61,7 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
                     ],
                   ),
                   Image.asset(
-                    'assets/images/courier.png', // Replace with the actual path to your image
+                    'assets/images/courier4.png', // Replace with the actual path to your image
                     width: 150, // Adjust the width as needed
                     height: 150, // Adjust the height as needed
                   ),
@@ -107,7 +107,7 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
       padding: const EdgeInsets.only(top: 8, bottom: 4),
       child: Text(
         title,
-        style: TextStyle(
+        style: const TextStyle(
             fontSize: 20, color: Colors.black, fontWeight: FontWeight.bold),
       ),
     );
@@ -116,7 +116,7 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
   Widget _buildDetailItem(String label, String value) {
     return Text(
       '  $label: $value',
-      style: TextStyle(fontSize: 16, color: Colors.grey),
+      style: const TextStyle(fontSize: 16, color: Colors.grey),
     );
   }
 
@@ -182,10 +182,10 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
                 Center(
                   child: CircleAvatar(
                     radius: 50,
-                    backgroundColor: Color.fromARGB(255, 243, 243, 243),
+                    backgroundColor: const Color.fromARGB(255, 243, 243, 243),
                     child: ClipOval(
                       child: Image.asset(
-                        'assets/images/courier.png',
+                        'assets/images/courier4.png',
                         width: 100,
                         height: 100,
                         fit: BoxFit.contain,
@@ -222,7 +222,7 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(100.0),
                   ),
-                  minimumSize: Size(double.infinity, 60),
+                  minimumSize: const Size(double.infinity, 60),
                 ),
                 onPressed: () {
                   // Details button action
@@ -250,14 +250,14 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
                         borderRadius: BorderRadius.circular(100.0),
                         side: const BorderSide(color: Colors.grey),
                       ),
-                      minimumSize:
-                          Size(double.infinity, 60), // Set the desired height
+                      minimumSize: const Size(
+                          double.infinity, 60), // Set the desired height
                     ),
                     onPressed: () {
                       // Details button action
                     },
-                    child: Text(
-                      'Reject',
+                    child: const Text(
+                      'Unpicked',
                       style: TextStyle(
                           fontSize: 15,
                           color: Colors.black,
@@ -265,7 +265,7 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
                     ),
                   ),
                 ),
-                SizedBox(width: 8), // Adjust the spacing between buttons
+                const SizedBox(width: 8), // Adjust the spacing between buttons
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -273,14 +273,14 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100.0),
                       ),
-                      minimumSize:
-                          Size(double.infinity, 60), // Set the desired height
+                      minimumSize: const Size(
+                          double.infinity, 60), // Set the desired height
                     ),
                     onPressed: () {
                       scanBarcodeNormal();
                     },
-                    child: Text(
-                      'Confirm',
+                    child: const Text(
+                      'Picked',
                       style: TextStyle(
                           fontSize: 15,
                           color: Colors.white,
@@ -302,7 +302,7 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
       backgroundColor: const Color.fromARGB(255, 244, 246, 248),
       appBar: AppBar(
         title: const Text(
-          'Pending Pickups',
+          'Pickups',
           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
