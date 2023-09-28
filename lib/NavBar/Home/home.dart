@@ -13,7 +13,7 @@ import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/MobileCash/mo
 import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/WalletDetails/walletDetails.dart';
 import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/NearestBranch/nearestBranch.dart';
 import 'package:abs_mobile_app/NavBar/More/Settings/PaymentMethods/BankTransfer/bankTransfer.dart';
-import 'package:abs_mobile_app/courier/courier.dart';
+import 'package:abs_mobile_app/Courier/PendingPickups/pendingPickups.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -714,6 +714,23 @@ class _HomePageState extends State<HomePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Center(
+                                  child: ElevatedButton(
+                                    onPressed: () {
+                                      // Navigate to the CardPage
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              const PendingPickupsPage(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text(
+                                      'Go to Card Page',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                                  ),
+                                ),
                                 Text(
                                   AppLocalizations.of(context)!
                                       .shipmentsOverview,
@@ -1119,23 +1136,6 @@ class _HomePageState extends State<HomePage> {
                                   const SizedBox(
                                       height:
                                           20), // Add spacing between balance and button
-                                  Center(
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        // Navigate to the CardPage
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const CourierPage(),
-                                          ),
-                                        );
-                                      },
-                                      child: const Text(
-                                        'Go to Card Page',
-                                        style: TextStyle(fontSize: 18),
-                                      ),
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
