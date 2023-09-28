@@ -144,14 +144,13 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
             context,
             PageRouteBuilder(
-              transitionDuration:
-                  Duration(milliseconds: 300), // Adjust the animation duration
+              transitionDuration: const Duration(milliseconds: 300),
               pageBuilder: (_, __, ___) => MobileCashPage(),
               transitionsBuilder:
                   (_, Animation<double> animation, __, Widget child) {
                 return SlideTransition(
                   position: Tween<Offset>(
-                    begin: Offset(1.0, 0.0),
+                    begin: const Offset(1.0, 0.0),
                     end: Offset.zero,
                   ).animate(animation),
                   child: child,
@@ -163,14 +162,13 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
             context,
             PageRouteBuilder(
-              transitionDuration:
-                  Duration(milliseconds: 300), // Adjust the animation duration
+              transitionDuration: const Duration(milliseconds: 300),
               pageBuilder: (_, __, ___) => WalletDetailsPage(),
               transitionsBuilder:
                   (_, Animation<double> animation, __, Widget child) {
                 return SlideTransition(
                   position: Tween<Offset>(
-                    begin: Offset(1.0, 0.0),
+                    begin: const Offset(1.0, 0.0),
                     end: Offset.zero,
                   ).animate(animation),
                   child: child,
@@ -182,14 +180,13 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
             context,
             PageRouteBuilder(
-              transitionDuration:
-                  Duration(milliseconds: 300), // Adjust the animation duration
+              transitionDuration: const Duration(milliseconds: 300),
               pageBuilder: (_, __, ___) => NearestBranchPage(),
               transitionsBuilder:
                   (_, Animation<double> animation, __, Widget child) {
                 return SlideTransition(
                   position: Tween<Offset>(
-                    begin: Offset(1.0, 0.0),
+                    begin: const Offset(1.0, 0.0),
                     end: Offset.zero,
                   ).animate(animation),
                   child: child,
@@ -201,14 +198,13 @@ class _HomePageState extends State<HomePage> {
           Navigator.push(
             context,
             PageRouteBuilder(
-              transitionDuration:
-                  Duration(milliseconds: 300), // Adjust the animation duration
+              transitionDuration: const Duration(milliseconds: 300),
               pageBuilder: (_, __, ___) => BankTransferPage(),
               transitionsBuilder:
                   (_, Animation<double> animation, __, Widget child) {
                 return SlideTransition(
                   position: Tween<Offset>(
-                    begin: Offset(1.0, 0.0),
+                    begin: const Offset(1.0, 0.0),
                     end: Offset.zero,
                   ).animate(animation),
                   child: child,
@@ -221,14 +217,13 @@ class _HomePageState extends State<HomePage> {
         Navigator.push(
           context,
           PageRouteBuilder(
-            transitionDuration:
-                Duration(milliseconds: 300), // Adjust the animation duration
+            transitionDuration: const Duration(milliseconds: 300),
             pageBuilder: (_, __, ___) => PaymentMethodsPage(),
             transitionsBuilder:
                 (_, Animation<double> animation, __, Widget child) {
               return SlideTransition(
                 position: Tween<Offset>(
-                  begin: Offset(1.0, 0.0),
+                  begin: const Offset(1.0, 0.0),
                   end: Offset.zero,
                 ).animate(animation),
                 child: child,
@@ -720,7 +715,6 @@ class _HomePageState extends State<HomePage> {
                                 Center(
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      // Navigate to the CardPage
                                       Navigator.of(context).push(
                                         MaterialPageRoute(
                                           builder: (context) =>
@@ -825,8 +819,8 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Positioned(
                                           top: 0,
-                                          left: 8, // Keep left value the same
-                                          right: 8, // Add right value
+                                          left: 8,
+                                          right: 8,
                                           child: Text(
                                             newShipmentsCount.toString(),
                                             style: const TextStyle(
@@ -864,8 +858,8 @@ class _HomePageState extends State<HomePage> {
                                         ),
                                         Positioned(
                                           top: 0,
-                                          left: 8, // Keep left value the same
-                                          right: 8, // Add right value
+                                          left: 8,
+                                          right: 8,
                                           child: Text(
                                             processingShipmentsCount.toString(),
                                             style: const TextStyle(
@@ -1155,7 +1149,8 @@ class _HomePageState extends State<HomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 16),
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 0, 16),
                                     child: Text(
                                       AppLocalizations.of(context)!.yourBalance,
                                       style: const TextStyle(
@@ -1168,8 +1163,7 @@ class _HomePageState extends State<HomePage> {
                                   Row(
                                     children: [
                                       Text(
-                                        ((totalCash - absFees)
-                                            .toString()), // Replace with your balance calculation
+                                        ((totalCash - absFees).toString()),
                                         style: const TextStyle(
                                           fontSize: 45,
                                           color: Color(0xFF2B2E83),
@@ -1187,9 +1181,7 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(
-                                      height:
-                                          20), // Add spacing between balance and button
+                                  const SizedBox(height: 20)
                                 ],
                               ),
                             ),

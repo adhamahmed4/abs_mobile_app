@@ -278,5 +278,12 @@
     "viewZonesDetails" : "عرض تفاصيل المناطق",
     "register" : "تسجيل",
     "completeYour2" : "أكمل حسابك",
-    "accountFor2" : "لتجربة كاملة"
+    "accountFor2" : "لتجربة كاملة",
+    "detailsOfAllYourShipments": "تفاصيل جميع شحناتك",
+    "detailsOfAllYourPickups": "تفاصيل جميع البيكاب",
+    "pendingShipments": "الشحنات المعلقة",
+    "pendingPickups": "البيكاب المعلق",
+    "withCourier": "مع المندوب",
+    "picked": "تم التقاطه",
+    "unPicked" : "لم يتم التقاطه"
 }

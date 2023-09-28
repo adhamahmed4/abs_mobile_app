@@ -1314,5 +1314,40 @@
     "@accountFor2":
     {
         "description": "The account for button"
+    },
+    "detailsOfAllYourShipments" : "Details of all your shipments",
+    "@detailsOfAllYourShipments":
+    {
+        "description": "The details of all your shipments button"
+    },
+        "detailsOfAllYourPickups" : "Details of all your pickups",
+    "@detailsOfAllYourPickups":
+    {
+        "description": "The details of all your pickups button"
+    },
+    "pendingShipments" : "Pending Shipments",
+    "@pendingShipments":
+    {
+        "description": "The pending shipments button"
+    },
+    "pendingPickups" : "Pending Pickups",
+    "@pendingPickups":
+    {
+        "description": "The pending pickups button"
+    },
+    "withCourier" : "With Courier",
+    "@withCourier":
+    {
+        "description": "The with courier button"
+    },
+    "picked" : "Picked",
+    "@picked":
+    {
+        "description": "The picked button"
+    },
+    "unPicked" : "Unpicked",
+    "@unPicked":
+    {
+        "description": "The unpicked button"
     }
 }
