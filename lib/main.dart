@@ -1,6 +1,7 @@
 // ignore_for_file: must_be_immutable
 import 'package:abs_mobile_app/Configurations/app_config.dart';
 import 'package:abs_mobile_app/FirebaseApi/firebase_api.dart';
+import 'package:abs_mobile_app/Courier/Home/home.dart';
 import 'package:abs_mobile_app/NavBar/navBar.dart';
 import 'package:abs_mobile_app/l10n/l10n.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -121,7 +122,8 @@ class _MyAppState extends State<MyApp> {
               GlobalWidgetsLocalizations.delegate,
             ],
             locale: _locale,
-            home: isTokenExists ? const NavBar() : LoginPage(),
+            // home: isTokenExists ? const NavBar() : LoginPage(),
+            home: HomePage(),
             title: 'ABS Courier & Freight Systems',
             theme: ThemeData(
               primarySwatch: const MaterialColor(
