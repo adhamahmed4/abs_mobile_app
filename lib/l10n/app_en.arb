@@ -1349,5 +1349,15 @@
     "@unPicked":
     {
         "description": "The unpicked button"
+    },
+    "recipientType" : "Recipient Type",
+    "@recipientType":
+    {
+        "description": "The recipient type button"
+    },
+    "recipientName" : "Recipient Name",
+    "@recipientName":
+    {
+        "description": "The recipient name button"
     }
 }
