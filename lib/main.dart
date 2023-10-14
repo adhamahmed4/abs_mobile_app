@@ -2,6 +2,7 @@
 import 'package:abs_mobile_app/Configurations/app_config.dart';
 import 'package:abs_mobile_app/FirebaseApi/firebase_api.dart';
 import 'package:abs_mobile_app/Courier/Home/home.dart';
+import 'package:abs_mobile_app/Courier/Maps/maps.dart';
 import 'package:abs_mobile_app/NavBar/navBar.dart';
 import 'package:abs_mobile_app/l10n/l10n.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';

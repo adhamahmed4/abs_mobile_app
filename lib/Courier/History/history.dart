@@ -1,17 +1,17 @@
 import 'package:abs_mobile_app/Courier/Drawer/drawer.dart';
+import 'package:abs_mobile_app/Courier/History/shipments.dart';
+import 'package:abs_mobile_app/Courier/History/pickups.dart';
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:abs_mobile_app/Courier/Home/home.dart';
-import 'package:abs_mobile_app/Courier/Pickups/currentpickups.dart';
-import 'package:abs_mobile_app/Courier/Pickups/pendingPickups.dart';
 
-class PickupsPage extends StatefulWidget {
+class HistoryPage extends StatefulWidget {
   @override
-  _PickupsPageState createState() => _PickupsPageState();
+  _HistoryPageState createState() => _HistoryPageState();
 }
 
-class _PickupsPageState extends State<PickupsPage> {
+class _HistoryPageState extends State<HistoryPage> {
   late PageController _pageController;
   int _currentIndex = 0;
 
@@ -32,7 +32,7 @@ class _PickupsPageState extends State<PickupsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          AppLocalizations.of(context)!.pickups,
+          AppLocalizations.of(context)!.history,
           style: const TextStyle(color: Colors.black),
         ),
         centerTitle: true,
@@ -42,7 +42,7 @@ class _PickupsPageState extends State<PickupsPage> {
           color: Colors.black,
         ),
       ),
-      drawer: DrawerNavigation(currentPage: DrawerPage.Pickups),
+      drawer: DrawerNavigation(currentPage: DrawerPage.History),
       body: Column(
         children: [
           Container(
@@ -59,8 +59,8 @@ class _PickupsPageState extends State<PickupsPage> {
                   cornerRadius: 10.0,
                   minHeight: 27.0,
                   labels: [
-                    AppLocalizations.of(context)!.pending,
-                    AppLocalizations.of(context)!.current
+                    AppLocalizations.of(context)!.pickups,
+                    AppLocalizations.of(context)!.shipments
                   ],
                   onToggle: (index) {
                     setState(() {
@@ -95,14 +95,14 @@ class _PickupsPageState extends State<PickupsPage> {
                   decoration: const BoxDecoration(
                     color: Colors.white,
                   ),
-                  child: const PendingPickupsPage(),
+                  child: PickupsPage(),
                 ),
                 Container(
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                   ),
-                  child: const CurrentPickupsPage(),
+                  child: ShipmentsPage(),
                 ),
               ],
             ),

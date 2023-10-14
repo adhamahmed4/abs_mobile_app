@@ -1,10 +1,12 @@
-import 'package:abs_mobile_app/Courier/Drawer/drawer.dart';
+import 'package:abs_mobile_app/Courier/History/pickedShipments.dart';
+import 'package:abs_mobile_app/Courier/History/deliveredShipments.dart';
+import 'package:abs_mobile_app/Courier/History/unpickedShipments.dart';
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:abs_mobile_app/Courier/Home/home.dart';
-import 'package:abs_mobile_app/Courier/Pickups/currentpickups.dart';
-import 'package:abs_mobile_app/Courier/Pickups/pendingPickups.dart';
+import 'package:abs_mobile_app/Courier/Shipments/currentShipments.dart';
+import 'package:abs_mobile_app/Courier/Shipments/pendingShipments.dart';
 
 class PickupsPage extends StatefulWidget {
   @override
@@ -30,19 +32,6 @@ class _PickupsPageState extends State<PickupsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          AppLocalizations.of(context)!.pickups,
-          style: const TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        shadowColor: Colors.transparent,
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
-      ),
-      drawer: DrawerNavigation(currentPage: DrawerPage.Pickups),
       body: Column(
         children: [
           Container(
@@ -59,8 +48,8 @@ class _PickupsPageState extends State<PickupsPage> {
                   cornerRadius: 10.0,
                   minHeight: 27.0,
                   labels: [
-                    AppLocalizations.of(context)!.pending,
-                    AppLocalizations.of(context)!.current
+                    AppLocalizations.of(context)!.picked,
+                    AppLocalizations.of(context)!.unPicked
                   ],
                   onToggle: (index) {
                     setState(() {
@@ -95,15 +84,14 @@ class _PickupsPageState extends State<PickupsPage> {
                   decoration: const BoxDecoration(
                     color: Colors.white,
                   ),
-                  child: const PendingPickupsPage(),
+                  child: PickedShipmentsPage(),
                 ),
                 Container(
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: const CurrentPickupsPage(),
-                ),
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                    ),
+                    child: UnpickedShipments()),
               ],
             ),
           ),
