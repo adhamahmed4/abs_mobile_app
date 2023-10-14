@@ -2,28 +2,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-class PendingPickupsPage extends StatefulWidget {
-  const PendingPickupsPage({Key? key}) : super(key: key);
+class PendingShipmentsPage extends StatefulWidget {
+  const PendingShipmentsPage({Key? key}) : super(key: key);
 
   @override
-  _PendingPickupsPageState createState() => _PendingPickupsPageState();
+  _PendingShipmentsPageState createState() => _PendingShipmentsPageState();
 }
 
-class _PendingPickupsPageState extends State<PendingPickupsPage> {
+class _PendingShipmentsPageState extends State<PendingShipmentsPage> {
+  final TextEditingController _searchController = TextEditingController();
+
   String _scanBarcode = 'Unknown';
   Future<void> scanBarcodeNormal() async {
     String barcodeScanRes;
+    // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
           '#ff6666', 'Cancel', true, ScanMode.BARCODE);
+      print(".... adham " + barcodeScanRes);
     } on PlatformException {
       barcodeScanRes = 'Failed to get platform version.';
     }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
     if (!mounted) return;
+
     setState(() {
       _scanBarcode = barcodeScanRes;
     });
+  }
+
+  void _launchGoogleMaps(double latitude, double longitude) async {
+    Uri googleMapsUrl = Uri.parse(
+        'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude');
+
+    if (await canLaunchUrl(googleMapsUrl)) {
+      await launchUrl(googleMapsUrl);
+    } else {
+      throw 'Could not launch Google Maps';
+    }
   }
 
   // Function to show the AlertDialog
@@ -54,7 +76,7 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
                     ],
                   ),
                   Image.asset(
-                    'assets/images/courier.png', // Replace with the actual path to your image
+                    'assets/images/courier3.png', // Replace with the actual path to your image
                     width: 150, // Adjust the width as needed
                     height: 150, // Adjust the height as needed
                   ),
@@ -175,10 +197,10 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
                 Center(
                   child: CircleAvatar(
                     radius: 50,
-                    backgroundColor: Color.fromARGB(255, 243, 243, 243),
+                    backgroundColor: const Color.fromARGB(255, 243, 243, 243),
                     child: ClipOval(
                       child: Image.asset(
-                        'assets/images/courier.png',
+                        'assets/images/courier3.png',
                         width: 100,
                         height: 100,
                         fit: BoxFit.contain,
@@ -215,10 +237,10 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(100.0),
                   ),
-                  minimumSize: Size(double.infinity, 60),
+                  minimumSize: const Size(double.infinity, 45),
                 ),
                 onPressed: () {
-                  // Details button action
+                  _launchGoogleMaps(30.044400000, 31.235700000);
                 },
                 child: const Text(
                   'Show Map',
@@ -244,12 +266,12 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
                         side: const BorderSide(color: Colors.grey),
                       ),
                       minimumSize:
-                          Size(double.infinity, 60), // Set the desired height
+                          Size(double.infinity, 45), // Set the desired height
                     ),
                     onPressed: () {
                       // Details button action
                     },
-                    child: Text(
+                    child: const Text(
                       'Reject',
                       style: TextStyle(
                           fontSize: 15,
@@ -258,7 +280,7 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
                     ),
                   ),
                 ),
-                SizedBox(width: 8), // Adjust the spacing between buttons
+                const SizedBox(width: 8), // Adjust the spacing between buttons
                 Expanded(
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -266,13 +288,13 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(100.0),
                       ),
-                      minimumSize:
-                          Size(double.infinity, 60), // Set the desired height
+                      minimumSize: const Size(
+                          double.infinity, 45), // Set the desired height
                     ),
                     onPressed: () {
                       scanBarcodeNormal();
                     },
-                    child: Text(
+                    child: const Text(
                       'Confirm',
                       style: TextStyle(
                           fontSize: 15,
@@ -291,87 +313,131 @@ class _PendingPickupsPageState extends State<PendingPickupsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 244, 246, 248),
-      appBar: AppBar(
-        title: const Text(
-          'Pending Pickups',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        shadowColor: Colors.transparent,
-        iconTheme: const IconThemeData(color: Colors.black),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: _CourierCard(
-                'Adham Ahmed',
-                'Jan 20 2023 5:30 PM',
-                '65 Misr Helwan Agricultural Road, Maadi, Cairo, Egypt',
-                '01001307530',
+    return Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _searchController,
+                  decoration: InputDecoration(
+                    hintText: AppLocalizations.of(context)!.searchByawb,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 8.0,
+                      horizontal: 16.0,
+                    ),
+                  ),
+                  onSubmitted: (awb) {
+                    // searchByAWB(awb);
+                  },
+                ),
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: _CourierCard(
-                'Jane Smith',
-                'September 21, 2023',
-                '456 Elm Street, Town, Country',
-                '+1 (987) 654-3210',
+              IconButton(
+                icon: const Icon(
+                  Icons.search,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  // searchByAWB(_searchController.text);
+                },
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: _CourierCard(
-                'Alice Johnson',
-                'September 22, 2023',
-                '789 Oak Street, Village, Country',
-                '+1 (555) 123-4567',
+              IconButton(
+                icon: const Icon(
+                  Icons.crop_free,
+                  color: Colors.black,
+                ),
+                onPressed: () {
+                  scanBarcodeNormal();
+                },
               ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: _CourierCard(
-                'Bob Wilson',
-                'September 23, 2023',
-                '101 Pine Street, Suburb, Country',
-                '+1 (777) 888-9999',
+              IconButton(
+                icon: const Icon(Icons.clear, color: Colors.black),
+                onPressed: () {
+                  _searchController.clear();
+                  setState(() {
+                    // searchResults.clear();
+                  });
+                },
               ),
+            ],
+          ),
+          Expanded(
+            child: ListView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  child: _CourierCard(
+                    'Adham Ahmed',
+                    'Jan 20 2023 5:30 PM',
+                    '65 Misr Helwan Agricultural Road, Maadi, Cairo, Egypt',
+                    '01001307530',
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  child: _CourierCard(
+                    'Jane Smith',
+                    'September 21, 2023',
+                    '456 Elm Street, Town, Country',
+                    '+1 (987) 654-3210',
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  child: _CourierCard(
+                    'Alice Johnson',
+                    'September 22, 2023',
+                    '789 Oak Street, Village, Country',
+                    '+1 (555) 123-4567',
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  child: _CourierCard(
+                    'Bob Wilson',
+                    'September 23, 2023',
+                    '101 Pine Street, Suburb, Country',
+                    '+1 (777) 888-9999',
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  child: _CourierCard(
+                    'Eve Adams',
+                    'September 24, 2023',
+                    '202 Cedar Street, County, Country',
+                    '+1 (333) 444-5555',
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  child: _CourierCard(
+                    'Michael Brown',
+                    'September 25, 2023',
+                    '303 Maple Street, State, Country',
+                    '+1 (222) 111-0000',
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+                  child: _CourierCard(
+                    'Sophia Taylor',
+                    'September 26, 2023',
+                    '404 Birch Street, Province, Country',
+                    '+1 (999) 000-1111',
+                  ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: _CourierCard(
-                'Eve Adams',
-                'September 24, 2023',
-                '202 Cedar Street, County, Country',
-                '+1 (333) 444-5555',
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: _CourierCard(
-                'Michael Brown',
-                'September 25, 2023',
-                '303 Maple Street, State, Country',
-                '+1 (222) 111-0000',
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-              child: _CourierCard(
-                'Sophia Taylor',
-                'September 26, 2023',
-                '404 Birch Street, Province, Country',
-                '+1 (999) 000-1111',
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

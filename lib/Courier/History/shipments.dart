@@ -1,17 +1,19 @@
-import 'package:abs_mobile_app/Courier/Drawer/drawer.dart';
+import 'package:abs_mobile_app/Courier/History/pickedShipments.dart';
+import 'package:abs_mobile_app/Courier/History/deliveredShipments.dart';
+import 'package:abs_mobile_app/Courier/History/undeliveredShipments.dart';
 import 'package:flutter/material.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:abs_mobile_app/Courier/Home/home.dart';
-import 'package:abs_mobile_app/Courier/Pickups/currentpickups.dart';
-import 'package:abs_mobile_app/Courier/Pickups/pendingPickups.dart';
+import 'package:abs_mobile_app/Courier/Shipments/currentShipments.dart';
+import 'package:abs_mobile_app/Courier/Shipments/pendingShipments.dart';
 
-class PickupsPage extends StatefulWidget {
+class ShipmentsPage extends StatefulWidget {
   @override
-  _PickupsPageState createState() => _PickupsPageState();
+  _ShipmentsPageState createState() => _ShipmentsPageState();
 }
 
-class _PickupsPageState extends State<PickupsPage> {
+class _ShipmentsPageState extends State<ShipmentsPage> {
   late PageController _pageController;
   int _currentIndex = 0;
 
@@ -30,19 +32,6 @@ class _PickupsPageState extends State<PickupsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          AppLocalizations.of(context)!.pickups,
-          style: const TextStyle(color: Colors.black),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-        shadowColor: Colors.transparent,
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-        ),
-      ),
-      drawer: DrawerNavigation(currentPage: DrawerPage.Pickups),
       body: Column(
         children: [
           Container(
@@ -59,8 +48,8 @@ class _PickupsPageState extends State<PickupsPage> {
                   cornerRadius: 10.0,
                   minHeight: 27.0,
                   labels: [
-                    AppLocalizations.of(context)!.pending,
-                    AppLocalizations.of(context)!.current
+                    AppLocalizations.of(context)!.delivered,
+                    AppLocalizations.of(context)!.undelivered
                   ],
                   onToggle: (index) {
                     setState(() {
@@ -95,14 +84,14 @@ class _PickupsPageState extends State<PickupsPage> {
                   decoration: const BoxDecoration(
                     color: Colors.white,
                   ),
-                  child: const PendingPickupsPage(),
+                  child: DeliveredShipmentsPage(),
                 ),
                 Container(
                   width: double.infinity,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                   ),
-                  child: const CurrentPickupsPage(),
+                  child: UndeliveredShipments(),
                 ),
               ],
             ),

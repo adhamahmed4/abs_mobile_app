@@ -287,5 +287,9 @@
     "picked": "تم التقاطه",
     "unPicked" : "لم يتم التقاطه",
     "recipientType" : "نوع المستلم",
-    "recipientName" : "اسم المستلم"
+    "recipientName" : "اسم المستلم",
+    "reason" : "السبب",
+    "pending" : "معلق",
+    "current" : "الحالي",
+    "history" : "سجل"
 }
