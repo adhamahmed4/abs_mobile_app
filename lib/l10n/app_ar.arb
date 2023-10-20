@@ -285,5 +285,11 @@
     "pendingPickups": "البيكاب المعلق",
     "withCourier": "مع المندوب",
     "picked": "تم التقاطه",
-    "unPicked" : "لم يتم التقاطه"
+    "unPicked" : "لم يتم التقاطه",
+    "recipientType" : "نوع المستلم",
+    "recipientName" : "اسم المستلم",
+    "reason" : "السبب",
+    "pending" : "معلق",
+    "current" : "الحالي",
+    "history" : "سجل"
 }

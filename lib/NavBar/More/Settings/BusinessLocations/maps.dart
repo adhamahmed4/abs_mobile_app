@@ -91,7 +91,7 @@ class _MapsPageState extends State<MapsPage> {
         children: [
           GoogleMap(
             initialCameraPosition: CameraPosition(
-              target: LatLng(widget.lat!, widget.lng!),
+              target: LatLng(30.044400000, 31.235700000),
               zoom: 18,
             ),
             onMapCreated: (GoogleMapController controller) {

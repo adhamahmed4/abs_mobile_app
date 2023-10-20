@@ -1349,5 +1349,35 @@
     "@unPicked":
     {
         "description": "The unpicked button"
+    },
+    "recipientType" : "Recipient Type",
+    "@recipientType":
+    {
+        "description": "The recipient type button"
+    },
+    "recipientName" : "Recipient Name",
+    "@recipientName":
+    {
+        "description": "The recipient name button"
+    },
+    "reason" : "Reason",
+    "@reason":
+    {
+        "description": "The reason button"
+    },
+    "pending" : "Pending",
+    "@pending":
+    {
+        "description": "The pending button"
+    },
+    "current" : "Current",
+    "@current":
+    {
+        "description": "The current button"
+    },
+    "history" : "History",
+    "@history":
+    {
+        "description": "The history button"
     }
 }
