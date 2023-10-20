@@ -1089,6 +1089,20 @@ class _HomePageState extends State<HomePage> {
                                       ),
                                     ),
                                   ),
+                                  Container(
+                                    width: 70,
+                                    height: 70,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Color(0xFF2B2E83),
+                                    ),
+                                    child: Icon(
+                                      Icons
+                                          .account_balance_wallet, // Add the wallet icon here
+                                      color: Colors.white,
+                                      size: 45,
+                                    ),
+                                  ),
                                   Row(
                                     children: [
                                       Text(
