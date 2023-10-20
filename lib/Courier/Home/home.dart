@@ -333,40 +333,65 @@ class _HomePageState extends State<HomePage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(0, 0, 0, 16),
-                                  child: Text(
-                                    AppLocalizations.of(context)!.collectedCash,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Color.fromARGB(249, 0, 0, 0),
-                                    ),
-                                  ),
-                                ),
                                 Row(
                                   children: [
-                                    Text(
-                                      '500',
-                                      style: const TextStyle(
-                                        fontSize: 45,
-                                        color: Color(0xFF2B2E83),
+                                    Padding(
+                                      padding: const EdgeInsets.fromLTRB(
+                                          0, 0, 0, 16),
+                                      child: Text(
+                                        AppLocalizations.of(context)!
+                                            .collectedCash,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                          color: Color.fromARGB(249, 0, 0, 0),
+                                        ),
                                       ),
                                     ),
                                     Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text(
-                                        AppLocalizations.of(context)!.egp,
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          color: Colors.grey,
+                                      padding: const EdgeInsets.only(left: 140),
+                                      child: Container(
+                                        width: 70,
+                                        height: 70,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: Color(0xFF2B2E83),
+                                        ),
+                                        child: Icon(
+                                          Icons
+                                              .account_balance_wallet, // Add the wallet icon here
+                                          color: Colors.white,
+                                          size: 45,
                                         ),
                                       ),
                                     ),
                                   ],
                                 ),
-                                const SizedBox(height: 20)
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(10, 0, 0, 4),
+                                  child: Row(
+                                    children: [
+                                      Text(
+                                        '500',
+                                        style: const TextStyle(
+                                          fontSize: 45,
+                                          color: Color(0xFF2B2E83),
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: Text(
+                                          AppLocalizations.of(context)!.egp,
+                                          style: const TextStyle(
+                                            fontSize: 30,
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(height: 10)
                               ],
                             ),
                           ),
