@@ -8,6 +8,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 // import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:abs_mobile_app/Courier/Home/home.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -28,52 +29,103 @@ class _LoginPageState extends State<LoginPage> {
     final username = _usernameController.text;
     final password = _passwordController.text;
 
-    final url = Uri.parse('${AppConfig.baseUrl}/signin-client');
-    final requestBody = {
+    final url_client = Uri.parse('${AppConfig.baseUrl}/signin-client');
+    final requestBody_client = {
       "userCred": username,
       "password": password,
     };
 
-    final jsonBody = json.encode(requestBody);
+    final jsonBody_client = json.encode(requestBody_client);
 
-    final response = await http.post(
-      url,
+    final response_client = await http.post(
+      url_client,
       headers: AppConfig.headers,
-      body: jsonBody,
+      body: jsonBody_client,
     );
 
-    if (response.statusCode == 200) {
-      final responseBody = json.decode(response.body);
-      if (responseBody == 'User not found') {
-        showDialog(
-          context: context,
-          builder: (context) {
-            return AlertDialog(
-              title: Text(AppLocalizations.of(context)!.loginFailed),
-              content:
-                  Text(AppLocalizations.of(context)!.invalidUsernameOrPassword),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(AppLocalizations.of(context)!.ok),
-                ),
-              ],
-            );
-          },
-        );
-        return;
-      }
-      final accessToken = responseBody["accessToken"].toString();
-      await AppConfig.storeToken(accessToken);
-      await AppConfig.initialize();
+    if (response_client.statusCode == 200) {
+      final responseBody_client = json.decode(response_client.body);
+      if (responseBody_client == 'User not found') {
+        final url_employee = Uri.parse('${AppConfig.baseUrl}/signin-employee');
 
-      if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => const NavBar()),
+        final requestBody_employee = {
+          "userCred": username,
+          "password": password,
+        };
+
+        final jsonBody_employee = json.encode(requestBody_employee);
+
+        final response_employee = await http.post(
+          url_employee,
+          headers: AppConfig.headers,
+          body: jsonBody_employee,
         );
+
+        if (response_employee.statusCode == 200) {
+          final responseBody_employee = json.decode(response_employee.body);
+          if (responseBody_employee == 'User not found') {
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text(AppLocalizations.of(context)!.loginFailed),
+                  content: Text(
+                      AppLocalizations.of(context)!.invalidUsernameOrPassword),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text(AppLocalizations.of(context)!.ok),
+                    ),
+                  ],
+                );
+              },
+            );
+            return;
+          }
+          final accessToken = responseBody_employee["accessToken"].toString();
+          await AppConfig.storeToken(accessToken);
+          await AppConfig.initialize();
+
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomePage()),
+            );
+          }
+        } else {
+          showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDialog(
+                title: Text(AppLocalizations.of(context)!.loginFailed),
+                content: Text(
+                    AppLocalizations.of(context)!.invalidUsernameOrPassword),
+                actions: <Widget>[
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(AppLocalizations.of(context)!.ok),
+                  ),
+                ],
+              );
+            },
+          );
+        }
+      }
+      if (responseBody_client != 'User not found' && response_client != 401) {
+        final accessToken = responseBody_client["accessToken"].toString();
+        await AppConfig.storeToken(accessToken);
+        await AppConfig.initialize();
+
+        if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const NavBar()),
+          );
+        }
       }
     } else {
       showDialog(
