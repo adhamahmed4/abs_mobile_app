@@ -1,9 +1,12 @@
+import 'package:abs_mobile_app/Login/login.dart';
 import 'package:flutter/material.dart';
 
 import 'package:abs_mobile_app/Courier/Home/home.dart';
 import 'package:abs_mobile_app/Courier/Pickups/pickups.dart';
 import 'package:abs_mobile_app/Courier/Shipments/shipments.dart';
 import 'package:abs_mobile_app/Courier/History/history.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum DrawerPage { Home, Shipments, Pickups, History, Profile, Logout }
 
@@ -49,6 +52,46 @@ class _DrawerNavigationState extends State<DrawerNavigation> {
     );
   }
 
+  void logout(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title:
+              Center(child: Text(AppLocalizations.of(context)!.confirmLogout)),
+          content:
+              Text(AppLocalizations.of(context)!.areYouSureYouWantToLogout),
+          actions: [
+            TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  AppLocalizations.of(context)!.cancel,
+                )),
+            TextButton(
+              onPressed: () async {
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.clear();
+                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginPage()),
+                );
+              },
+              child: Text(
+                AppLocalizations.of(context)!.logout,
+                style: TextStyle(
+                  color: Colors.red,
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void navigateToPage(BuildContext context, DrawerPage page) {
     switch (page) {
       case DrawerPage.Home:
@@ -62,6 +105,9 @@ class _DrawerNavigationState extends State<DrawerNavigation> {
         break;
       case DrawerPage.History:
         navigateToHistoryPage(context);
+        break;
+      case DrawerPage.Logout:
+        logout(context);
         break;
       // Add cases for Profile and Logout if needed
       default:

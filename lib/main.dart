@@ -1,4 +1,6 @@
 // ignore_for_file: must_be_immutable
+import 'dart:convert';
+
 import 'package:abs_mobile_app/Configurations/app_config.dart';
 import 'package:abs_mobile_app/FirebaseApi/firebase_api.dart';
 import 'package:abs_mobile_app/Courier/Home/home.dart';
@@ -71,6 +73,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   Locale _locale = const Locale('en');
+  int roleTypeID = 0;
 
   void setLocale(Locale newLocale) {
     setState(() {
@@ -78,8 +81,41 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  String _decodeBase64(String str) {
+    String output = str.replaceAll('-', '+').replaceAll('_', '/');
+
+    switch (output.length % 4) {
+      case 0:
+        break;
+      case 2:
+        output += '==';
+        break;
+      case 3:
+        output += '=';
+        break;
+      default:
+        throw Exception('Illegal base64url string!"');
+    }
+
+    return utf8.decode(base64Url.decode(output));
+  }
+
   Future<bool> checkTokenExistence() async {
     String? token = await AppConfig.checkToken();
+    if (token != null) {
+      final parts = token.split('.');
+      if (parts.length != 3) {
+        throw Exception('invalid token');
+      }
+
+      final payload = _decodeBase64(parts[1]);
+      final payloadMap = json.decode(payload);
+      if (payloadMap is! Map<String, dynamic>) {
+        throw Exception('invalid payload');
+      }
+
+      roleTypeID = payloadMap["UserInfo"]["roleTypeID"];
+    }
     return token != null;
   }
 
@@ -123,8 +159,11 @@ class _MyAppState extends State<MyApp> {
               GlobalWidgetsLocalizations.delegate,
             ],
             locale: _locale,
-            // home: isTokenExists ? const NavBar() : LoginPage(),
-            home: HomePage(),
+            home: isTokenExists
+                ? roleTypeID == 1
+                    ? const HomePage()
+                    : const NavBar()
+                : LoginPage(),
             title: 'ABS Courier & Freight Systems',
             theme: ThemeData(
               primarySwatch: const MaterialColor(
