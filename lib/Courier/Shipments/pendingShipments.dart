@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:abs_mobile_app/Configurations/app_config.dart';
 
 class PendingShipmentsPage extends StatefulWidget {
   const PendingShipmentsPage({Key? key}) : super(key: key);
@@ -14,6 +18,49 @@ class PendingShipmentsPage extends StatefulWidget {
 
 class _PendingShipmentsPageState extends State<PendingShipmentsPage> {
   final TextEditingController _searchController = TextEditingController();
+  List<Map<String, dynamic>> _shipmentsData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadShipments();
+  }
+
+  Future<void> _loadShipments() async {
+    try {
+      var shipments = await getShipments();
+      setState(() {
+        _shipmentsData = shipments;
+      });
+    } catch (e) {
+      // Handle error
+    }
+  }
+
+  String getDaysDifference(expectedDeliveryDate) {
+    DateTime expectedDate = DateTime.parse(expectedDeliveryDate);
+    DateTime currentDate = DateTime.now();
+    int daysDifference = expectedDate.difference(currentDate).inDays;
+    return '$daysDifference days';
+  }
+
+  String formatDateTime(String dateTimeString) {
+    final dateTime = DateTime.parse(dateTimeString).toLocal();
+    final formatter = DateFormat('dd-MM-yyyy h:mm a');
+    return formatter.format(dateTime);
+  }
+
+  Future<List<Map<String, dynamic>>> getShipments() async {
+    final url = Uri.parse('${AppConfig.baseUrl}/shipments-courier/2');
+    final response = await http.get(url, headers: AppConfig.headers);
+
+    if (response.statusCode == 200) {
+      final responseBody = json.decode(response.body) as List<dynamic>;
+      return List<Map<String, dynamic>>.from(responseBody);
+    } else {
+      throw Exception('Failed to get shipment info');
+    }
+  }
 
   String _scanBarcode = 'Unknown';
   Future<void> scanBarcodeNormal() async {
@@ -50,7 +97,18 @@ class _PendingShipmentsPageState extends State<PendingShipmentsPage> {
 
   // Function to show the AlertDialog
   void _showDetailsDialog(
-      String name, String date, String address, String phoneNumber) {
+      String deliveryContactPerson,
+      String deliveryAddress,
+      String deliveryContactNumber,
+      int cash,
+      String awb,
+      String product,
+      String packageType,
+      int noOfPcs,
+      String contents,
+      int weight,
+      String notes,
+      String expectedDeliveryDate) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -69,29 +127,33 @@ class _PendingShipmentsPageState extends State<PendingShipmentsPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Text(
+                        'Expected to be delivered in ${getDaysDifference(expectedDeliveryDate)}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.red,
+                        ),
+                      ),
                       _buildSectionHeader('Order Details'),
-                      _buildDetailItem('AWB', 'dfjksj'),
-                      _buildDetailItem('Status', 'delivered'),
-                      _buildDetailItem('Payment', '57 EGP'),
+                      _buildDetailItem('AWB', awb),
+                      _buildDetailItem('Product Type', product),
+                      _buildDetailItem('Cash', cash.toString()),
+                      _buildDetailItem('Package Type', packageType),
+                      _buildDetailItem('No. of Pieces', noOfPcs.toString()),
+                      _buildDetailItem('Contents', contents),
+                      _buildDetailItem('Weight', weight.toString()),
                     ],
-                  ),
-                  Image.asset(
-                    'assets/images/courier3.png', // Replace with the actual path to your image
-                    width: 150, // Adjust the width as needed
-                    height: 150, // Adjust the height as needed
                   ),
                 ],
               ),
               _buildSectionHeader('User Details'),
-              _buildDetailItem('Name', name),
-              _buildDetailItem('Address', address),
-              _buildDetailItem('Phone Number', phoneNumber),
+              _buildDetailItem('Name', deliveryContactPerson),
+              _buildDetailItem('Address', deliveryAddress),
+              _buildDetailItem('Phone Number', deliveryContactNumber),
               const SizedBox(height: 15),
               _buildSectionHeader('Notes'),
-              const Text(
-                'This is a note.',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
+              Text(notes,
+                  style: const TextStyle(fontSize: 16, color: Colors.grey)),
             ],
           ),
           actions: [
@@ -136,7 +198,22 @@ class _PendingShipmentsPageState extends State<PendingShipmentsPage> {
   }
 
   Widget _CourierCard(
-      String name, String date, String address, String phoneNumber) {
+      String name,
+      String address,
+      String phoneNumber,
+      String awb,
+      String status,
+      int cash,
+      String packageType,
+      int noOfPcs,
+      String contents,
+      int weight,
+      String notes,
+      String lastChangeDate,
+      String expectedDeliveryDate,
+      String product,
+      {double latitude = 0.0,
+      double longitude = 0.0}) {
     return Card(
       elevation: 4, // Adjust the card's elevation (shadow)
       shape: RoundedRectangleBorder(
@@ -147,20 +224,42 @@ class _PendingShipmentsPageState extends State<PendingShipmentsPage> {
         children: [
           Row(
             children: [
-              const Padding(
-                  padding: EdgeInsets.fromLTRB(24, 8, 0, 0),
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 8, 0, 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.circle,
+                            size: 12,
+                            color: status == 'Delivery'
+                                ? Colors.green
+                                : Colors.red,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            status,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: status == 'Delivery'
+                                  ? Colors.green
+                                  : Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
                       Text(
-                        'ABS2018531',
-                        style: TextStyle(
+                        awb,
+                        style: const TextStyle(
                             fontSize: 16,
                             color: Colors.blue,
                             fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        'Jan 20 2023 5:30 PM',
+                        formatDateTime(lastChangeDate),
                         style: TextStyle(fontSize: 12, color: Colors.grey),
                       ),
                     ],
@@ -179,7 +278,19 @@ class _PendingShipmentsPageState extends State<PendingShipmentsPage> {
                     ),
                     onPressed: () {
                       // Call the function to show the AlertDialog
-                      _showDetailsDialog(name, date, address, phoneNumber);
+                      _showDetailsDialog(
+                          name,
+                          address,
+                          phoneNumber,
+                          cash,
+                          awb,
+                          product,
+                          packageType,
+                          noOfPcs,
+                          contents,
+                          weight,
+                          notes,
+                          expectedDeliveryDate);
                     },
                     child: const Text(
                       'Details',
@@ -240,7 +351,7 @@ class _PendingShipmentsPageState extends State<PendingShipmentsPage> {
                   minimumSize: const Size(double.infinity, 45),
                 ),
                 onPressed: () {
-                  _launchGoogleMaps(30.044400000, 31.235700000);
+                  _launchGoogleMaps(latitude, longitude);
                 },
                 child: const Text(
                   'Show Map',
@@ -369,72 +480,41 @@ class _PendingShipmentsPageState extends State<PendingShipmentsPage> {
             ],
           ),
           Expanded(
-            child: ListView(
-              children: [
-                Padding(
+            child: ListView.builder(
+              itemCount: _shipmentsData.length,
+              itemBuilder: (context, index) {
+                var shipment = _shipmentsData[index];
+                double? latitude = shipment['latitude'] as double? ?? 0.0;
+                double? longitude = shipment['longitude'] as double? ?? 0.0;
+
+                return Padding(
                   padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
                   child: _CourierCard(
-                    'Adham Ahmed',
-                    'Jan 20 2023 5:30 PM',
-                    '65 Misr Helwan Agricultural Road, Maadi, Cairo, Egypt',
-                    '01001307530',
+                    shipment['service'] == 'Delivery'
+                        ? shipment['deliveryContactPerson'] as String
+                        : shipment['returnContactPerson'] as String,
+                    shipment['service'] == 'Delivery'
+                        ? shipment['deliveryAddress'] as String
+                        : shipment['returnAddress'] as String,
+                    shipment['service'] == 'Delivery'
+                        ? shipment['deliveryContactNumber'] as String
+                        : shipment['returnContactNumber'] as String,
+                    shipment['AWB'] as String,
+                    shipment['service'] as String,
+                    shipment['Cash'].abs() as int,
+                    shipment['packageType'] as String,
+                    shipment['noOfPcs'] as int,
+                    shipment['contents'] as String,
+                    shipment['actualWeight'] as int,
+                    shipment['specialInstructions'] as String,
+                    shipment['lastChangeDate'] as String,
+                    shipment['expectedDeliveryDate'] as String,
+                    shipment['product'] as String,
+                    latitude: latitude,
+                    longitude: longitude,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: _CourierCard(
-                    'Jane Smith',
-                    'September 21, 2023',
-                    '456 Elm Street, Town, Country',
-                    '+1 (987) 654-3210',
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: _CourierCard(
-                    'Alice Johnson',
-                    'September 22, 2023',
-                    '789 Oak Street, Village, Country',
-                    '+1 (555) 123-4567',
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: _CourierCard(
-                    'Bob Wilson',
-                    'September 23, 2023',
-                    '101 Pine Street, Suburb, Country',
-                    '+1 (777) 888-9999',
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: _CourierCard(
-                    'Eve Adams',
-                    'September 24, 2023',
-                    '202 Cedar Street, County, Country',
-                    '+1 (333) 444-5555',
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: _CourierCard(
-                    'Michael Brown',
-                    'September 25, 2023',
-                    '303 Maple Street, State, Country',
-                    '+1 (222) 111-0000',
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
-                  child: _CourierCard(
-                    'Sophia Taylor',
-                    'September 26, 2023',
-                    '404 Birch Street, Province, Country',
-                    '+1 (999) 000-1111',
-                  ),
-                ),
-              ],
+                );
+              },
             ),
           ),
         ],
