@@ -51,7 +51,7 @@ class _CurrentShipmentsPageState extends State<CurrentShipmentsPage> {
   }
 
   Future<List<Map<String, dynamic>>> getShipments() async {
-    final url = Uri.parse('${AppConfig.baseUrl}/shipments-courier/1006');
+    final url = Uri.parse('${AppConfig.baseUrl}/shipments-courier/5');
     final response = await http.get(url, headers: AppConfig.headers);
 
     if (response.statusCode == 200) {
